@@ -1,0 +1,25 @@
+#!/bin/bash 
+
+TARGET=""
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -t|--target)
+      TARGET="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+  esac
+done
+
+if [[ ! -z $TARGET ]]
+then
+    START_SCRIPT=$BASE/targets/$TARGET/par.tcl
+    echo "[ICF] Using target script $START_SCRIPT"
+    innovus -init $START_SCRIPT
+else 
+    echo "[ICF] Running Innovus"
+fi 

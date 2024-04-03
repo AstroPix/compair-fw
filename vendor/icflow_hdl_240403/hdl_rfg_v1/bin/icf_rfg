@@ -1,0 +1,5 @@
+#!/bin/bash 
+
+echo "Target= $IC_RFG_TARGET"
+
+tclsh $RFGV1_HOME/tool/icf_rfg_gen.tcl $*

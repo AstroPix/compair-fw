@@ -1,0 +1,1 @@
+export DOCSV1_HOME="$(dirname "$(readlink -f ${BASH_SOURCE[0]})")"

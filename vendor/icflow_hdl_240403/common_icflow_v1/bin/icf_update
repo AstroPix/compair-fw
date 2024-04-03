@@ -1,0 +1,5 @@
+#!/bin/bash
+
+tclsh $ICFLOW_HOME/common_icflow_v1/icflow.update.tcl $*
+#echo "[ICF] Getting latest package"
+#wget http://ipe-iperic-srv1.ipe.kit.edu/gitlab/api/v4/projects/51/jobs/artifacts/main/download?job=package-job -O icflow_latest.zip

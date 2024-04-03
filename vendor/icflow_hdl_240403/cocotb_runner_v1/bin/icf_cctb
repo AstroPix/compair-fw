@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [[ ! $1 =~ "-.+" ]]
+then 
+    echo "[ICF] Using CoCoTb runner v1 with standard configuration"
+    tclsh $CCTBV1_HOME/tcl/cocotb_default.tcl $@
+
+else
+    echo "[ICF] Using CoCoTb runner v1 with TCL startup from $1"
+    simScript=$1
+    shift
+    tclsh $simScript $@
+    #make icf_sim
+fi

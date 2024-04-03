@@ -1,0 +1,1 @@
+package ifneeded cocotb 1.0 [list source $dir/tcl/cocotb.tcl]

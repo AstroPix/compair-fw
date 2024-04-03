@@ -1,0 +1,3 @@
+#/bin/bash 
+
+echo "Placeholder helper to open waveforms, if needed"

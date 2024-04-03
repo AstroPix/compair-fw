@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "IC Flow location: $ICFLOW_HOME"
+
+folderName=$(echo $ICFLOW_HOME | rev | cut -d '/' -f1 | rev)
+if [[ $folderName = "packages" ]]
+then
+    version=dev
+else
+    version=$(echo $folderName | rev | cut -d '_' -f1-2 | rev )
+fi
+echo "IC Flow version: $version"

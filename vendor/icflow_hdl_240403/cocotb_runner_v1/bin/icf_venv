@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]
+then 
+    echo "[ICF] No Script provided, installing/updating venv"
+    make -s -f ${CCTBV1_HOME}/venv/Makefile.venv setup
+
+else
+
+    #echo "[ICF] Running $1"
+    pyScript=$1
+    shift
+    SCRIPT=$pyScript ARGS=$@ make -e -f ${CCTBV1_HOME}/venv/Makefile.venv run 
+fi

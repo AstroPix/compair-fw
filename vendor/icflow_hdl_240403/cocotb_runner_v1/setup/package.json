@@ -1,0 +1,10 @@
+{
+    "name": "icflow cocotb runner",
+    "version": "0.0.0",
+    "scripts": {
+        "report":"junit-cli-report-viewer results.xml"
+    },
+    "dependencies": {
+        "junit-cli-report-viewer": "latest"
+    }
+}

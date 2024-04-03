@@ -1,0 +1,11 @@
+${BASE}/fw/common/rtl/host/sw_dual_spi_uart/spi_path.v
+${BASE}/fw/common/rtl/host/sw_dual_spi_uart/sw_dual_spi_uart.v
+${BASE}/fw/common/rtl/host/sw_dual_spi_uart/sw_switch.v
+${BASE}/fw/common/rtl/host/sw_dual_spi_uart/uart_path.v
+${BASE}/fw/common/rtl/host/uart_lite_driver.sv
++incdir+${HDLBUILDV1_HOME}/svlib/includes
+/home/rleys/git/adl/icflow/packages/hdl_rfg_v1/rtl/protocol/rfg_axis_protocol.sv
+/home/rleys/git/adl/icflow/packages/hdl_rfg_v1/rtl/protocol/rfg_axis_protocol_srl_fifo.sv
+/home/rleys/git/adl/icflow/packages/hdl_rfg_v1/rtl/protocol/rfg_axis_readout_framing.sv
+/home/rleys/git/adl/icflow/packages/hdl_rfg_v1/rtl/spi/spi_slave_axis_egress.sv
+/home/rleys/git/adl/icflow/packages/hdl_rfg_v1/rtl/spi/spi_slave_axis_igress.sv

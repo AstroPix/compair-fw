@@ -1,106 +1,48 @@
-# gitignore template for Xilinx Vivado Design Suite
-# website: https://www.xilinx.com/support/download.html
-# Default from: https://github.com/github/gitignore/blob/main/community/Xilinx.gitignore
 
-# [home]
+**/*.gen
+**/ip/
+
+**/*.log
+
+
+## Xilinx
+**/*.cache
+**/*.hw
+**/*.ip_user_files
+**/*.sim
+**/*.runs
+**/*.srcs/*
+*_ooc.xdc
+*.bxml
 *.jou
-*.log
-*.debug
-*.str
-*.zip
-*.tmp
-*.rst
-*.os
-*.js
-*.pb
-*.dcp
-*.hwdef
-*.vds
-*.veo
-*.wdf
-*.vdi
-*.dmp
-*.rpx
-*.rpt
-*_stub.v
-*_stub.vhdl
-*_funcsim.v
-*_funcsim.vhdl
-.project
-
-# [dir]
-*.cache
-.metadata
-*.data
-*.ipdefs
+*pid*
 .Xil
-*.sdk
-*.hw
-*.ip_user_files
 
-### IP synth
-*_synth_*
+## Xcelium/sim
+xcelium.d*
+**/.icflow/sim/*
+.simvision
+waves.shm
+xrun.*
 
-.jobs
+## HDL Tools
+.generated/
+generated/
+.rtl
+outputs
+hw/
+.outputs
 
-### project synth
-*/*.runs/synth*/*.xml
-*/*.runs/synth*/*.txt
-*/*.runs/synth*/*.sh
-*/*.runs/synth*/*.tcl
-*/*.runs/synth*/*.bat
-*/*.runs/synth*/*.xdc
-!*/*.runs/synth*/*utilization*.rpt
+## Python
+sw/dist
+**/.venv
+**/__pycache__
+**/*pycache*
 
-*.runs/synth*/*.xml
-*.runs/synth*/*.txt
-*.runs/synth*/*.sh
-*.runs/synth*/*.tcl
-*.runs/synth*/*.bat
-*.runs/synth*/*.xdc
-!*.runs/synth*/*utilization*.rpt
+## Docs
+.icflow
+.$*
+docs/site
 
-### project impl
-*/*.runs/impl*/*.xml
-*/*.runs/impl*/*.html
-*/*.runs/impl*/*.txt
-*/*.runs/impl*/*.sh
-*/*.runs/impl*/*.tcl
-*/*.runs/impl*/*.bat
-!*/*.runs/impl*/*utilization*.rpt
-
-*.runs/impl*/*.xml
-*.runs/impl*/*.html
-*.runs/impl*/*.txt
-*.runs/impl*/*.sh
-*.runs/impl*/*.tcl
-*.runs/impl*/*.bat
-!*.runs/impl*/*utilization*.rpt
-
-### block design
-*/*/bd/*/hdl
-*/*/*/bd/*/hdl
-
-*/*/bd/*/*.xdc
-*/*/*/bd/*/*.xdc
-
-*/*/bd/*/ip/*/*.xdc
-*/*/*/bd/*/ip/*/*.xdc
-
-*/*/bd/*/ip/*/*/
-*/*/*/bd/*/ip/*/*/
-
-*/*/bd/*/ip/*/*.vhd
-*/*/*/bd/*/ip/*/*.vhd
-
-*/*/bd/*/ip/*/*.xml
-*/*/*/bd/*/ip/*/*.xml
-
-*.c
-*.h
-*.vho
-*.html
-*/*/bd/*/ip/*/*.tcl
-*/*/*/bd/*/ip/*/*.tcl
-hw_handoff
-ipshared
+## vendor things
+*.tar.gz

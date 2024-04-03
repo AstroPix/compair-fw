@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rm -f drawio-*.deb
+curl -s https://api.github.com/repos/jgraph/drawio-desktop/releases/latest \
+| grep -m1 "browser_download_url.*deb" \
+| cut -d : -f 2,3 \
+| tr -d \" \
+| xargs wget -q --show-progress
+
+sudo dpkg -i $(ls drawio-*.deb)
