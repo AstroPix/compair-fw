@@ -10,6 +10,7 @@ icDefineParameter IC_SIM_BUILD      "Default Simulation build work folder" .icfl
 icDefineParameter IC_SIM_SIMULATOR  "Selected Simulator" icarus
 icDefineParameter IC_SIM_UI         "Try to open simulator UI" 0
 icDefineParameter IC_SIM_EXTRA_ARGS "Extra arguments for sim" {}
+icDefineParameter IC_SIM_SIM_ARGS "Extra arguments for sim" {}
 icDefineParameter IC_SIM_TB         "Name of the python module to be used as testbench"
 icDefineParameter IC_SIM_WORKDIR    "Folder to use to run stuff, to control where outputs are written and keep code folders clean" .icflow/coco
 
@@ -25,6 +26,9 @@ proc coco_parameters args {
     }
 
     ## Autoselect Simulator
+    ###########
+
+    ## xrun
     if {[icflow::utils::icIsToolPresent xrun]} {
         icInfo "XRun detected, switching to xcelium simulator"
         set ::IC_SIM_SIMULATOR xcelium
@@ -47,6 +51,25 @@ proc coco_parameters args {
         }
     }
 
+    ## qrun
+    if {[icflow::utils::icIsToolPresent qrun]} {
+        icInfo "QRUN detected, switching to qrun simulator"
+        set ::IC_SIM_SIMULATOR questa
+
+        
+        ## F File support
+        if {[llength $::IC_NETLIST_F]>0} {
+            icInfo "Using F File for Questa"
+            #set ::IC_SIM_SIM_ARGS [list -f [join $::IC_NETLIST_F -f] ]
+            #set ::IC_NETLIST_VLOG {}
+            #set ::IC_NETLIST_VLOG [list [join $::IC_NETLIST_F -f] ]
+            set ::IC_NETLIST_VLOG  ../../counter.v
+
+            if {${::IC_SIM_UI}==1} {
+                lappend ::IC_SIM_EXTRA_ARGS -gui
+            }
+        }
+    }
     icCheckParameters
 
 
@@ -113,6 +136,7 @@ proc coco_sim args {
     set commandString "source .venv/bin/activate && make -f Makefile.run \
                 COCOTB_ANSI_OUTPUT=1 \
                 SIM=$::IC_SIM_SIMULATOR \
+                SIM_ARGS='[join $::IC_SIM_SIM_ARGS " "]' \
                 EXTRA_ARGS='[join $::IC_SIM_EXTRA_ARGS " "]' \
                 GUI=$::IC_SIM_UI WAVES=1 MODULE=$::IC_SIM_TB TOPLEVEL=$::IC_TOP VERILOG_SOURCES=[join $netlist " "] sim"
     set runScript [open $::IC_SIM_BUILD/run_simulation.sh w+]
