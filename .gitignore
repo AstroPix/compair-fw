@@ -32,6 +32,7 @@ generated/
 outputs
 hw/
 .outputs
+sim_build
 
 ## Python
 sw/dist
