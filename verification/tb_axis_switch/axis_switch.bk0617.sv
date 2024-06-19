@@ -45,32 +45,27 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
         return( vector_binary );
     endfunction
 
-    // Input Source Ports Fifo signals
-    //--------------------
-    logic [PORTS-1:0] source_port_fifo_empty; // Internal FIFO empty, will be inverted as valid
-
     // Request and Grants using RR arbiter
     // Use tvalid to present requests, then when a grant is given, disable arbiter until the data routing has finished
     //----------------
+    
+    // Request mask maps slave requested target master with it's ready state
+    reg [PORTS-1:0] internal_request_mask;
 
     // Slave requests are masked by target master ready
-    //wire [PORTS-1:0] internal_requests = s_axis_tvalid ;
-
-    // Grant request driven by source port not empty and masked by target master ready
-    wire [PORTS-1:0] internal_grant_requests_mask;
-    wire [PORTS-1:0] internal_grant_requests = ~source_port_fifo_empty & internal_grant_requests_mask ;
+    wire [PORTS-1:0] internal_requests = s_axis_tvalid /*& internal_request_mask*/;
 
     // Grants outputs
     wire [PORTS-1:0]                internal_grant;
     wire [GRANT_BINARY_SIZE-1:0]    internal_grant_binary = one_hot_to_binary(internal_grant);
-    //wire                            grant_requested       = |s_axis_tvalid;
+    wire                            grant_requested       = |s_axis_tvalid;
     wire                            grant_granted         = |internal_grant;
 
     // Transmition signals
     
     reg                         transmitting;
     reg [GRANT_BINARY_SIZE-1:0] source_port;
-    //reg [GRANT_BINARY_SIZE-1:0] target_port; // Save target port to avoid issues if the user changes tid while transmitting
+    reg [GRANT_BINARY_SIZE-1:0] target_port; // Save target port to avoid issues if the user changes tid while transmitting
     reg [TID_WIDTH-1:0] source_tid;
 
     //wire last_data = transmitting & s_axis_tlast[source_port]; // On last data block, allow arbiting
@@ -81,7 +76,7 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
         .clk(clk),
         .resn(resn),
         .enable(!transmitting || last_data),
-        .req(internal_grant_requests),
+        .req(internal_requests),
         .grant(internal_grant));
 
     // Transmit state
@@ -94,7 +89,7 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
         if (!resn) begin 
             transmitting <= 'b0;
             source_port  <= 'h0;
-            //target_port  <= 'h0;
+            target_port  <= 'h0;
             source_tid  <= 'h0;
         end
         else begin 
@@ -103,7 +98,7 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
             //-----------
 
             // If there is a request and grant given, set transmitting
-            if (|internal_grant_requests && grant_granted) begin 
+            if (grant_requested && grant_granted) begin 
                 transmitting <= 1'b1;
                 source_port  <= internal_grant_binary;
             end
@@ -121,11 +116,6 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
      // Key is the target master, value the source slave
     logic [TID_WIDTH:0] target_port_source_slave [PORTS];
 
-    logic [TID_WIDTH-1:0] source_port_target_master [PORTS];
-    logic [TID_WIDTH-1:0] current_target_master;
-    logic [TID_WIDTH-1:0] source_port_target_tdata [PORTS];
-    logic [TID_WIDTH-1:0] source_port_target_tuser [PORTS];
-
     // Key is the target master, value the source tuser
     logic [7:0] target_port_source_tuser [PORTS];
 
@@ -135,63 +125,21 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
 
     localparam INPUT_FIFO_WIDTH = TDATA_WIDTH+TID_WIDTH+TUSER_WIDTH+1;
 
-    
+    logic [PORTS-1:0] m_axis_empty_internal; // Internal FIFO empty, will be inverted as valid
     logic [INPUT_FIFO_WIDTH-1:0] m_axis_slave_output[PORTS]; // Output of slave fifo routed to proper master
 
     logic [PORTS-1:0] s_axis_fifo_almost_full;
     assign s_axis_tready = ~s_axis_fifo_almost_full;
 
-    // Memory to save source port targets
-    //-------------
-    always @(posedge clk) begin
-    //always_comb begin
-        for (int i = 0; i < PORTS; i++) begin
-            if (!resn) begin 
-                target_port_source_slave[i] <= 'h0;
-            end
-            else begin
-                if (grant_granted && (internal_grant_binary==i)) begin
-                    target_port_source_slave[source_port_target_master[i]][TID_WIDTH] <= 1'b1;
-                    target_port_source_slave[source_port_target_master[i]][TID_WIDTH-1:0] <= i;
-                    current_target_master <= source_port_target_master[i];
-
-                    // target_port_source_tuser[source_port_target_master[i]] <= source_port_target_tuser[i];
-                    //target_port_source_tdata[source_port_target_master[i]] <= source_port_target_tdata[i];
-                    //target_port_source_slave[i][TID_WIDTH] = 1'b1;
-                    //target_port_source_slave[s_axis_tid[(i*8)+8-1:i*8]][TID_WIDTH-1:0] = i;
-                end else if((source_port==i) && last_data) begin 
-                    //target_port_source_slave[source_port_target_master[i]][TID_WIDTH] <= 1'b0;
-                    target_port_source_slave[current_target_master][TID_WIDTH] <= 1'b0;
-                end/*else if(transmitting && (source_port==i) && last_data) begin 
-                    target_port_source_slave[source_port_target_master[i]][TID_WIDTH] <= 1'b0;
-                end*/
-                //target_port_source_slave[master_target][TID_WIDTH] = 1'b1;
-                //target_port_source_slave[master_target][TID_WIDTH-1:0] = f;
-                
-                //target_port_source_tuser[master_target] = slave_tuser;
-                //target_port_source_tdata[master_target] = slave_tdata;
-            end
-            
-        end
-        
-    end
-    // Generate Input FIFOS for source ports
-    //-----------------
+    
     genvar f;
     generate 
         for (f = 0 ; f < PORTS; f++) begin
 
-            logic [1:0] f_bits = f;
-
             //-- Slave Side tuser, tdata, input fifo
             //------------
             wire slave_selected = transmitting && (source_port==f);
-            
-            wire [TID_WIDTH-1:0] master_target = s_axis_tid[(f*TID_WIDTH)+TID_WIDTH-1:f*TID_WIDTH];
-            assign source_port_target_master[f] = master_target;
-
-            assign internal_grant_requests_mask[f] = ! (slave_selected || m_axis_tready[master_target]==0 ); // 1 to enable, 0 to disable
-
+            wire [TID_WIDTH-1:0] master_target = s_axis_tid[(f*8)+8-1:f*8];
             wire [TUSER_WIDTH-1:0] slave_tuser = s_axis_tuser[(f*TUSER_WIDTH)+TUSER_WIDTH-1:f*TUSER_WIDTH];
             wire [TDATA_WIDTH-1:0] slave_tdata = s_axis_tdata[(f*TDATA_WIDTH)+TDATA_WIDTH-1:f*TDATA_WIDTH];
 
@@ -211,15 +159,23 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
                 // Master internal side
                 // Empty sets matched master valid
                 .read_value(m_axis_slave_output[f]),
-                .read(slave_selected &&  m_axis_tready[current_target_master] /*& slave_selected*/ && m_axis_tvalid[current_target_master] ),
-                .empty(source_port_fifo_empty[f]),
+                .read( m_axis_tready[master_target] /*& slave_selected*/ & m_axis_tvalid[master_target] ),
+                .empty(m_axis_empty_internal[f]),
                 .almost_empty()
             );
 
-            
-            //assign source_port_target_tdata[f] = s_axis_tdata[(f*8)+8-1:f*8];
-            //assign source_port_target_tuser[f] = s_axis_tuser[(f*8)+8-1:f*8];
-            /*always @(posedge clk) begin
+            //-- Save selected state in target port memory entry
+            always @(posedge clk) begin 
+                if (!resn) begin 
+                    internal_request_mask[f] <= 'b0;
+                    //master_target_reg <= 'b0;
+                end
+                else begin 
+                    internal_request_mask[f] <= m_axis_tready[master_target] && !slave_selected;
+                    //master_target_reg <= s_axis_tid[(f*8)+8-1:f*8];
+                end
+            end
+            always @(posedge clk) begin
                 if (!resn) begin
                     target_port_source_slave[f] <= 'h0;
                 end else if (slave_selected) begin
@@ -229,8 +185,7 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
                     target_port_source_slave[master_target[1:0]][TID_WIDTH] <= 1'b0 ;
                     //target_port_source_slave[master_target[1:0]][TID_WIDTH-1:0] <= f;
                 end
-            end*/
-
+            end
             /*always_comb begin
 
                 if(!resn) begin 
@@ -245,22 +200,17 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
             end*/
 
             //-- Master target ready signal connected to this slave
-            wire master_port_selected = target_port_source_slave[f][TID_WIDTH] == 1'b1 && transmitting;
-            wire [TDATA_WIDTH-1:0] master_port_tdata = !master_port_selected ? 'h0 : m_axis_slave_output[source_port][TDATA_WIDTH-1:0];
-            wire [INPUT_FIFO_WIDTH-1:0] master_port_slave_fifo_out = m_axis_slave_output[source_port];
+            wire master_port_selected = target_port_source_slave[f][TID_WIDTH] == 1'b1;
            // wire master_port_selected = target_port_source_slave[f][TID_WIDTH] == 1'b1;
            // wire master_port_selected = m_axis_slave_output[f]
             always_comb begin
                 //m_axis_tvalid[f] = !master_port_selected ? 1'b0 : s_axis_tvalid[target_port_source_slave[f][7:0]];
-                
-                m_axis_tid[f*8+8-1:f*8] = target_port_source_slave[f][TID_WIDTH-1:0];
+                m_axis_tuser[f*8+8-1:f*8] = target_port_source_tuser[f];
+                m_axis_tid[f*8+8-1:f*8] = target_port_source_slave[f];
                 //m_axis_tdata[f*8+8-1:f*8] = !master_port_selected ? 'h0 : target_port_source_tdata[f];
-                m_axis_tvalid[f] = !master_port_selected ? 1'b0 : !source_port_fifo_empty[source_port];
-                m_axis_tdata[f*8+8-1:f*8] = !master_port_selected ? 'h0 : m_axis_slave_output[source_port][TDATA_WIDTH-1:0];
-                m_axis_tlast[f] = !master_port_selected ? 'b0 : m_axis_slave_output[source_port][INPUT_FIFO_WIDTH-1];
-                m_axis_tuser[f*TUSER_WIDTH+TUSER_WIDTH-1:f*TUSER_WIDTH] = !master_port_selected ? 'b0 : m_axis_slave_output[source_port][TDATA_WIDTH+TUSER_WIDTH-1:TDATA_WIDTH];
-
-                //master_port_tdata = !master_port_selected ? 'h0 : m_axis_slave_output[internal_grant_binary][TDATA_WIDTH-1:0];
+                m_axis_tvalid[f] = !master_port_selected ? 1'b0 : !m_axis_empty_internal[target_port_source_slave[f][7:0]];
+                m_axis_tdata[f*8+8-1:f*8] = !master_port_selected ? 'h0 : m_axis_slave_output[internal_grant_binary][TDATA_WIDTH-1:0];
+                m_axis_tlast[f] = !master_port_selected ? 'b0 : m_axis_slave_output[internal_grant_binary][INPUT_FIFO_WIDTH-1]; 
             end
         end
     endgenerate

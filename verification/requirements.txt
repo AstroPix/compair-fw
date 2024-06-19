@@ -1,3 +1,4 @@
+cocotb
 cocotbext-uart
 pytest
 bitstring~=3.1
