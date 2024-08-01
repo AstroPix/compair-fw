@@ -33,6 +33,7 @@ outputs
 hw/
 .outputs
 sim_build
+results.xml 
 
 ## Python
 sw/dist
