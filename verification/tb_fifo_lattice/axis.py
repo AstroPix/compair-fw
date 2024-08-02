@@ -198,7 +198,7 @@ class AXIS_Master_Driver:
     async def driver_task(self):
         while True:
             frame = await self.outputQueue.get()
-            self.dut._log.info(f"AXIS Master got frame with {len(frame)} bytes")
+            self.dut._log.debug(f"AXIS Master got frame with {len(frame)} bytes")
             for i,axisCycle in enumerate(frame):
                 
                 # Data contained in cycle.data parameter
@@ -215,10 +215,10 @@ class AXIS_Master_Driver:
 
                 ## If the cycle has no data, don't set valid
                 if axisCycle.data is None:
-                    self.dut._log.info(f"AXIS Master writing empty Cycle")
+                    self.dut._log.debug(f"AXIS Master writing empty Cycle")
                     self.notValid()
                 else:
-                    self.dut._log.info(f"AXIS Master writing byte {hex(byte)}")
+                    self.dut._log.debug(f"AXIS Master writing byte {hex(byte)}")
                     self.valid()
                     self.setData(byte)
 
@@ -226,7 +226,7 @@ class AXIS_Master_Driver:
                 # Do this on next edge to avoid sync issues with simulator
                 await FallingEdge(self.clk)
                 if  not self.isReady():
-                    self.dut._log.info("AXIS Master waiting for ready")
+                    self.dut._log.debug("AXIS Master waiting for ready")
                     while not self.isReady():
                         await FallingEdge(self.clk)
 

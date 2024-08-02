@@ -9,10 +9,13 @@ from axis import AXIS_Master_Driver, AXIS_Slave_Driver ,AXIS_Master_Monitor,AXIS
 
 clockJob : Task
 
+masterClockPeriod = 22
+slaveClockPeriod = 13
+
 async def common_clock(dut):
     ## This starts a task that will create a clock waveform every 10ns
-    writeClock = cocotb.start_soon(Clock(dut.s_axis_aclk, 9, units='ns').start())
-    readClock = cocotb.start_soon(Clock(dut.m_axis_aclk, 22, units='ns').start())
+    writeClock = cocotb.start_soon(Clock(dut.s_axis_aclk, slaveClockPeriod, units='ns').start())
+    readClock = cocotb.start_soon(Clock(dut.m_axis_aclk, masterClockPeriod, units='ns').start())
     await RisingEdge(dut.s_axis_aclk)
     await RisingEdge(dut.m_axis_aclk)
 
@@ -71,33 +74,27 @@ async def waitForXSlaveClocks(dut,count):
     for i in range(count):
         await RisingEdge(dut.s_axis_aclk)
 
+def slaveReadyWithPauses(slave,pauseRandMax):
+    async def __lt():
+        print("Started read with pauses task")
+        while True: 
+            # Read byte, then pause, maybe
+            await RisingEdge(slave.clk)
+            slave.ready()
+            for j in range(random.randint(0,pauseRandMax)):
+                await RisingEdge(slave.clk)
+                slave.notReady()
+    job = cocotb.start_soon(__lt())
+    return job
+
 ## Driving
 ################
-async def writeByte(dut,b):
-    await master.writeFrame([b])
-    #await RisingEdge(dut.clk)
-    #dut.data_in.value = b 
-    #dut.shiftin.value = 1
-
-async def readByte(dut):
-    await RisingEdge(dut.clk)
-    dut.shiftout.value = 1
-
-async def noRead(dut):
-    await RisingEdge(dut.clk)
-    dut.shiftout.value = 0
-
-async def noWrite(dut):
-    await RisingEdge(dut.clk)
-    dut.shiftin.value = 0
-
-
 
 async def scoreBoardValidate(masterMonitor,slaveMonitor,expectedCount):
 
     ## Check data counts are the same in both input and output, and according to expecting size
     assert masterMonitor.getBytesCount() == expectedCount, f"Expected {expectedCount} bytes"
-    assert masterMonitor.getBytesCount() == slaveMonitor.getBytesCount() , "In/Out Queues should be of same size"
+    
     
 
     # Get bytes
@@ -105,10 +102,13 @@ async def scoreBoardValidate(masterMonitor,slaveMonitor,expectedCount):
     outBytes = await slaveMonitor.getAllBytes()
 
     if inBytes != outBytes:
+        print(f"In len={len(inBytes)},Out len={len(outBytes)}")
         for i in range(len(inBytes)):
-            print(f"in={hex(inBytes[i])},out={hex(outBytes[i])}")
+            inb = hex(inBytes[i])
+            outb = "OOR" if i >= len(outBytes) else hex(outBytes[i])
+            print(f"in={hex(inBytes[i])},out={outb}")
 
-
+    assert masterMonitor.getBytesCount() == slaveMonitor.getBytesCount() , "In/Out Queues should be of same size"
     assert inBytes == outBytes , "In/Out Bytes should be identical"
 
     print(f"** Scoreboard success in={len(inBytes)} bytes,out={len(inBytes)} bytes**")
@@ -126,23 +126,25 @@ async def test_single_write_single_read(dut):
 
 
     # Check that Master interface becomes valid
-    await waitForXMasterClocks(dut,10)
+    await waitForXMasterClocks(dut,20)
     assert (dut.m_axis_tvalid.value == 1 ) , "Master interface is valid after write (not empty)"
 
     # Read by setting the Slave receiver to ready -> Use Falling edge to avoid sync issue with simulator on posedge
-    await waitForXMasterClocksNegedge(dut,1)
+    await waitForXMasterClocks(dut,2)
     slave.ready()
-    await waitForXMasterClocks(dut,3)
+    await waitForXMasterClocks(dut,4)
+    slave.notReady()
     assert (dut.m_axis_tvalid.value == 0 ) , "Master interface is not valid after read (empty)"
 
-    # Check results
-    await waitForXMasterClocks(dut,2)
+
     await scoreBoardValidate(masterMonitor,slaveMonitor,1)
 
     await Timer(10, units="us")
 
     ## Repeat the test but the Ready state of Simulation Slave receiver is always on
     ## If the Fifo is generated with "reg output", the data is delayed by one cycle, which is not what we want
+    await waitForXMasterClocks(dut,2)
+    slave.ready()
     await master.writeByte(random.randint(1,128))
     await waitForXMasterClocksNegedge(dut,10)
     await scoreBoardValidate(masterMonitor,slaveMonitor,1)
@@ -165,7 +167,7 @@ async def test_2write_2read(dut):
 
     # Wait for Master side to be ready - set slave receiver ready 
     await RisingEdge(dut.m_axis_tvalid)
-    await waitForXMasterClocks(dut,1)
+    await waitForXMasterClocks(dut,3)
     slave.ready()
     await waitForXMasterClocksNegedge(dut,5)
     slave.notReady()
@@ -194,7 +196,7 @@ async def test_write_readalways(dut):
     await master.generateDataCycles(count = bytesCount , pausesRandMin = 0 , pausesRandMax = 3)
     
     # Wait a while
-    await Timer(1,units="us")
+    await Timer(2,units="us")
 
     # Verify
     await scoreBoardValidate(masterMonitor,slaveMonitor,bytesCount)
@@ -204,134 +206,127 @@ async def test_write_readalways(dut):
 
 
 
-@cocotb.test(timeout_time = 1,timeout_unit="ms",skip=True)
+@cocotb.test(timeout_time = 1,timeout_unit="ms",skip=False)
 async def test_write_full_then_readcontinuous(dut):
 
     master,slave,masterMonitor,slaveMonitor = await reset_common_clock(dut)
     await Timer(2,units="us")
 
     
-    # Read task
-    async def randomReader(dut):
-        while True: 
-            # Read byte, then pause, maybe
-            await readByte(dut)
-            if dut.empty.value==0:
-                for j in range(random.randint(0,3)):
-                    await noRead(dut)
+    # Write 64 bytes +5 , it should turn the FIFO full - the +5 is because there is a caching 4 entrie fifo in the read path, so the fifo capacity is Fifo_Depth + 5
+    bytesCount = 64+5
+    await master.generateDataCycles(count = bytesCount , pausesRandMin = 0 , pausesRandMax = 2)
     
-    # Write until full with pauses
-    # Write with pauses
-    for i in range(random.randint(600,1024)):
-        if dut.full.value != 1:
-            await writeByte(dut,random.randint(1,128))
-            for j in range(random.randint(0,3)):
-                await noWrite(dut)
-        else:
-            await noWrite(dut)
-            break
-        
-    await noWrite(dut)
+    # Wait until full, i.e slave interface not ready
+    await FallingEdge(dut.s_axis_tready)
 
-    dut.shiftout.value = 1
-
-    # Wait until empty
-    await RisingEdge(dut.empty)
+    # Now start reading
+    await waitForXMasterClocks(dut,10)
+    slave.ready()
+    await waitForXMasterClocks(dut,72)
 
     # Verify
-    await Timer(1,units="us")
-    #job.kill()
-    await FallingEdge(dut.clk)
-    await scoreBoardValidate()
+    await scoreBoardValidate(masterMonitor,slaveMonitor,bytesCount)
 
-    #await stop_clock(dut)
     await Timer(50, units="us")
+    return 
 
 
-@cocotb.test(timeout_time = 1,timeout_unit="ms",skip=True)
+@cocotb.test(timeout_time = 500,timeout_unit="us",skip=False)
 async def test_write_full_randomread(dut):
-    await reset_common_clock(dut)
+
+    master,slave,masterMonitor,slaveMonitor = await reset_common_clock(dut)
     await Timer(2,units="us")
 
-    start_monitors(dut)
-    await Timer(1,units="us")
-
     
-    # Read task
-    async def randomReader(dut):
-        while True: 
-            # Read byte, then pause, maybe
-            await readByte(dut)
-            if dut.empty.value==0:
-                for j in range(random.randint(0,3)):
-                    await noRead(dut)
     
     # Write until full with pauses
-    # Write with pauses
-    for i in range(random.randint(600,1024)):
-        if dut.full.value != 1:
-            await writeByte(dut,random.randint(1,128))
-            for j in range(random.randint(0,3)):
-                await noWrite(dut)
-        else:
-            await noWrite(dut)
-            break
-        
-    await noWrite(dut)
+    bytesCount = 64+5
+    await master.generateDataCycles(count = bytesCount , pausesRandMin = 0 , pausesRandMax = 2)
+    await FallingEdge(dut.s_axis_tready)
 
-    # Start reading and write again with pauses
-    job = cocotb.start_soon(randomReader(dut))
+
+    # Start reading and write again with pauses to test at the full corner case
+    # Now start reading
+    await waitForXMasterClocks(dut,10)
+    dut._log.info("Starting Slave ready with pauses task")
+    job = slaveReadyWithPauses(slave,3)
+    
+    #await waitForXMasterClocks(dut,72)
+
     # Write with pauses
-    for i in range(random.randint(5,64)):
-        await writeByte(dut,random.randint(1,128))
-        for j in range(random.randint(0,3)):
-            await noWrite(dut)
-    await noWrite(dut)
+    #bytesCount = bytesCount + 42
+    #await master.generateDataCycles(count = 42 , pausesRandMin = 0 , pausesRandMax = 3)
 
     # Wait until empty
-    await RisingEdge(dut.empty)
-
-    # Verify
-    await Timer(1,units="us")
-    job.kill()
-    await FallingEdge(dut.clk)
-    await scoreBoardValidate()
-
-    #await stop_clock(dut)
-    await Timer(50, units="us")
-
-            
-@cocotb.test(timeout_time = 1,timeout_unit="ms",skip=True)
-async def test_write_randomread(dut):
-    await reset_common_clock(dut)
-    await Timer(2,units="us")
-
-    start_monitors(dut)
-    await Timer(1,units="us")
-
-    
-    # Read task
-    async def randomReader(dut):
-        while True: 
-            # Read byte, then pause, maybe
-            await readByte(dut)
-            for j in range(random.randint(0,3)):
-                await noRead(dut)
-    job = cocotb.start_soon(randomReader(dut))
-
-    # Write with pauses
-    for i in range(random.randint(5,64)):
-        await writeByte(dut,random.randint(1,128))
-        for j in range(random.randint(0,3)):
-            await noWrite(dut)
-    await noWrite(dut)
-
+    await FallingEdge(dut.m_axis_tvalid)
 
     # Verify
     await Timer(5,units="us")
     job.kill()
-    await FallingEdge(dut.clk)
-    await scoreBoardValidate()
+    
+    await scoreBoardValidate(masterMonitor,slaveMonitor,bytesCount)
+
+    #await stop_clock(dut)
+    await Timer(50, units="us")
+
+@cocotb.test(timeout_time = 500,timeout_unit="us",skip=False)
+async def test_write_full_randomread_and_write(dut):
+
+    master,slave,masterMonitor,slaveMonitor = await reset_common_clock(dut)
+    await Timer(2,units="us")
+
+    
+    
+    # Write until full with pauses
+    bytesCount = 64+5
+    await master.generateDataCycles(count = bytesCount , pausesRandMin = 0 , pausesRandMax = 2)
+    await FallingEdge(dut.s_axis_tready)
+
+
+    # Start reading and write again with pauses to test at the full corner case
+    # Now start reading
+    await waitForXMasterClocks(dut,10)
+    dut._log.info("Starting Slave ready with pauses task")
+    job = slaveReadyWithPauses(slave,3)
+    
+    #await waitForXMasterClocks(dut,72)
+
+    # Write with pauses
+    bytesCount = bytesCount + 42
+    await master.generateDataCycles(count = 42 , pausesRandMin = 0 , pausesRandMax = 3)
+
+    # Wait until empty
+    await FallingEdge(dut.m_axis_tvalid)
+
+    # Verify
+    await Timer(5,units="us")
+    job.kill()
+    
+    await scoreBoardValidate(masterMonitor,slaveMonitor,bytesCount)
+
+    #await stop_clock(dut)
+    await Timer(50, units="us")
+            
+@cocotb.test(timeout_time = 1,timeout_unit="ms",skip=False)
+async def test_write_randomread(dut):
+
+    master,slave,masterMonitor,slaveMonitor = await reset_common_clock(dut)
+    await Timer(2,units="us")
+    
+    # Read task
+    job = slaveReadyWithPauses(slave,3)
+
+    # Write with pauses
+    bytesCount = random.randint(5,96)
+    await master.generateDataCycles(count = bytesCount , pausesRandMin = 0 , pausesRandMax = 3)
+
+
+    # Verify
+    await Timer(20,units="us")
+    job.kill()
+    
+    await scoreBoardValidate(masterMonitor,slaveMonitor,bytesCount)
 
    #await stop_clock(dut)
     await Timer(50, units="us")
@@ -339,36 +334,26 @@ async def test_write_randomread(dut):
 
 
             
-@cocotb.test(timeout_time = 1,timeout_unit="ms",skip=True)
+@cocotb.test(timeout_time = 1,timeout_unit="ms",skip=False)
 async def test_write_randomread_long(dut):
-    await reset_common_clock(dut)
+    master,slave,masterMonitor,slaveMonitor = await reset_common_clock(dut)
     await Timer(2,units="us")
-
-    start_monitors(dut)
-    await Timer(1,units="us")
-
     
     # Read task
-    async def randomReader(dut):
-        while True: 
-            # Read byte, then pause, maybe
-            await readByte(dut)
-            for j in range(random.randint(0,3)):
-                await noRead(dut)
-    job = cocotb.start_soon(randomReader(dut))
+    job = slaveReadyWithPauses(slave,3)
 
     # Write with pauses
-    for i in range(random.randint(1024,2048)):
-        await writeByte(dut,random.randint(1,128))
-        for j in range(random.randint(0,5)):
-            await noWrite(dut)
-    await noWrite(dut)
+    bytesCount = random.randint(1024,4096)
+    await master.generateDataCycles(count = bytesCount , pausesRandMin = 0 , pausesRandMax = 3)
 
 
     # Verify
-    await Timer(5,units="us")
+    await Timer(200,units="us")
     job.kill()
-    await FallingEdge(dut.clk)
-    await scoreBoardValidate()
+    
+    await scoreBoardValidate(masterMonitor,slaveMonitor,bytesCount)
 
+   #await stop_clock(dut)
     await Timer(50, units="us")
+
+    

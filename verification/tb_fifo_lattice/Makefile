@@ -7,7 +7,7 @@ SHELL=/bin/bash
 SIM ?= xcelium
 TOPLEVEL_LANG ?= verilog
 
-VERILOG_SOURCES += $(PWD)/../../rtl/utilities/fifo_lattice_axis_wrapper.sv $(PWD)/fifo_2clk_64e.v
+VERILOG_SOURCES += $(PWD)/../../rtl/utilities/fifo_lattice_axis_wrapper.sv $(PWD)/../../rtl/utilities/mini_fwft_fifo.sv $(PWD)/fifo_2clk_64e.v
 #VERILOG_SOURCES += $(PWD)/my_design.sv
 # use VHDL_SOURCES for VHDL files
 
@@ -20,7 +20,7 @@ WAVES ?= 1
 USER_ARGS?=
 EXTRA_ARGS?=-input xcelium.tcl -define LFCPNX -define LFCPNX_100 -define jd5d00 -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
 
-
+RANDOM_SEED=1722517216
 
 inspect: export USER_ARGS=-gui
 inspect: sim
