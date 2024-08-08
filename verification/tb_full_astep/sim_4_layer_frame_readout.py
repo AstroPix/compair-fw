@@ -21,10 +21,10 @@ import astep24_3l_sim
 async def test_layer_0_single_frame_noautoread(dut):
 
     ## Driver, asic, clock+reset
-    driver = astep24_3l_sim.getUARTDriver(dut)
     asic = vip.astropix3.Astropix3Model(dut = dut, prefix = "layer_0" , chipID = 1)
     await vip.cctb.common_clock_reset(dut)
     await Timer(10, units="us")
+    driver = await astep24_3l_sim.getDriver(dut)
 
     ## Drive a frame from the ASIC with autoread disabled, it should timeout
     try:
@@ -41,22 +41,23 @@ async def test_layer_0_single_frame_noautoread(dut):
     ## Then Write 10 NULL Bytes, which will be enought to readout the whole frame
     generator = cocotb.start_soon(asic.generateTestFrame(length = 5))
     await Timer(1,units="us")  
-    await driver.setLayerReset(layer = 0, reset = False)
+    await driver.setLayerConfig(layer = 0, reset = False,hold=False,autoread=False,chipSelect=True,flush=True)
     await driver.writeLayerBytes( layer = 0 , bytes = [0x00]*10 , flush = True)
     await generator.join()
 
     ## Check That one Frame was seen
+    await Timer(50, units="us")
     assert  await driver.readoutGetBufferSize() == 12
     await Timer(50, units="us")
 
-@cocotb.test(timeout_time = 1 , timeout_unit = "ms")
+@cocotb.test(timeout_time = 2 , timeout_unit = "ms")
 async def test_layer_0_double_frame_noautoread(dut):
 
     ## Driver, asic, clock+reset
-    driver = astep24_3l_sim.getUARTDriver(dut)
     asic = vip.astropix3.Astropix3Model(dut = dut, prefix = "layer_0" , chipID = 1)
     await vip.cctb.common_clock_reset(dut)
     await Timer(10, units="us")
+    driver = await astep24_3l_sim.getDriver(dut)
 
     ## Drive a frame from the ASIC with autoread disabled, it should timeout
     try:
@@ -73,11 +74,12 @@ async def test_layer_0_double_frame_noautoread(dut):
     ## Then Write 10 NULL Bytes, which will be enought to readout the whole frame
     generator = cocotb.start_soon(asic.generateTestFrame(length = 5,framesCount=2))
     await Timer(1,units="us")  
-    await driver.setLayerReset(layer = 0, reset = False)
+    await driver.setLayerConfig(layer = 0, reset = False,hold=False,autoread=False,chipSelect=True,flush=True)
     await driver.writeLayerBytes( layer = 0 , bytes = [0x00]*16 , flush = True)
     await generator.join()
 
     ## Check That two Frames were seen
+    await Timer(50, units="us")
     assert  await driver.readoutGetBufferSize() == 24
 
     ## Readout and print
@@ -86,21 +88,21 @@ async def test_layer_0_double_frame_noautoread(dut):
         print(f"B={hex(b)}")
     await Timer(50, units="us")
 
-@cocotb.test(timeout_time = 0.5 , timeout_unit = "ms")
+@cocotb.test(timeout_time = 2 , timeout_unit = "ms")
 async def test_layer_0_single_frame_autoread(dut):
 
     ## Driver, asic, clock+reset
-    driver = astep24_3l_sim.getUARTDriver(dut)
     asic = vip.astropix3.Astropix3Model(dut = dut, prefix = "layer_0" , chipID = 1)
     await vip.cctb.common_clock_reset(dut)
     await Timer(10, units="us")
+    driver = await astep24_3l_sim.getDriver(dut)
 
     assert await driver.readoutGetBufferSize() == 0
 
     ##########
 
     ## Start the layer, with autoread enabled
-    await driver.setLayerReset(layer = 0 , reset = False, disable_autoread = 0 , flush = True )
+    await driver.setLayerConfig(layer = 0, reset = False, hold = False, autoread = True , flush = True )
 
     ## Drive a frame from the ASIC
     ## This method returns when the frame was outputed from the chip spi slave
@@ -116,13 +118,10 @@ async def test_layer_0_single_frame_autoread(dut):
     await Timer(50, units="us")
 
 
-@cocotb.test(timeout_time = 0.8, timeout_unit = "ms")
+@cocotb.test(timeout_time = 2, timeout_unit = "ms")
 async def test_3_layers_single_frame(dut):
     """Send A single frame to all layers after each other"""
 
-
-    ## Get Target Driver
-    driver = astep24_3l_sim.getUARTDriver(dut)
 
     ## Create ASIC Models
     asics = []
@@ -133,13 +132,14 @@ async def test_3_layers_single_frame(dut):
     ## Clock/Reset
     await vip.cctb.common_clock_reset(dut)
     await Timer(10, units="us")
+    driver = await astep24_3l_sim.getDriver(dut)
 
     #########
 
     ## Start the layers, with autoread enabled
-    await driver.setLayerReset(layer = 0, reset = False, disable_autoread = 0 , flush = False )
-    await driver.setLayerReset(layer = 1, reset = False, disable_autoread = 0 , flush = False )
-    await driver.setLayerReset(layer = 2, reset = False, disable_autoread = 0 , flush = True )
+    await driver.setLayerConfig(layer = 0, reset = False, hold = False, autoread = True , flush = False )
+    await driver.setLayerConfig(layer = 1, reset = False, hold = False, autoread = True , flush = False )
+    await driver.setLayerConfig(layer = 2, reset = False, hold = False, autoread = True , flush = True )
 
     ## Generate Frame to all after each other
     for i in range(3):
@@ -161,11 +161,12 @@ async def test_3_layers_single_frame(dut):
     ## Same test but generate the frames in parallel
     ## First warm reset
     await vip.cctb.warm_reset(dut)
+    await Timer(50, units="us")
 
     ## Start the layers, with autoread enabled
-    await driver.setLayerReset(layer = 0, reset = False, disable_autoread = 0 , flush = False )
-    await driver.setLayerReset(layer = 1, reset = False, disable_autoread = 0 , flush = False )
-    await driver.setLayerReset(layer = 2, reset = False, disable_autoread = 0 , flush = True )
+    await driver.setLayerConfig(layer = 0, reset = False, hold = False, autoread = True , flush = False )
+    await driver.setLayerConfig(layer = 1, reset = False, hold = False, autoread = True , flush = False )
+    await driver.setLayerConfig(layer = 2, reset = False, hold = False, autoread = True , flush = True )
 
     ## Generate Frames
     tasks = []

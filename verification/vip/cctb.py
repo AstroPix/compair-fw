@@ -6,12 +6,11 @@ import cocotb
 from cocotb.triggers    import Timer,RisingEdge
 from cocotb.clock       import Clock
 
-import  rfg.discovery
-from    rfg.cocotb.cocotb_uart import UARTIO
-from    rfg.cocotb.cocotb_spi  import SPIIO
+#import  rfg.discovery
+#from    rfg.cocotb.cocotb_uart import UARTIO
+#from    rfg.cocotb.cocotb_spi  import SPIIO
 
-
-from drivers.astep.housekeeping import Housekeeping
+#from drivers.astep.housekeeping import Housekeeping
 
 ## Try to load the Firmware RFG package based on currently possible tops
 def load_fsp():

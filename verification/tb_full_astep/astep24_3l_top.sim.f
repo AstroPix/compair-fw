@@ -9,8 +9,11 @@
 +define+RFG_FW_BUILD=32'h0000ffAB
 
 ## Main Verilog
--f ${BASE}/fw/astep24-3l/common/astep24_3l_top.f
+-f ${BASE}/rtl/top/astep24_3l_top.f
 
 
-## Xilinx sim
--f ${BASE}/fw/astep24-3l/verification/xilinx_sim_libs.f
+## Lattice sim
+#-f ${BASE}/fw/astep24-3l/verification/xilinx_sim_libs.f
+${BASE}/verification/ip/fifo_2clk_64x32.v
+${BASE}/verification/ip/fifo_2clk_64x8.v
+${BASE}/verification/ip/clock_pll_1.v

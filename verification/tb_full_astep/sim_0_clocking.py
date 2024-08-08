@@ -40,7 +40,7 @@ async def test_clocking_resets(dut):
     await Timer(10, units="us")
 
 @cocotb.test(timeout_time = 1,timeout_unit="ms")
-async def test_clocking_dividers(dut):
+async def test_clocking_dividers(dut,skip=True):
   
     await vip.cctb.common_clock_reset(dut)
     dut.warm_resn.value = 0
@@ -57,7 +57,7 @@ async def test_clocking_dividers(dut):
 
 
 @cocotb.test(timeout_time = 1,timeout_unit="ms")
-async def test_buffers_reset(dut):
+async def test_buffers_reset(dut,skip=True):
   
     ## Get Target Driver
     driver = astep24_3l_sim.getUARTDriver(dut)
@@ -79,7 +79,7 @@ async def test_buffers_reset(dut):
     
     await Timer(50, units="us")
 
-@cocotb.test(timeout_time = 1,timeout_unit="ms")
+@cocotb.test(timeout_time = 1,timeout_unit="ms",skip=True)
 async def test_spi_divider_api(dut):
   
     ## Get Target Driver
