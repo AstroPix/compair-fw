@@ -1,6 +1,0 @@
-<testsuites name="results">
-  <testsuite name="all" package="all">
-    <property name="random_seed" value="1715773025" />
-    <testcase name="test_clocking_reset" classname="sim_counter" file="/home/rleys/git/adl/compair-fw/verification/.venv/lib/python3.10/site-packages/cocotb/decorators.py" lineno="6" time="1.2030696868896484" sim_time_ns="201000.001" ratio_time="167072.61698169337" />
-  </testsuite>
-</testsuites>
