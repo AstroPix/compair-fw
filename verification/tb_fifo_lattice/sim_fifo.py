@@ -46,13 +46,16 @@ async def reset_common_clock(dut):
     await common_clock(dut)
 
     ## Reset the design for a few clock cycles
-    dut.s_axis_aresetn.value = 0 
+    dut.s_axis_aresetn.value = 0
+    dut.m_axis_aresetn.value = 0 
     for i in range(10):
         await RisingEdge(dut.s_axis_aclk)
     for i in range(10):
         await RisingEdge(dut.m_axis_aclk)
     dut.s_axis_aresetn.value = 1
+    dut.m_axis_aresetn.value = 1 
     await RisingEdge(dut.s_axis_aclk)
+    await RisingEdge(dut.m_axis_aclk)
 
 
     # Start monitors
@@ -122,6 +125,7 @@ async def test_single_write_single_read(dut):
 
 
     # Write
+    master.setTid(0xAB)
     await master.writeByte(random.randint(1,128))
 
 
@@ -348,7 +352,7 @@ async def test_write_randomread_long(dut):
 
 
     # Verify
-    await Timer(200,units="us")
+    await Timer(500,units="us")
     job.kill()
     
     await scoreBoardValidate(masterMonitor,slaveMonitor,bytesCount)

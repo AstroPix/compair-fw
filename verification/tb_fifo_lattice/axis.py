@@ -172,6 +172,7 @@ class AXIS_Master_Driver:
         self.dut = dut 
         self.clk = clk 
         self.outputQueue = Queue(maxsize = queueSize)
+        self.offset = 0 
   
 
     def reset(self):
@@ -189,9 +190,20 @@ class AXIS_Master_Driver:
     def isReady(self):
         return True if self.dut.s_axis_tready.value == 1 else False
 
+    def setTid(self,target,size=8):
+        for i in range(size):
+            self.dut.s_axis_tid[self.offset*size+i].value  = (target >> i & 0x1)
 
-    def setData(self,value):
-        for i in range(8):
+    def setTuser(self,val,size=8):
+        for i in range(size):
+            self.dut.s_axis_tuser[self.offset*size+i].value  = (val >> i & 0x1)
+
+    def setTdest(self,val,size=8):
+        for i in range(size):
+            self.dut.s_axis_tdest[self.offset*8+i].value  = (val >> i & 0x1)
+
+    def setData(self,value,size=8):
+        for i in range(size):
             self.dut.s_axis_tdata[i].value  = (value >> i & 0x1)
        
 
