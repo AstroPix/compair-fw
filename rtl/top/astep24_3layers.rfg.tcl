@@ -37,17 +37,31 @@ set baseRegisters [subst {
         {HK_XADC_VCCINT         -size 16 -sw_read_only -hw_write -doc "XADC FPGA VCCINT (automatically updated by firmware)"}
         {HK_CONVERSION_TRIGGER   -counter -interrupt -size 32 -match_reset 32'd10 -updown -doc "This register is a counter that generates regular interrupts to fetch new XADC values"}
         {HK_STAT_CONVERSIONS_COUNTER -size 32 -sw_read_only -counter -enable -hw_ignore -doc "Counter increased after each XADC conversion (for information) "} 
-        {HK_ADC_MOSI_FIFO -fifo_axis_master -with_tlast -doc "FIFO to send bytes to ADC"}
+        {HK_CTRL  -doc "Controls for HK modules" -bits {{SELECT_ADC -doc "Selects ADC SPI Output. 0 selects DAC, 1 selects ADC"}}}
+        {HK_ADCDAC_MOSI_FIFO -fifo_axis_master -with_tlast -doc "FIFO to send bytes to ADC or DAC"}
         {HK_ADC_MISO_FIFO -fifo_axis_slave -read_count  -doc "FIFO with read bytes from ADC"}
-        {HK_DAC_MOSI_FIFO -fifo_axis_master -with_tlast  -doc "FIFO to send bytes to DAC"}
         {SPI_LAYERS_CKDIVIDER -clock_divider spi_layers -reset 8'h4 -async_reset -doc "This clock divider provides the clock for the Layer SPI interfaces"}
         {SPI_HK_CKDIVIDER     -clock_divider spi_hk     -reset 8'h4 -async_reset -doc "This clock divider provides the clock for the Housekeeping ADC/DAC SPI interfaces"}
-        [rrepeat 4 {LAYER_${i}_CFG_CTRL            -reset 8'b00000111 -bits {{hold -doc "Hold Layer"} {reset -doc "Active High Layer Reset (Inverted before output to Sensor)"}  {disable_autoread -doc "1: Layer doesn't read frames if the interrupt is low, 0: Layer reads frames upon interrupt trigger"}}  -doc "Layer $i control bits"}]
-        [rrepeat 4 {LAYER_${i}_STATUS               -sw_read_only  -bits { {interruptn -input} {frame_decoding -input} } -doc "Layer $i status bits"} ]
-        [rrepeat 4 {LAYER_${i}_STAT_FRAME_COUNTER  -size 32  -counter -enable -hw_ignore -doc "Counts the number of data frames"}]
-        [rrepeat 4 {LAYER_${i}_STAT_IDLE_COUNTER   -size 32  -counter -enable -hw_ignore -doc "Counts the number of Idle bytes"}]
-        [rrepeat 4 {LAYER_${i}_MOSI                 -fifo_axis_master -with_tlast -write_count -doc "FIFO to send bytes to Layer $i Astropix"}]
-        {LAYERS_CFG_FRAME_TAG_COUNTER               -size 32 -counter -doc "Counter to tag frames upon detection (Counter value added to frame output)"}
+        [rrepeat 3 {LAYER_${i}_CFG_CTRL            -reset 8'b00000111 -bits {
+                {hold -doc "Hold Layer"} 
+                {reset -doc "Active High Layer Reset (Inverted before output to Sensor)"}  
+                {disable_autoread -doc "1: Layer doesn't read frames if the interrupt is low, 0: Layer reads frames upon interrupt trigger"}
+                {cs -doc "Chip Select, active high (inverted in firmware) - Set to 1 to force chip select low - if autoread is active, chip select is automatically 1"} 
+                {disable_miso -doc "If 1, the SPI interface won't read bytes from MOSI"} 
+            }  
+            -doc "Layer $i control bits"
+        }]
+        [rrepeat 3 {LAYER_${i}_STATUS               -sw_read_only  -bits { {interruptn -input} {frame_decoding -input} } -doc "Layer $i status bits"} ]
+        [rrepeat 3 {LAYER_${i}_STAT_FRAME_COUNTER  -size 32  -counter -enable -hw_ignore -doc "Counts the number of data frames"}]
+        [rrepeat 3 {LAYER_${i}_STAT_IDLE_COUNTER   -size 32  -counter -enable -hw_ignore -doc "Counts the number of Idle bytes"}]
+        [rrepeat 3 {LAYER_${i}_MOSI                 -fifo_axis_master -with_tlast -write_count -doc "FIFO to send bytes to Layer $i Astropix"}]
+        
+        {LAYERS_CFG_FRAME_TAG_COUNTER_CTRL      -reset 8'h1    -size 8 -bits {
+                {enable -doc "If 1, the counter will increment after the trigger counter reached its match value"} 
+                {force_count -doc "If 1, the counter will increment at each core clock cycle. If you flush a write with this value 1 then 0 in two data words, you can increment by 1 manually"} 
+            }   -doc "A few bits to control the Frame Tagging Counter"}
+        {LAYERS_CFG_FRAME_TAG_COUNTER_TRIGGER       -size 32 -counter -enable -interrupt  -updown -match_reset 32'd4  -doc "This Interrupt Counter provides the enable signal for the frame tag counter"}
+        {LAYERS_CFG_FRAME_TAG_COUNTER               -size 32 -counter  -enable -doc "Counter to tag frames upon detection (Counter value added to frame output)"}
         {LAYERS_CFG_NODATA_CONTINUE   -reset 8'd5 -doc "Number of IDLE Bytes until stopping readout"}
         {LAYERS_SR_OUT 
             -doc "Shift Register Configuration I/O Control register"
@@ -57,8 +71,7 @@ set baseRegisters [subst {
                 {SIN -doc "SIN I/O for Shift Register Configuration"}
                 {LD0 -doc "Load signal for Layer 0"}
                 {LD1 -doc "Load signal for Layer 1"}
-                {LD2 -doc "Load signal for Layer 2"}
-                {LD3 -doc "Load signal for Layer 3 (internal test layer)"}   
+                {LD2 -doc "Load signal for Layer 2"} 
             }
         }
         {LAYERS_SR_IN 
@@ -68,7 +81,6 @@ set baseRegisters [subst {
                 {SOUT0 -input}
                 {SOUT1 -input}
                 {SOUT2 -input}
-                {SOUT3 -input}
             }
         }
         {LAYERS_INJ_CTRL -reset 8'b00000110 
@@ -85,12 +97,7 @@ set baseRegisters [subst {
         }
         {LAYERS_INJ_WADDR -size 4 -doc "Address for register to write in Injection Pattern Generator"  }
         {LAYERS_INJ_WDATA  -doc "Data for register to write in Injection Pattern Generator" }
-        
         {LAYERS_READOUT -fifo_axis_slave -read_count -doc "Reads from the readout data fifo"}
-        [rrepeat 1 {LAYER_[expr ${i}+3]_GEN_CTRL  -bits {
-            FRAME_ENABLE
-        }}]
-        [rrepeat 1 {LAYER_[expr ${i}+3]_GEN_FRAME_COUNT  -size 16 -reset 16'd5}]
         {IO_CTRL 
             -doc "Configuration register for I/O multiplexers and gating."
             -reset 8'b00001000 

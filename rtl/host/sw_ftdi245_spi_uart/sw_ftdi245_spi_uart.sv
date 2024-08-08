@@ -65,7 +65,7 @@ module sw_ftdi245_spi_uart(
     wire [31:0] uart_core_s_axi_wdata;
     wire [1:0]  uart_core_s_axi_bresp;
     wire [1:0]  uart_core_s_axi_rresp;
-    axi_uartlite_core  uart_core(
+    /*axi_uartlite_core  uart_core(
         .interrupt(uart_core_interrupt),
         .rx(uart_rx),
         .s_axi_aclk(clk_uart),
@@ -127,13 +127,15 @@ module sw_ftdi245_spi_uart(
         .s_axis_tready(uart_egress_fifo_m_axis_tready),
         .s_axis_tvalid(uart_egress_fifo_m_axis_tvalid),
 
-        .uart_got_byte(/* WAIVED: Helper bus not used */),
-        .uart_init_done(/* WAIVED: Helper bus not used */),
-        .uart_rcv_byte(/* WAIVED: Helper bus not used */)
-    );
-    fifo_axis_2clk_sw_io_16e  uart_igress_fifo(
+        .uart_got_byte(),
+        .uart_init_done(),
+        .uart_rcv_byte()
+    );*/
+    assign switch_s_tvalid[1] = 1'b0;
+    fifo_axis_common #(.AWIDTH(4),.TID_WIDTH(8),.TDEST_WIDTH(8),.TLAST(1))  uart_igress_fifo(
 
         .m_axis_aclk  (clk_core),
+        .m_axis_aresetn(clk_core_resn),
         .m_axis_tready (switch_s_tready[1]),
         .m_axis_tvalid (switch_s_tvalid[1]),
         .m_axis_tdata (switch_s_tdata[15:8]),
@@ -151,12 +153,19 @@ module sw_ftdi245_spi_uart(
         .s_axis_tvalid(uart_driver_m_axis_tvalid),
         .s_axis_tlast(1'b1),
 
+        .s_axis_tuser(),
+        .m_axis_tuser(),
+
+        .axis_wr_data_count(),
+        .axis_rd_data_count(),
+
         .almost_full(),
         .almost_empty()
     );
-    fifo_axis_2clk_sw_io_16e  uart_egress_fifo(
+    fifo_axis_common #(.AWIDTH(4),.TID_WIDTH(8),.TDEST_WIDTH(8),.TLAST(1))  uart_egress_fifo(
 
         .m_axis_aclk(clk_uart),
+        .m_axis_aresetn(clk_uart_resn),
 
         .m_axis_tdata(uart_egress_fifo_m_axis_tdata),
         .m_axis_tdest(),
@@ -174,6 +183,12 @@ module sw_ftdi245_spi_uart(
         .s_axis_tdest(switch_m_tdest[15:8]),
         .s_axis_tid(switch_m_tid[15:8]),
         .s_axis_tlast(switch_m_tlast[1]),
+
+        .s_axis_tuser(),
+        .m_axis_tuser(),
+
+        .axis_wr_data_count(),
+        .axis_rd_data_count(),
 
         .almost_full(),
         .almost_empty()
@@ -196,7 +211,7 @@ module sw_ftdi245_spi_uart(
     // IGRESS
     spi_slave_axis_igress #(.AXIS_DEST(0),.AXIS_SOURCE(2),.MSB_FIRST(1)) spi_igress(
         .spi_clk(spi_clk),
-        .resn(spi_csn),
+        .resn(!spi_csn),
         .spi_csn(spi_csn),
         .spi_mosi(spi_mosi),
 
@@ -209,10 +224,10 @@ module sw_ftdi245_spi_uart(
         .err_overrun(/* WAIVED: Overrun not relevant when CS not used */)
     );      
 
-    fifo_axis_2clk_sw_io_16e  spi_igress_fifo(
+    fifo_axis_common #(.AWIDTH(4),.TID_WIDTH(8),.TDEST_WIDTH(8),.USE_TID(1),.USE_TDEST(1), .TLAST(1))  spi_igress_fifo(
         
         .s_axis_aclk(spi_clk),
-        .s_axis_aresetn(spi_csn),
+        .s_axis_aresetn(!spi_csn),
         .s_axis_tdata(spi_igress_m_axis_tdata),
         .s_axis_tdest(spi_igress_m_axis_tdest),
         .s_axis_tid(spi_igress_m_axis_tid),
@@ -221,6 +236,7 @@ module sw_ftdi245_spi_uart(
         .s_axis_tlast(1'b1),
 
         .m_axis_aclk(clk_core),
+        .m_axis_aresetn(clk_core_resn),
         .m_axis_tready (switch_s_tready[2]),
         .m_axis_tvalid (switch_s_tvalid[2]),
         .m_axis_tdata (switch_s_tdata[23:16]),
@@ -228,11 +244,16 @@ module sw_ftdi245_spi_uart(
         .m_axis_tid    (switch_s_tid[23:16]),
         .m_axis_tlast  (switch_s_tlast[2]),
         
+        .s_axis_tuser(),
+        .m_axis_tuser(),
+
+        .axis_wr_data_count(),
+        .axis_rd_data_count(),
 
         .almost_full(),
         .almost_empty()
     );
-    fifo_axis_2clk_sw_io_16e  spi_egress_fifo(
+    fifo_axis_common #(.AWIDTH(4),.TID_WIDTH(8),.TDEST_WIDTH(8),.USE_TID(1),.USE_TDEST(1),.TLAST(1))  spi_egress_fifo(
 
         .s_axis_aclk(clk_core),
         .s_axis_aresetn(clk_core_resn),
@@ -244,6 +265,7 @@ module sw_ftdi245_spi_uart(
         .s_axis_tlast(switch_m_tlast[2]),
 
         .m_axis_aclk(spi_clk),
+        .m_axis_aresetn(!spi_csn),
         .m_axis_tdata(spi_egress_fifo_m_axis_tdata),
         .m_axis_tid(spi_egress_fifo_m_axis_tid),
         .m_axis_tready(spi_egress_fifo_m_axis_tready),
@@ -252,7 +274,11 @@ module sw_ftdi245_spi_uart(
         .m_axis_tdest(),
 
         
-        
+        .s_axis_tuser(),
+        .m_axis_tuser(),
+
+        .axis_wr_data_count(),
+        .axis_rd_data_count(),
 
         .almost_full(),
         .almost_empty()
@@ -262,7 +288,7 @@ module sw_ftdi245_spi_uart(
     // Egress
     rfg_axis_readout_framing #(.MTU_SIZE(16),.IDLE_BYTE(8'hBC),.START_BYTE(8'hEF)) readout_framing(
         .clk(spi_clk),
-        .resn(spi_csn),
+        .resn(!spi_csn),
         .s_axis_tdata(spi_egress_fifo_m_axis_tdata),
         .s_axis_tid(spi_egress_fifo_m_axis_tid),
         .s_axis_tlast(spi_egress_fifo_m_axis_tlast),
@@ -282,7 +308,7 @@ module sw_ftdi245_spi_uart(
         .s_axis_tvalid(readout_framing_m_axis_tvalid),
 
         .spi_clk(spi_clk),
-        .resn(spi_csn),
+        .resn(!spi_csn),
         .spi_csn(spi_csn),
         .spi_miso(spi_miso)
     );
@@ -323,7 +349,7 @@ module sw_ftdi245_spi_uart(
         .s_axis_almost_empty(ftdi_egress_s_axis_almost_empty)
     );
     
-    fifo_axis_2clk_sw_io_16e ftdi_igress_fifo (
+    fifo_axis_common #(.AWIDTH(4),.TID_WIDTH(8),.TDEST_WIDTH(8),.USE_TID(1),.USE_TDEST(1),.TLAST(1)) ftdi_igress_fifo (
         
         .s_axis_aresetn(clk_ftdi_resn),  
         .s_axis_aclk(clk_ftdi),        
@@ -334,7 +360,8 @@ module sw_ftdi245_spi_uart(
         .s_axis_tid(ftdi_igress_m_axis_tid),
         .s_axis_tlast(1'b1),
 
-        .m_axis_aclk(clk_core),       
+        .m_axis_aclk(clk_core), 
+        .m_axis_aresetn(clk_core_resn),    
         .m_axis_tdata (switch_s_tdata[31:24]),
         .m_axis_tready (switch_s_tready[3]),
         .m_axis_tvalid (switch_s_tvalid[3]),
@@ -342,13 +369,17 @@ module sw_ftdi245_spi_uart(
         .m_axis_tid    (switch_s_tid[31:24]),
         .m_axis_tlast  (switch_s_tlast[3]),
 
-        
+        .s_axis_tuser(),
+        .m_axis_tuser(),
+
+        .axis_wr_data_count(),
+        .axis_rd_data_count(),
 
         .almost_full(ftdi_igress_m_axis_almost_full),
         .almost_empty()
     );
 
-    fifo_axis_2clk_sw_io_16e ftdi_egress_fifo (
+    fifo_axis_common #(.AWIDTH(4),.TID_WIDTH(8),.TDEST_WIDTH(8),.TLAST(1)) ftdi_egress_fifo (
 
         .s_axis_aresetn(clk_core_resn),  
         .s_axis_aclk(clk_core),      
@@ -359,13 +390,20 @@ module sw_ftdi245_spi_uart(
         .s_axis_tid(switch_m_tid[31:24]), 
         .s_axis_tlast(switch_m_tlast[3]),
 
-        .m_axis_aclk(clk_ftdi),      
+        .m_axis_aclk(clk_ftdi),
+        .m_axis_aresetn(clk_ftdi_resn),   
         .m_axis_tvalid(ftdi_egress_s_axis_tvalid),  
         .m_axis_tready(ftdi_egress_s_axis_tready), 
         .m_axis_tdata(ftdi_egress_s_axis_tdata),
         .m_axis_tlast(),
         .m_axis_tid(),
         .m_axis_tdest(),
+
+        .s_axis_tuser(),
+        .m_axis_tuser(),
+
+        .axis_wr_data_count(),
+        .axis_rd_data_count(),
 
         .almost_full(),
         .almost_empty(ftdi_egress_s_axis_almost_empty)
@@ -404,9 +442,9 @@ module sw_ftdi245_spi_uart(
     //----------------------    
     // SWITCH
     //----------------------
-    axis_switch_swifs  axis_switch_swifs_I(
-        .aclk(clk_core),
-        .aresetn(clk_core_resn),
+    axis_switch #(.PORTS(4))  axis_switch_swifs_I(
+        .clk(clk_core),
+        .resn(clk_core_resn),
 
         .m_axis_tdata(switch_m_tdata),
         .m_axis_tdest(switch_m_tdest),
@@ -423,8 +461,8 @@ module sw_ftdi245_spi_uart(
         .s_axis_tdest(switch_s_tdest),
         .s_axis_tid(switch_s_tid),
         .s_axis_tlast(switch_s_tlast),
-        .s_axis_tuser(4'b0000),
-        .s_decode_err()
+        .s_axis_tuser(4'b0000)
+        //.s_decode_err()
     );
 
             

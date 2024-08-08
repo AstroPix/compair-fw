@@ -96,7 +96,7 @@ async def test_simple_2bytes_2frames(dut):
 
     ## Write some bytes targeting 2
     ##############
-    sources[0].setTid(2)
+    sources[0].setTdest(2)
     await sources[0].writeFrame([AxisCycle(0xAB),AxisCycle(0xCD)])
 
     ## Check number of bytes received on slave
@@ -106,7 +106,7 @@ async def test_simple_2bytes_2frames(dut):
     assert(2 == slaveBytesCount)
 
     ## Write some bytes targetting 1
-    sources[0].setTid(1)
+    sources[0].setTdest(1)
     await sources[0].writeFrame([AxisCycle(0xAB),AxisCycle(0xCD)])
     await Timer(100, units="us")
 
@@ -133,7 +133,7 @@ async def test_1frame_with_pauses(dut):
     source = sources[1]
     sink = sinks[2]
 
-    sourceBytes = await source.generateDataCycles(5,tid=2)
+    sourceBytes = await source.generateDataCycles(5,tdest=2)
 
     sink.ready()
 
@@ -155,7 +155,7 @@ async def test_1frame_with_pauses(dut):
     await Timer(10, units="us")
 
     ## Send data
-    sourceBytes = await source.generateDataCycles(5,tid=2)
+    sourceBytes = await source.generateDataCycles(5,tdest=2)
 
     await Timer(20, units="us")
 
@@ -191,8 +191,8 @@ async def test_frames_2sources_to_sink(dut):
 
     # Ensure data is generated on negedge so that both ports are ready at the same time
     await FallingEdge(dut.clk)
-    sourceBytes.append(await sources[firstSource].generateDataCycles(5,tid=targetSink))
-    sourceBytes.append(await sources[secondSource].generateDataCycles(5,tid=targetSink))
+    sourceBytes.append(await sources[firstSource].generateDataCycles(5,tdest=targetSink))
+    sourceBytes.append(await sources[secondSource].generateDataCycles(5,tdest=targetSink))
 
     # Wait and enable port 0
     await Timer(20, units="us")
@@ -213,10 +213,10 @@ async def test_frames_2sources_to_sink(dut):
      # Ensure data is generated on negedge so that both ports are ready at the same time
     await FallingEdge(dut.clk)
     sinks[targetSink].notReady()
-    sourceBytes.append(await sources[firstSource].generateDataCycles(5,tid=targetSink))
-    sourceBytes.append(await sources[secondSource].generateDataCycles(5,tid=targetSink))
-    sourceBytes.append(await sources[firstSource].generateDataCycles(8,tid=targetSink))
-    sourceBytes.append(await sources[secondSource].generateDataCycles(8,tid=targetSink))
+    sourceBytes.append(await sources[firstSource].generateDataCycles(5,tdest=targetSink))
+    sourceBytes.append(await sources[secondSource].generateDataCycles(5,tdest=targetSink))
+    sourceBytes.append(await sources[firstSource].generateDataCycles(8,tdest=targetSink))
+    sourceBytes.append(await sources[secondSource].generateDataCycles(8,tdest=targetSink))
 
     # Wait and enable port 0
     await Timer(20, units="us")
@@ -246,7 +246,7 @@ async def test_frames_from_sources_to_sinks(dut):
             for sinki in range(4):
                 bytesCount = random.randint(4,16)
                 totalBytesCount += bytesCount
-                await sources[sourcei].generateDataCycles(bytesCount,tid=sinki)
+                await sources[sourcei].generateDataCycles(bytesCount,tdest=sinki)
 
     dut._log.info(f"Generated {totalBytesCount} bytes")
 

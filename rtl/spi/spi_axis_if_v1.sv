@@ -73,13 +73,11 @@ module spi_axis_if_v1 #(
 
     generate
         if (CLOCK_OUT_CG==1'b1) begin 
-            /*BUFGCE spi_clk_buf BUFGMUX (
-                .I(clk),
-                .O(spi_clk),
-                .CE((spi_clk_running && !spi_clk_pause))
-            );*/
+            
             wire clock_selected = (spi_clk_running && !spi_clk_pause && spi_clk_enable_negedge);
-            BUFGCTRL  spi_clk_buf  (
+            
+            // OLD Xilinx Explicit CLock Gating 
+            /*BUFGCTRL  spi_clk_buf  (
                 .I0(1'b0),
                 .I1(clk),
                 .O(spi_clk),
@@ -89,10 +87,10 @@ module spi_axis_if_v1 #(
                 .IGNORE1(1'b1),
                 .S0(!clock_selected ), //|| !resn
                 .S1(clock_selected) // && resn
-            );
-            //assign  spi_clk = (spi_clk_running && !spi_clk_pause) ?  clk : 1'b0 ;
+            );*/
+            assign  spi_clk = clock_selected ?  clk : 1'b0 ;
         end else begin
-            assign  spi_clk = (spi_clk_running && !spi_clk_pause) ?  clk : 1'b0 ;
+            assign  spi_clk = clk ;
         end
     endgenerate
    

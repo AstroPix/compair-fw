@@ -9,25 +9,28 @@ module housekeeping_main(
     input  wire				clk_core_resn,
     input  wire				clk_spi,
     input  wire				clk_spi_resn,
+    input  wire             select_adc,
     output wire [7:0]		ext_adc_miso_m_axis_tdata,
     input  wire				ext_adc_miso_m_axis_tready,
     output wire				ext_adc_miso_m_axis_tvalid,
     output wire [31:0]		ext_adc_miso_read_size,
-    input  wire [7:0]		ext_adc_mosi_s_axis_tdata,
-    input  wire				ext_adc_mosi_s_axis_tlast,
-    output wire				ext_adc_mosi_s_axis_tready,
-    input  wire				ext_adc_mosi_s_axis_tvalid,
-    output wire				ext_adc_spi_clk,
-    output wire				ext_adc_spi_csn,
-    input  wire				ext_adc_spi_miso,
-    output wire				ext_adc_spi_mosi,
-    input  wire [7:0]		ext_dac_mosi_s_axis_tdata,
+    input  wire [7:0]		ext_adcdac_mosi_s_axis_tdata,
+    input  wire				ext_adcdac_mosi_s_axis_tlast,
+    output wire				ext_adcdac_mosi_s_axis_tready,
+    input  wire				ext_adcdac_mosi_s_axis_tvalid,
+    output wire				ext_spi_clk,
+    output wire				ext_spi_csn,
+    input  wire				ext_spi_miso,
+    output wire				ext_spi_mosi,
+
+    /*input  wire [7:0]		ext_dac_mosi_s_axis_tdata,
     input  wire				ext_dac_mosi_s_axis_tlast,
     output wire				ext_dac_mosi_s_axis_tready,
     input  wire				ext_dac_mosi_s_axis_tvalid,
     output wire				ext_dac_spi_clk,
     output wire				ext_dac_spi_csn,
-    output wire				ext_dac_spi_mosi,
+    output wire				ext_dac_spi_mosi,*/
+
     input  wire				xadc_conversion_trigger,
     output wire [15:0]		xadc_temperature,
     output wire				xadc_temperature_write,
@@ -59,28 +62,29 @@ module housekeeping_main(
             
     
     // Module Instance
-    ext_adc_driver  ext_adc_driver(
+    ext_adcdac_driver  ext_adcdac_driver(
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
         .clk_spi(clk_spi),
         .clk_spi_resn(clk_spi_resn),
+        .select_adc(select_adc),
         .ext_adc_miso_m_axis_tdata(ext_adc_miso_m_axis_tdata),
         .ext_adc_miso_m_axis_tready(ext_adc_miso_m_axis_tready),
         .ext_adc_miso_m_axis_tvalid(ext_adc_miso_m_axis_tvalid),
         .ext_adc_miso_read_size(ext_adc_miso_read_size),
-        .ext_adc_mosi_s_axis_tdata(ext_adc_mosi_s_axis_tdata),
-        .ext_adc_mosi_s_axis_tlast(ext_adc_mosi_s_axis_tlast),
-        .ext_adc_mosi_s_axis_tready(ext_adc_mosi_s_axis_tready),
-        .ext_adc_mosi_s_axis_tvalid(ext_adc_mosi_s_axis_tvalid),
-        .ext_adc_spi_clk(ext_adc_spi_clk),
-        .ext_adc_spi_csn(ext_adc_spi_csn),
-        .ext_adc_spi_miso(ext_adc_spi_miso),
-        .ext_adc_spi_mosi(ext_adc_spi_mosi)
+        .ext_adcdac_mosi_s_axis_tdata(ext_adcdac_mosi_s_axis_tdata),
+        .ext_adcdac_mosi_s_axis_tlast(ext_adcdac_mosi_s_axis_tlast),
+        .ext_adcdac_mosi_s_axis_tready(ext_adcdac_mosi_s_axis_tready),
+        .ext_adcdac_mosi_s_axis_tvalid(ext_adcdac_mosi_s_axis_tvalid),
+        .ext_spi_clk(ext_spi_clk),
+        .ext_spi_csn(ext_spi_csn),
+        .ext_spi_miso(ext_spi_miso),
+        .ext_spi_mosi(ext_spi_mosi)
     );
             
     
     // Module Instance
-    ext_dac_driver  ext_dac_driver(
+    /*ext_dac_driver  ext_dac_driver(
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
         .clk_spi(clk_spi),
@@ -92,7 +96,7 @@ module housekeeping_main(
         .ext_dac_spi_clk(ext_dac_spi_clk),
         .ext_dac_spi_csn(ext_dac_spi_csn),
         .ext_dac_spi_mosi(ext_dac_spi_mosi)
-    );
+    );*/
                 
 
 endmodule

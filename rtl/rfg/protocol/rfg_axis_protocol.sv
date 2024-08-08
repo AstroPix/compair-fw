@@ -138,7 +138,7 @@ module rfg_axis_protocol  #(
                 s_axis_tready <= 1'b0;
 
                 switch_m_axis_if.reset_master();
-                //m_axis_tdest  <= 8'h00;
+                m_axis_tdest  <= 8'h00;
                 //m_axis_tid    <= {}
 
                 read_buffer_write <= 1'b0;

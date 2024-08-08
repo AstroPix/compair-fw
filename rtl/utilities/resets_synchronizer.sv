@@ -31,10 +31,10 @@ module resets_synchronizer #(parameter CLOCKS = 2 , parameter RESET_DELAY = 5  )
 
             // First Synchronise asynchronous reset in the clock domain
             // This helps avoiding methodology warnings on FGPA
-            async_signal_sync  reset_signal_sync(.clk(input_clocks[i]),.async_input(async_resn_in),.sync_out(synced_resn_in[i]));
+            //async_signal_sync  reset_signal_sync(.clk(input_clocks[i]),.async_input(async_resn_in),.sync_out(synced_resn_in[i]));
 
             // Now Generate reset in clock domain
-            reset_sync #(.RESET_DELAY(RESET_DELAY))  reset_generator (.clk(input_clocks[i]),.resn_in(synced_resn_in[i]),.resn_out(output_resn[i]));
+            reset_sync #(.RESET_DELAY(RESET_DELAY))  reset_generator (.clk(input_clocks[i]),.resn_in(async_resn_in),.resn_out(output_resn[i]));
 
             if (i>0) begin 
                 async_signal_sync  master_reset_output_synchroniser(.clk(master_clk),.async_input(output_resn[i-1]),.sync_out(master_synced_resn_out[i-1]));

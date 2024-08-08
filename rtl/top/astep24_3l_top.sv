@@ -42,6 +42,7 @@ module astep24_3l_top(
     output wire				layer_2_spi_mosi,
 
     output wire             layers_inj,
+    output wire             layers_spi_csn, // This is a merged CS for all layers
     output wire				layers_sr_in_rb,
     input  wire				layers_sr_in_sout0,
     input  wire				layers_sr_in_sout1,
@@ -103,8 +104,8 @@ module astep24_3l_top(
         .cold_resn_in(cold_resn),
         .io_aresn(io_aresn),
         .warm_resn_in(warm_resn),
-        .clk_100(clk_100),
-        .clk_100_resn(clk_100_resn),
+        //.clk_100(clk_100),
+        //.clk_100_resn(clk_100_resn),
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
         .clk_sample(clk_sample),
@@ -183,7 +184,7 @@ module astep24_3l_top(
     wire [3:0]  injection_generator_inj_waddr;
 
     wire [7:0]  hk_dac_mosi_fifo_m_axis_tdata;
-    wire [7:0]  hk_adc_mosi_fifo_m_axis_tdata;
+    wire [7:0]  hk_adcdac_mosi_fifo_m_axis_tdata;
     wire [31:0] hk_adc_miso_fifo_read_size;
     wire [7:0]  hk_adc_miso_fifo_s_axis_tdata;
     wire [15:0] hk_xadc_temperature;
@@ -192,22 +193,20 @@ module astep24_3l_top(
     wire [7:0]  layer_0_mosi_tdata;
     wire [7:0]  layer_1_mosi_tdata;
     wire [7:0]  layer_2_mosi_tdata;
-    wire [7:0]  layer_3_mosi_tdata;
 
     wire [31:0] layer_0_mosi_write_size;
     wire [31:0] layer_1_mosi_write_size;
     wire [31:0] layer_2_mosi_write_size;
-    wire [31:0] layer_3_mosi_write_size;
 
     wire layer_0_reset;
     wire layer_1_reset;
     wire layer_2_reset;
-    wire layer_3_reset;
+
 
     assign layer_0_resn = !layer_0_reset;
     assign layer_1_resn = !layer_1_reset;
     assign layer_2_resn = !layer_2_reset;
-    assign layer_3_resn = !layer_3_reset;
+
 
     wire [7:0]  layers_readout_s_axis_tdata;
     wire [31:0] layers_readout_read_size;
@@ -215,9 +214,7 @@ module astep24_3l_top(
     wire [31:0] layers_cfg_frame_tag_counter;
      
     wire hk_conversion_trigger_interrupt;
-    //assign rfg_io_led[0] = hk_conversion_trigger_interrupt;
-
-    wire [15:0] layer_3_gen_frame_count;
+    wire hk_ctrl_select_adc;
 
     main_rfg  main_rfg_I (
             
@@ -233,6 +230,8 @@ module astep24_3l_top(
 
         .io_led(rfg_io_led[7:0]),
 
+        .hk_ctrl(),
+        .hk_ctrl_select_adc(hk_ctrl_select_adc),
         .hk_xadc_temperature(hk_xadc_temperature),
         .hk_xadc_temperature_write(hk_xadc_temperature_write),
         .hk_xadc_vccint(hk_xadc_vccint),
@@ -242,11 +241,11 @@ module astep24_3l_top(
         .hk_conversion_trigger_match(),
         .hk_stat_conversions_counter_enable(hk_xadc_temperature_write),
         
-        // ADC -> MOSI
-        .hk_adc_mosi_fifo_m_axis_tdata(hk_adc_mosi_fifo_m_axis_tdata),
-        .hk_adc_mosi_fifo_m_axis_tvalid(hk_adc_mosi_fifo_m_axis_tvalid),
-        .hk_adc_mosi_fifo_m_axis_tready(hk_adc_mosi_fifo_m_axis_tready),
-        .hk_adc_mosi_fifo_m_axis_tlast(hk_adc_mosi_fifo_m_axis_tlast),
+        // ADC+DAC -> MOSI
+        .hk_adcdac_mosi_fifo_m_axis_tdata(hk_adcdac_mosi_fifo_m_axis_tdata),
+        .hk_adcdac_mosi_fifo_m_axis_tvalid(hk_adcdac_mosi_fifo_m_axis_tvalid),
+        .hk_adcdac_mosi_fifo_m_axis_tready(hk_adcdac_mosi_fifo_m_axis_tready),
+        .hk_adcdac_mosi_fifo_m_axis_tlast(hk_adcdac_mosi_fifo_m_axis_tlast),
 
         // ADC <- MISO
         .hk_adc_miso_fifo_s_axis_tdata(hk_adc_miso_fifo_s_axis_tdata),
@@ -254,12 +253,6 @@ module astep24_3l_top(
         .hk_adc_miso_fifo_s_axis_tready(hk_adc_miso_fifo_s_axis_tready),
         .hk_adc_miso_fifo_read_size(hk_adc_miso_fifo_read_size),
         .hk_adc_miso_fifo_read_size_write(1'b1),
-
-        // DAC -> MOSI
-        .hk_dac_mosi_fifo_m_axis_tdata(hk_dac_mosi_fifo_m_axis_tdata),
-        .hk_dac_mosi_fifo_m_axis_tvalid(hk_dac_mosi_fifo_m_axis_tvalid),
-        .hk_dac_mosi_fifo_m_axis_tready(hk_dac_mosi_fifo_m_axis_tready),
-        .hk_dac_mosi_fifo_m_axis_tlast(hk_dac_mosi_fifo_m_axis_tlast),
         
         // SPI Clock Dividers
         .spi_layers_ckdivider_source_clk(clk_core),
@@ -277,21 +270,22 @@ module astep24_3l_top(
         .layer_0_cfg_ctrl_disable_autoread(layer_0_cfg_ctrl_disable_autoread),
         .layer_0_cfg_ctrl_reset(layer_0_reset),
         .layer_0_cfg_ctrl_hold(layer_0_hold),
+        .layer_0_cfg_ctrl_cs(layer_0_cfg_ctrl_cs),
+        .layer_0_cfg_ctrl_disable_miso(layer_0_cfg_ctrl_disable_miso),
         
         .layer_1_cfg_ctrl(),
         .layer_1_cfg_ctrl_disable_autoread(layer_1_cfg_ctrl_disable_autoread),
         .layer_1_cfg_ctrl_reset(layer_1_reset),
         .layer_1_cfg_ctrl_hold(layer_1_hold),
+        .layer_1_cfg_ctrl_cs(layer_1_cfg_ctrl_cs),
+        .layer_1_cfg_ctrl_disable_miso(layer_1_cfg_ctrl_disable_miso),
 
         .layer_2_cfg_ctrl(),
         .layer_2_cfg_ctrl_disable_autoread(layer_2_cfg_ctrl_disable_autoread),
         .layer_2_cfg_ctrl_reset(layer_2_reset),
         .layer_2_cfg_ctrl_hold(layer_2_hold),
-
-        .layer_3_cfg_ctrl(),
-        .layer_3_cfg_ctrl_disable_autoread(layer_3_cfg_ctrl_disable_autoread),
-        .layer_3_cfg_ctrl_reset(layer_3_reset),
-        .layer_3_cfg_ctrl_hold(layer_3_hold),
+        .layer_2_cfg_ctrl_cs(layer_2_cfg_ctrl_cs),
+        .layer_2_cfg_ctrl_disable_miso(layer_2_cfg_ctrl_disable_miso),
 
         .layer_0_status(),   
         .layer_0_status_interruptn(layers_interruptn_synced[0]),
@@ -305,20 +299,14 @@ module astep24_3l_top(
         .layer_2_status_interruptn(layers_interruptn_synced[2]),
         .layer_2_status_frame_decoding(layer_2_status_frame_decoding),
 
-        .layer_3_status(),   
-        .layer_3_status_interruptn(layer_3_interruptn),
-        .layer_3_status_frame_decoding(layer_3_status_frame_decoding),
-
         .layer_0_stat_frame_counter_enable(layer_0_stat_frame_counter_enable),
         .layer_1_stat_frame_counter_enable(layer_1_stat_frame_counter_enable),
         .layer_2_stat_frame_counter_enable(layer_2_stat_frame_counter_enable),
-        .layer_3_stat_frame_counter_enable(layer_3_stat_frame_counter_enable),
 
         .layer_0_stat_idle_counter_enable(layer_0_stat_idle_counter_enable),
         .layer_1_stat_idle_counter_enable(layer_1_stat_idle_counter_enable),
         .layer_2_stat_idle_counter_enable(layer_2_stat_idle_counter_enable),
-        .layer_3_stat_idle_counter_enable(layer_3_stat_idle_counter_enable),
-
+  
         .layer_0_mosi_m_axis_tdata(layer_0_mosi_tdata),
         .layer_0_mosi_m_axis_tvalid(layer_0_mosi_tvalid),
         .layer_0_mosi_m_axis_tready(layer_0_mosi_tready),
@@ -339,15 +327,19 @@ module astep24_3l_top(
         .layer_2_mosi_m_axis_tlast(layer_2_mosi_tlast),
         .layer_2_mosi_write_size(layer_2_mosi_write_size),
         .layer_2_mosi_write_size_write(1'b1),
-
-        .layer_3_mosi_m_axis_tdata(layer_3_mosi_tdata),
-        .layer_3_mosi_m_axis_tvalid(layer_3_mosi_tvalid),
-        .layer_3_mosi_m_axis_tready(layer_3_mosi_tready),
-        .layer_3_mosi_m_axis_tlast(layer_3_mosi_tlast),
-        .layer_3_mosi_write_size(layer_3_mosi_write_size),
-        .layer_3_mosi_write_size_write(1'b1),
       
+        .layers_cfg_frame_tag_counter_ctrl(),
+        .layers_cfg_frame_tag_counter_ctrl_force_count(layers_cfg_frame_tag_counter_ctrl_force_count),
+        .layers_cfg_frame_tag_counter_ctrl_enable(layers_cfg_frame_tag_counter_ctrl_enable),
+
+        .layers_cfg_frame_tag_counter_trigger(),
+        .layers_cfg_frame_tag_counter_trigger_interrupt(layers_cfg_frame_tag_counter_trigger_interrupt),
+        .layers_cfg_frame_tag_counter_trigger_enable(layers_cfg_frame_tag_counter_ctrl_enable),
+        .layers_cfg_frame_tag_counter_trigger_match(),
+
         .layers_cfg_frame_tag_counter(layers_cfg_frame_tag_counter),
+        .layers_cfg_frame_tag_counter_enable(layers_cfg_frame_tag_counter_ctrl_enable && (layers_cfg_frame_tag_counter_trigger_interrupt || layers_cfg_frame_tag_counter_ctrl_force_count)),
+
         .layers_cfg_nodata_continue(layers_cfg_nodata_continue),
 
         .layers_sr_out(),
@@ -357,7 +349,7 @@ module astep24_3l_top(
         .layers_sr_out_ld0(layers_sr_out_ld0),
         .layers_sr_out_ld1(layers_sr_out_ld1),
         .layers_sr_out_ld2(layers_sr_out_ld2),
-        .layers_sr_out_ld3(layers_sr_out_ld3),
+     
         .layers_inj_ctrl(),
         .layers_inj_ctrl_reset              (injection_generator_inj_ctrl_reset),
         .layers_inj_ctrl_suspend            (injection_generator_inj_ctrl_suspend),
@@ -375,19 +367,12 @@ module astep24_3l_top(
         .layers_sr_in_sout0(layers_sr_in_sout0),
         .layers_sr_in_sout1(layers_sr_in_sout1),
         .layers_sr_in_sout2(layers_sr_in_sout2),
-        .layers_sr_in_sout3(layers_sr_in_sout3),
 
         .layers_readout_s_axis_tdata(layers_readout_s_axis_tdata),
         .layers_readout_s_axis_tvalid(layers_readout_s_axis_tvalid),
         .layers_readout_s_axis_tready(layers_readout_s_axis_tready),
         .layers_readout_read_size(layers_readout_read_size),
         .layers_readout_read_size_write(1'b1),
-
-        .layer_3_gen_ctrl(),
-        .layer_3_gen_ctrl_frame_enable(layer_3_gen_ctrl_frame_enable),
-        .layer_3_gen_frame_count(layer_3_gen_frame_count),
-
-        
 
         // Target Specific Registers
         .gecco_sr_ctrl(),
@@ -409,8 +394,7 @@ module astep24_3l_top(
     // Layers Readout Module
     // - Contains Each Layer Interface with Protocol management, and the Switched buffer
     //-------------------------------
-    wire [1:0] layer_3_spi_miso;
-    layers_readout_switched #(.LAYER_COUNT(4)) switched_readout(
+    layers_readout_switched #(.LAYER_COUNT(3)) switched_readout(
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
         .clk_io(spi_layers_ckdivider_divided_clk),
@@ -418,61 +402,42 @@ module astep24_3l_top(
 
         // Layers
         .layers_interruptn({
-           
-            layer_3_interruptn,
             layers_interruptn_synced[2],
             layers_interruptn_synced[1],
             layers_interruptn_synced[0]}),
         .layers_spi_clk({
-            
-            layer_3_spi_clk,
             layer_2_spi_clk,
             layer_1_spi_clk,
             layer_0_spi_clk}),
         .layers_spi_mosi({
-           
-            layer_3_spi_mosi,
             layer_2_spi_mosi,
             layer_1_spi_mosi,
             layer_0_spi_mosi}),
         .layers_spi_miso({
-           
-            layer_3_spi_miso,
             layer_2_spi_miso,
             layer_1_spi_miso,
             layer_0_spi_miso}),
-        .layers_spi_csn({
-            
-            layer_3_spi_csn,
-            layer_2_spi_csn,
-            layer_1_spi_csn,
-            layer_0_spi_csn}),
+        .layers_spi_csn(),
 
         // MOSI
         //-----------
         .layers_mosi_s_axis_tdata({
-            layer_3_mosi_tdata,
             layer_2_mosi_tdata,
             layer_1_mosi_tdata,
             layer_0_mosi_tdata}),
         .layers_mosi_s_axis_tlast({
-            layer_3_mosi_tlast,
             layer_2_mosi_tlast,
             layer_1_mosi_tlast,
             layer_0_mosi_tlast}),
         .layers_mosi_s_axis_tready({
-            layer_3_mosi_tready,
             layer_2_mosi_tready,
             layer_1_mosi_tready,
             layer_0_mosi_tready}),
         .layers_mosi_s_axis_tvalid({
-            layer_3_mosi_tvalid,
             layer_2_mosi_tvalid,
             layer_1_mosi_tvalid,
             layer_0_mosi_tvalid}),
-
         .layers_mosi_write_size({
-            layer_3_mosi_write_size,
             layer_2_mosi_write_size,
             layer_1_mosi_write_size,
             layer_0_mosi_write_size
@@ -488,7 +453,6 @@ module astep24_3l_top(
         // Configurations
         //---------------------
         .config_disable_autoread({
-            layer_3_cfg_ctrl_disable_autoread,
             layer_2_cfg_ctrl_disable_autoread,
             layer_1_cfg_ctrl_disable_autoread,
             layer_0_cfg_ctrl_disable_autoread
@@ -496,27 +460,28 @@ module astep24_3l_top(
         .config_frame_tag_counter(layers_cfg_frame_tag_counter),
         .config_nodata_continue(layers_cfg_nodata_continue),
         .config_layers_reset({
-            layer_3_reset,
             layer_2_reset,
             layer_1_reset,
             layer_0_reset
+        }),
+        .config_layers_disable_miso({
+            layer_2_cfg_ctrl_disable_miso,
+            layer_1_cfg_ctrl_disable_miso,
+            layer_0_cfg_ctrl_disable_miso
         }),
 
         // Statistics
         //----------------------
         .layers_status_frame_decoding({
-            layer_3_status_frame_decoding,
             layer_2_status_frame_decoding,
             layer_1_status_frame_decoding,
             layer_0_status_frame_decoding
         }),
         .layers_stat_count_frame({
-            layer_3_stat_frame_counter_enable,
             layer_2_stat_frame_counter_enable,
             layer_1_stat_frame_counter_enable,
             layer_0_stat_frame_counter_enable}),
         .layers_stat_count_idle({
-            layer_3_stat_idle_counter_enable,
             layer_2_stat_idle_counter_enable,
             layer_1_stat_idle_counter_enable,
             layer_0_stat_idle_counter_enable})
@@ -541,99 +506,72 @@ module astep24_3l_top(
         .syncrst            (injection_generator_inj_ctrl_trigger)
     );
 
-    // ASIC Models
-    //-------------------
-    astropix3_asic_model  asic_model (
-        .clk(spi_layers_ckdivider_divided_clk),
-        
-        .resn(spi_layers_ckdivider_divided_resn),
-
-        .gen_ctrl_frame_count(layer_3_gen_frame_count),
-        .gen_ctrl_frame_enable(layer_3_gen_ctrl_frame_enable),
-
-        .interruptn(layer_3_interruptn),
-
-        .spi_clk  (layer_3_spi_clk),
-        .spi_csn  (layer_3_spi_csn),
-        .spi_miso (layer_3_spi_miso),
-        .spi_mosi (layer_3_spi_mosi),
-
-        .sr_ck1(layers_sr_out_ck1),
-        .sr_ck2(layers_sr_out_ck2),
-        .sr_ld(layers_sr_out_ld),
-        .sr_rb(1'b0),
-        .sr_sin(layers_sr_out_sin),
-        .sr_sout()
-    );
 
 
     // Housekeeping
     //--------------------
-    housekeeping_main  housekeeping(
+    /*housekeeping_main  housekeeping(
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
 
         .clk_spi(spi_hk_ckdivider_divided_clk),
         .clk_spi_resn(spi_hk_ckdivider_divided_resn),
 
+        .select_adc(hk_ctrl_select_adc),
+
         .ext_adc_miso_m_axis_tdata(hk_adc_miso_fifo_s_axis_tdata),
         .ext_adc_miso_m_axis_tready(hk_adc_miso_fifo_s_axis_tready),
         .ext_adc_miso_m_axis_tvalid(hk_adc_miso_fifo_s_axis_tvalid),
         .ext_adc_miso_read_size(hk_adc_miso_fifo_read_size),
        
-        .ext_adc_mosi_s_axis_tdata(hk_adc_mosi_fifo_m_axis_tdata),
-        .ext_adc_mosi_s_axis_tlast(hk_adc_mosi_fifo_m_axis_tlast),
-        .ext_adc_mosi_s_axis_tready(hk_adc_mosi_fifo_m_axis_tready),
-        .ext_adc_mosi_s_axis_tvalid(hk_adc_mosi_fifo_m_axis_tvalid),
+        .ext_adcdac_mosi_s_axis_tdata(hk_adcdac_mosi_fifo_m_axis_tdata),
+        .ext_adcdac_mosi_s_axis_tlast(hk_adcdac_mosi_fifo_m_axis_tlast),
+        .ext_adcdac_mosi_s_axis_tready(hk_adcdac_mosi_fifo_m_axis_tready),
+        .ext_adcdac_mosi_s_axis_tvalid(hk_adcdac_mosi_fifo_m_axis_tvalid),
        
-        .ext_adc_spi_clk(ext_adc_spi_clk),
-        .ext_adc_spi_csn(ext_adc_spi_csn),
-        .ext_adc_spi_miso(ext_adc_spi_miso),
-        .ext_adc_spi_mosi(ext_adc_spi_mosi),
+        .ext_spi_clk(ext_spi_clk_internal),
+        .ext_spi_csn(ext_spi_csn_internal),
+        .ext_spi_miso(ext_adc_spi_miso),
+        .ext_spi_mosi(ext_spi_mosi),
 
-        .ext_dac_mosi_s_axis_tdata(hk_dac_mosi_fifo_m_axis_tdata),
-        .ext_dac_mosi_s_axis_tlast(hk_dac_mosi_fifo_m_axis_tlast),
-        .ext_dac_mosi_s_axis_tready(hk_dac_mosi_fifo_m_axis_tready),
-        .ext_dac_mosi_s_axis_tvalid(hk_dac_mosi_fifo_m_axis_tvalid),
-       
-        .ext_dac_spi_clk(ext_dac_spi_clk),
-        .ext_dac_spi_csn(ext_dac_spi_csn),
-        .ext_dac_spi_mosi(ext_dac_spi_mosi),
 
         .xadc_conversion_trigger(hk_conversion_trigger_interrupt),
         .xadc_temperature(hk_xadc_temperature),
         .xadc_temperature_write(hk_xadc_temperature_write),
         .xadc_vccint(hk_xadc_vccint),
         .xadc_vccint_write(hk_xadc_vccint_write)
-    );
-            
-    //-- MOSI and CLK is shared
-
-    MUXF7  ext_spi_mosi_MUXF7(
-        .I0(ext_adc_spi_mosi),
-        .I1(ext_dac_spi_mosi),
-        .O(ext_spi_mosi),
-        .S(ext_adc_spi_csn)
-    );
-            
-    BUFGCTRL  spi_clk_buf  (
-        .I0(ext_adc_spi_clk),
-        .I1(ext_dac_spi_clk),
-        .O(ext_spi_clk),
-        .CE0(1'b1),
-        .CE1(1'b1),
-        .IGNORE0(1'b1),
-        .IGNORE1(1'b1),
-        .S0(!ext_adc_spi_csn ),
-        .S1(ext_adc_spi_csn) 
-    );
-    /*BUFGMUX  ext_spi_clk_BUFGMUX(
-        .I0(ext_adc_spi_clk),
-        .I1(ext_dac_spi_clk),
-        .O(ext_spi_clk),
-        .S(ext_adc_spi_csn)
     );*/
-                
+    
+    // SPI IO
+    //-----------------
+
+    //-- Shared CSN for Layers
+    //---------------
+
+    // First layers CSN are set by the control register
+    // When Autoread is on, always set CSN to 0 - otherwise the CS control bit sets it
+    assign layer_0_spi_csn = !(layer_0_cfg_ctrl_cs || !layer_0_cfg_ctrl_disable_autoread) ;
+    assign layer_1_spi_csn = !(layer_1_cfg_ctrl_cs || !layer_1_cfg_ctrl_disable_autoread) ;
+    assign layer_2_spi_csn = !(layer_2_cfg_ctrl_cs || !layer_2_cfg_ctrl_disable_autoread) ;
+    assign layers_spi_csn = layer_0_spi_csn & layer_1_spi_csn & layer_2_spi_csn;
+
+    //-- Housekeeping
+    //--------------
+
+    //-- MOSI and CLK is shared
+    //-- CSN is selected based on RFG control
+    
+    //assign ext_spi_clk = hk_ctrl_select_adc ? !ext_spi_clk_internal : ext_spi_clk_internal;
+    //assign ext_dac_spi_csn = !hk_ctrl_select_adc ? ext_spi_csn_internal : 1;
+    //assign ext_adc_spi_csn =  hk_ctrl_select_adc ? ext_spi_csn_internal : 1;
+
+    assign ext_spi_clk = 0;
+    assign ext_dac_spi_csn =  1;
+    assign ext_adc_spi_csn =  1;
+    
+    `ifdef SIMULATION
+    GSR GSR_INST ( .GSR_N(1'b1), .CLK(1'b0));
+    `endif
 
 endmodule
 

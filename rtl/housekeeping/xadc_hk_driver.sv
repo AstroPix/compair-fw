@@ -38,7 +38,7 @@ module xadc_hk_driver(
     //------------
         
     // Module Instance
-    xadc_astep  xadc(
+    /*xadc_astep  xadc(
         .alarm_out(xadc_alarm_out),
         .busy_out(xadc_busy_out),
         .channel_out(xadc_channel_out),
@@ -54,7 +54,7 @@ module xadc_hk_driver(
         .s_axis_aclk(clk),
         .vn_in(1'd0),
         .vp_in(1'd0)
-    );
+    );*/
             
     
     // Module Instance

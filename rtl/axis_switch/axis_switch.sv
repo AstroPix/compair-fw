@@ -1,27 +1,29 @@
-module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_WIDTH = 8, parameter TDATA_WIDTH=8 ) (
+module axis_switch #(parameter PORTS=4,parameter TDATA_WIDTH=8 , parameter TID_WIDTH = 8, parameter TUSER_WIDTH = 8, parameter TDEST_WIDTH=8 ) (
     input  wire                             clk, 
     input  wire                             resn,
 
     // Busses for Master ports
-    output  logic  [(PORTS*TID_WIDTH)-1:0]     m_axis_tid,
-    output  logic  [(PORTS*TUSER_WIDTH)-1:0]   m_axis_tuser,
-    output  logic  [(PORTS*TDATA_WIDTH)-1:0]   m_axis_tdata,
-    //output  logic  [(TID_WIDTH)-1:0]         m_axis_tid,
-    //output  logic  [(TDATA_WIDTH)-1:0]       m_axis_tdata,
-    output  logic  [PORTS-1:0]                 m_axis_tvalid,
-    output  logic  [PORTS-1:0]                 m_axis_tlast,
-    input   wire [PORTS-1:0]                   m_axis_tready,
+    output  logic  [(PORTS*TID_WIDTH)-1:0]      m_axis_tid,
+    output  logic  [(PORTS*TUSER_WIDTH)-1:0]    m_axis_tuser,
+    output  logic  [(PORTS*TDATA_WIDTH)-1:0]    m_axis_tdata,
+    output  logic  [(PORTS*TDEST_WIDTH)-1:0]    m_axis_tdest,
+
+    output  logic  [PORTS-1:0]                  m_axis_tvalid,
+    output  logic  [PORTS-1:0]                  m_axis_tlast,
+    input   wire   [PORTS-1:0]                  m_axis_tready,
     
     // Busses for slave ports
     //---------
 
     // This signal will mask tvalid from master
-    input   wire  [(PORTS*TID_WIDTH)-1:0]     s_axis_tid,
-    input   wire  [(PORTS*TUSER_WIDTH)-1:0]   s_axis_tuser,
-    output  logic [PORTS-1:0]                 s_axis_tready,
-    input   wire  [PORTS-1:0]                 s_axis_tvalid,
-    input   wire  [(PORTS*TDATA_WIDTH)-1:0]   s_axis_tdata,
-    input   wire  [PORTS-1:0]                 s_axis_tlast
+    input   wire  [(PORTS*TID_WIDTH)-1:0]       s_axis_tid,
+    input   wire  [(PORTS*TUSER_WIDTH)-1:0]     s_axis_tuser,
+    input   wire  [(PORTS*TDATA_WIDTH)-1:0]     s_axis_tdata,
+    input   wire  [(PORTS*TDEST_WIDTH)-1:0]     s_axis_tdest,
+
+    output  logic [PORTS-1:0]                   s_axis_tready,
+    input   wire  [PORTS-1:0]                   s_axis_tvalid,
+    input   wire  [PORTS-1:0]                   s_axis_tlast
     
 
 );
@@ -133,7 +135,7 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
     logic [7:0] target_port_source_tdata [PORTS];
 
 
-    localparam INPUT_FIFO_WIDTH = TDATA_WIDTH+TID_WIDTH+TUSER_WIDTH+1;
+    localparam INPUT_FIFO_WIDTH = TDATA_WIDTH+TID_WIDTH+TUSER_WIDTH+TUSER_WIDTH+1;
 
     
     logic [INPUT_FIFO_WIDTH-1:0] m_axis_slave_output[PORTS]; // Output of slave fifo routed to proper master
@@ -151,25 +153,16 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
             end
             else begin
                 if (grant_granted && (internal_grant_binary==i)) begin
+
                     target_port_source_slave[source_port_target_master[i]][TID_WIDTH] <= 1'b1;
                     target_port_source_slave[source_port_target_master[i]][TID_WIDTH-1:0] <= i;
                     current_target_master <= source_port_target_master[i];
 
-                    // target_port_source_tuser[source_port_target_master[i]] <= source_port_target_tuser[i];
-                    //target_port_source_tdata[source_port_target_master[i]] <= source_port_target_tdata[i];
-                    //target_port_source_slave[i][TID_WIDTH] = 1'b1;
-                    //target_port_source_slave[s_axis_tid[(i*8)+8-1:i*8]][TID_WIDTH-1:0] = i;
                 end else if((source_port==i) && last_data) begin 
-                    //target_port_source_slave[source_port_target_master[i]][TID_WIDTH] <= 1'b0;
+  
                     target_port_source_slave[current_target_master][TID_WIDTH] <= 1'b0;
-                end/*else if(transmitting && (source_port==i) && last_data) begin 
-                    target_port_source_slave[source_port_target_master[i]][TID_WIDTH] <= 1'b0;
-                end*/
-                //target_port_source_slave[master_target][TID_WIDTH] = 1'b1;
-                //target_port_source_slave[master_target][TID_WIDTH-1:0] = f;
-                
-                //target_port_source_tuser[master_target] = slave_tuser;
-                //target_port_source_tdata[master_target] = slave_tdata;
+
+                end
             end
             
         end
@@ -187,30 +180,33 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
             //------------
             wire slave_selected = transmitting && (source_port==f);
             
-            wire [TID_WIDTH-1:0] master_target = s_axis_tid[(f*TID_WIDTH)+TID_WIDTH-1:f*TID_WIDTH];
+            //wire [TDEST_WIDTH-1:0] master_target = s_axis_tdest[(f*TDEST_WIDTH)+TDEST_WIDTH-1:f*TDEST_WIDTH];
+            wire [TDEST_WIDTH-1:0] master_target = m_axis_slave_output[f][TDATA_WIDTH+TDEST_WIDTH-1:TDATA_WIDTH];
             assign source_port_target_master[f] = master_target;
 
             assign internal_grant_requests_mask[f] = ! (slave_selected || m_axis_tready[master_target]==0 ); // 1 to enable, 0 to disable
 
-            wire [TUSER_WIDTH-1:0] slave_tuser = s_axis_tuser[(f*TUSER_WIDTH)+TUSER_WIDTH-1:f*TUSER_WIDTH];
-            wire [TDATA_WIDTH-1:0] slave_tdata = s_axis_tdata[(f*TDATA_WIDTH)+TDATA_WIDTH-1:f*TDATA_WIDTH];
+            wire [TUSER_WIDTH-1:0]  slave_tuser = s_axis_tuser[(f*TUSER_WIDTH)+TUSER_WIDTH-1:f*TUSER_WIDTH];
+            wire [TDEST_WIDTH-1:0]  slave_tdest = s_axis_tdest[(f*TDEST_WIDTH)+TDEST_WIDTH-1:f*TDEST_WIDTH];
+            wire [TID_WIDTH-1:0]    slave_tid   = s_axis_tid[(f*TID_WIDTH)+TID_WIDTH-1:f*TID_WIDTH];
+            wire [TDATA_WIDTH-1:0]  slave_tdata = s_axis_tdata[(f*TDATA_WIDTH)+TDATA_WIDTH-1:f*TDATA_WIDTH];
 
             // Write in fifo the slave side data, tuser, tid
-            simple_1ck_fifo #(.DWIDTH(INPUT_FIFO_WIDTH)) input_fifo(
+            mini_fwft_fifo #(.DWIDTH(INPUT_FIFO_WIDTH),.AWIDTH(2)) input_fifo(
                 .clk(clk),
                 .resn(resn),
                 
                 // Slave side
                 // Almost full sets slave ready
                 // Write is from slave interface
-                .write_value({s_axis_tlast[f],master_target,slave_tuser,slave_tdata}),
+                .data_in({s_axis_tlast[f],master_target,slave_tuser,slave_tdest,slave_tdata}),
                 .write(s_axis_tvalid[f] & s_axis_tready[f]),
                 .full(),
                 .almost_full(s_axis_fifo_almost_full[f]),
 
                 // Master internal side
                 // Empty sets matched master valid
-                .read_value(m_axis_slave_output[f]),
+                .data_out(m_axis_slave_output[f]),
                 .read(slave_selected &&  m_axis_tready[current_target_master] /*& slave_selected*/ && m_axis_tvalid[current_target_master] ),
                 .empty(source_port_fifo_empty[f]),
                 .almost_empty()
@@ -258,8 +254,9 @@ module axis_switch #(parameter PORTS=4,parameter TID_WIDTH = 8, parameter TUSER_
                 m_axis_tvalid[f] = !master_port_selected ? 1'b0 : !source_port_fifo_empty[source_port];
                 m_axis_tdata[f*8+8-1:f*8] = !master_port_selected ? 'h0 : m_axis_slave_output[source_port][TDATA_WIDTH-1:0];
                 m_axis_tlast[f] = !master_port_selected ? 'b0 : m_axis_slave_output[source_port][INPUT_FIFO_WIDTH-1];
-                m_axis_tuser[f*TUSER_WIDTH+TUSER_WIDTH-1:f*TUSER_WIDTH] = !master_port_selected ? 'b0 : m_axis_slave_output[source_port][TDATA_WIDTH+TUSER_WIDTH-1:TDATA_WIDTH];
-
+                
+                m_axis_tdest[f*TDEST_WIDTH+TDEST_WIDTH-1:f*TDEST_WIDTH] = !master_port_selected ? 'b0 : m_axis_slave_output[source_port][TDATA_WIDTH+TDEST_WIDTH-1:TDATA_WIDTH];
+                m_axis_tuser[f*TUSER_WIDTH+TUSER_WIDTH-1:f*TUSER_WIDTH] = !master_port_selected ? 'b0 : m_axis_slave_output[source_port][(TDATA_WIDTH+TDEST_WIDTH)+TUSER_WIDTH-1:(TDATA_WIDTH+TDEST_WIDTH)];
                 //master_port_tdata = !master_port_selected ? 'h0 : m_axis_slave_output[internal_grant_binary][TDATA_WIDTH-1:0];
             end
         end

@@ -46,6 +46,7 @@ module layers_readout_switched #(
     input wire  [31:0]                  config_frame_tag_counter,
     input wire  [7:0]                   config_nodata_continue,
     input wire  [LAYER_COUNT-1:0]       config_layers_reset,
+    input wire  [LAYER_COUNT-1:0]       config_layers_disable_miso,
 
     // Status
     //---------------------
@@ -104,6 +105,7 @@ module layers_readout_switched #(
                 .cfg_frame_tag_counter(config_frame_tag_counter),
                 .cfg_nodata_continue(config_nodata_continue),
                 .cfg_layer_reset(config_layers_reset[li]),
+                .cfg_disable_miso(config_layers_disable_miso[li]),
                 .status_frame_decoding(layers_status_frame_decoding[li]),
                 .stat_frame_detected(layers_stat_count_frame[li]),
                 .stat_idle_detected(layers_stat_count_idle[li])
@@ -120,9 +122,9 @@ module layers_readout_switched #(
     //---------------
     wire [7:0] switch_m_axis_tdata;
     wire switch_m_axis_tlast;
-    axis_switch_layer_frame  axis_switch_layer_frame_I(
-        .aclk(clk_core),
-        .aresetn(clk_core_resn),
+    axis_switch  axis_switch_layer_frame_I(
+        .clk(clk_core),
+        .resn(clk_core_resn),
 
         .m_axis_tdata(switch_m_axis_tdata),
         .m_axis_tdest(),
@@ -135,13 +137,18 @@ module layers_readout_switched #(
         .s_axis_tlast(layers_miso_m_axis_tlast),
         .s_axis_tready(layers_miso_m_axis_tready),
         .s_axis_tvalid(layers_miso_m_axis_tvalid),
-        .s_decode_err(),
-        .s_req_suppress({LAYER_COUNT{1'b0}})
+        //.s_decode_err(),
+        //.s_req_suppress({LAYER_COUNT{1'b0}})
+        // Unused
+        .m_axis_tuser(),
+        .m_axis_tid(),
+        .s_axis_tuser(),
+        .s_axis_tid()
     );
 
     // Data FIFO
     //-----------------
-    fifo_axis_1clk_1kB  frames_buffer(
+    fifo_axis_common #(.DUAL_CLOCK(0))  frames_buffer(
         .s_axis_aclk(clk_core),
         .s_axis_aresetn(clk_core_resn),
 
@@ -156,7 +163,22 @@ module layers_readout_switched #(
         .m_axis_tdata(readout_frames_m_axis_tdata),
         .m_axis_tready(readout_frames_m_axis_tready),
         .m_axis_tvalid(readout_frames_m_axis_tvalid),
-        .m_axis_tlast()
+        .m_axis_tlast(),
+
+        // Unused stuff
+        .m_axis_aclk(),
+        .m_axis_aresetn(),
+        .m_axis_tuser(),
+        .m_axis_tid(),
+        .m_axis_tdest(),
+
+        .s_axis_tuser(),
+        .s_axis_tid(),
+        .s_axis_tdest(),
+
+        .axis_wr_data_count(),
+        .almost_full(),
+        .almost_empty()
     );
 
 endmodule
