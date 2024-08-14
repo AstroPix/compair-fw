@@ -19,9 +19,10 @@ class UARTIO(rfg.core.RFGIO):
     baud : int = 921600
     timeout : int = 3
 
-    def __init__(self, tx,rx):
+    def __init__(self, tx,rx, baud = 921600):
         self.tx = tx
         self.rx = rx
+        self.baud = baud
 
     def open(self):
         #dir(dut)

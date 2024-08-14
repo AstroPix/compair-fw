@@ -24,6 +24,7 @@ xcelium.d*
 .simvision
 waves.shm
 xrun.*
+restore.tcl*
 
 ## HDL Tools
 .generated/
@@ -48,3 +49,6 @@ docs/site
 
 ## vendor things
 *.tar.gz
+
+
+
