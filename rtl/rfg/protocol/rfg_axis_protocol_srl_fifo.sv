@@ -23,10 +23,10 @@ module rfg_axis_protocol_srl_fifo #(parameter AWIDTH = 2) (
 
     assign read_value = mem[rptr];
     
-    wire [AWIDTH-1:0] rptr_next = (rptr + 1);
-    wire [AWIDTH-1:0] rptr_next_2 = (rptr + 2);
-    wire [AWIDTH-1:0] wptr_next = (wptr + 1);
-    wire [AWIDTH-1:0] wptr_next_2 = (wptr + 2);
+    wire [AWIDTH-1:0] rptr_next = (rptr + 1'd1);
+    wire [AWIDTH-1:0] rptr_next_2 = (rptr + 2'd2);
+    wire [AWIDTH-1:0] wptr_next = (wptr + 1'd1);
+    wire [AWIDTH-1:0] wptr_next_2 = (wptr +2'd2);
     wire wptr_next_is_read = wptr_next == (rptr);
     wire wptr_next2_is_read = wptr_next_2 == (rptr);
     always@(posedge clk) begin 
@@ -43,12 +43,12 @@ module rfg_axis_protocol_srl_fifo #(parameter AWIDTH = 2) (
             // Write
             if (write && !full) begin 
                 mem[wptr] = write_value;
-                wptr <= wptr + 1;
+                wptr <= wptr + 1'd1;
             end
 
             // Read 
             if (read && !empty) begin 
-                rptr <= rptr+1;
+                rptr <= rptr+1'd1;
             end
 
             // Full

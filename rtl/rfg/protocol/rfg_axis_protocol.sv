@@ -35,7 +35,6 @@ module rfg_axis_protocol  #(
     input  wire                     s_axis_tvalid,
     output reg                      s_axis_tready,
     input  wire [ID_WIDTH-1:0]      s_axis_tid, // Source Port from slave so that answers are forwared back to the right port
-    input  wire [7:0]               s_axis_tdest,
  
 
     output reg [7:0]                rfg_address,
@@ -169,7 +168,7 @@ module rfg_axis_protocol  #(
 
                         // Count valid cycles
                         if (!m_axis_write_stall && !read_buffer_empty) begin 
-                            rfg_master_length <= rfg_master_length -1;
+                            rfg_master_length <= rfg_master_length -1'd1;
                         end
                     end
                     default: begin 
@@ -271,12 +270,12 @@ module rfg_axis_protocol  #(
                         //rfg_read <= !read_buffer_almost_full && (rfg_current_length > 1) ;
 
                         if (/*read_buffer_write && !read_buffer_full*/ rfg_read) begin 
-                            rfg_current_length  <= rfg_current_length - 1; 
+                            rfg_current_length  <= rfg_current_length - 1'd1; 
                         end
 
                         // Address increment
                         if (rfg_read && rfg_header.address_increment) begin
-                            rfg_address <= rfg_address + 1;
+                            rfg_address <= rfg_address + 1'd1;
                         end
 
                     end
@@ -294,7 +293,7 @@ module rfg_axis_protocol  #(
                                 rfp_state           <= RFP_HEADER;
                             end
                             else begin
-                                rfg_current_length  <= rfg_current_length - 1; 
+                                rfg_current_length  <= rfg_current_length - 1'd1; 
                             end
                         end
                         else begin
@@ -304,7 +303,7 @@ module rfg_axis_protocol  #(
 
                         // Address increment
                         if (rfg_write && rfg_header.address_increment) begin
-                            rfg_address <= rfg_address + 1;
+                            rfg_address <= rfg_address + 1'd1;
                         end
                     end
 

@@ -6,7 +6,7 @@ Multi Layers parametezied
 
 */
 module layers_readout_switched #(
-    parameter LAYER_COUNT = 5
+    parameter LAYER_COUNT = 3
 ) (
 
     // Clocking
@@ -67,11 +67,18 @@ module layers_readout_switched #(
     //----------------------
 
     // Master outputs from layers readout
-    wire  [(LAYER_COUNT*8)-1:0]   layers_miso_m_axis_tdata;
-    wire  [(LAYER_COUNT*8)-1:0]   layers_miso_m_axis_tdest;
-    wire  [LAYER_COUNT-1:0]       layers_miso_m_axis_tvalid;
-    wire  [LAYER_COUNT-1:0]       layers_miso_m_axis_tlast;
-    wire  [LAYER_COUNT-1:0]       layers_miso_m_axis_tready;
+    wire  [((LAYER_COUNT+1)*8)-1:0]   layers_miso_m_axis_tdata;
+    wire  [((LAYER_COUNT+1)*8)-1:0]   layers_miso_m_axis_tdest;
+    wire  [(LAYER_COUNT+1)-1:0]       layers_miso_m_axis_tvalid;
+    wire  [(LAYER_COUNT+1)-1:0]       layers_miso_m_axis_tlast;
+    wire  [(LAYER_COUNT+1)-1:0]       layers_miso_m_axis_tready;
+
+    // The last input port is unused
+    assign layers_miso_m_axis_tvalid[(LAYER_COUNT+1)-1] = 1'b0;
+    assign layers_miso_m_axis_tlast[(LAYER_COUNT+1)-1] = 1'b0;
+    assign layers_miso_m_axis_tdata[(LAYER_COUNT+1)*8-1:(LAYER_COUNT+1)*8-8] = 8'b0;
+    assign layers_miso_m_axis_tdest[(LAYER_COUNT+1)*8-1:(LAYER_COUNT+1)*8-8] = 8'b0;
+
     genvar li;
     generate
         for (li = 0 ; li < LAYER_COUNT ; li++) begin 
@@ -120,9 +127,11 @@ module layers_readout_switched #(
 
     // Switch
     //---------------
-    wire [7:0] switch_m_axis_tdata;
-    wire switch_m_axis_tlast;
-    axis_switch  axis_switch_layer_frame_I(
+    wire [(LAYER_COUNT+1)*8-1:0] switch_m_axis_tdata;
+    wire [LAYER_COUNT+1-1:0] switch_m_axis_tlast;
+    wire [LAYER_COUNT+1-1:0] switch_m_axis_tready;
+    wire [LAYER_COUNT+1-1:0] switch_m_axis_tvalid;
+    axis_switch #(.PORTS(LAYER_COUNT+1)) axis_switch_layer_frame_I(
         .clk(clk_core),
         .resn(clk_core_resn),
 
@@ -148,15 +157,16 @@ module layers_readout_switched #(
 
     // Data FIFO
     //-----------------
-    fifo_axis_common #(.DUAL_CLOCK(0))  frames_buffer(
+    wire [7:0] output_buffer_tdata = switch_m_axis_tdata[7:0];
+    fifo_axis_common #(.DUAL_CLOCK(0),.TID_WIDTH(8),.TDEST_WIDTH(8),.USE_TID(0),.USE_TDEST(0),.TLAST(0))  frames_buffer(
         .s_axis_aclk(clk_core),
         .s_axis_aresetn(clk_core_resn),
 
         // From Switch
-        .s_axis_tdata(switch_m_axis_tdata),
-        .s_axis_tready(switch_m_axis_tready),
-        .s_axis_tvalid(switch_m_axis_tvalid),
-        .s_axis_tlast(switch_m_axis_tlast),
+        .s_axis_tdata(output_buffer_tdata),
+        .s_axis_tready(switch_m_axis_tready[0]),
+        .s_axis_tvalid(switch_m_axis_tvalid[0]),
+        .s_axis_tlast(switch_m_axis_tlast[0]),
 
         // To RFG Readout
         .axis_rd_data_count(readout_frames_data_count),
@@ -166,8 +176,8 @@ module layers_readout_switched #(
         .m_axis_tlast(),
 
         // Unused stuff
-        .m_axis_aclk(),
-        .m_axis_aresetn(),
+        .m_axis_aclk(clk_core),
+        .m_axis_aresetn(clk_core_resn),
         .m_axis_tuser(),
         .m_axis_tid(),
         .m_axis_tdest(),

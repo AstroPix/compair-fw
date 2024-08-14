@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<RadiantModule architecture="jd5d00" date="2024 08 07 14:10:37" device="LFCPNX-100" device_int="jd5d80" family="LFCPNX" gen_platform="Radiant" gen_platform_version="2024.1.0.34.2" generator="ipgen" library="module" module="pll" name="clock_pll_1" operation="Commercial" package="ASG256" package_int="ASG256" partnumber="LFCPNX-100-7ASG256C" source_format="Verilog" speed="7_Low-Power_1.0V" speed_int="4" vendor="latticesemi.com" version="1.9.0">
+ <Package>
+  <File modified="2024 08 07 14:10:37" name="rtl/clock_pll_1_bb.v" type="black_box_verilog"/>
+  <File modified="2024 08 07 14:10:37" name="clock_pll_1.cfg" type="cfg"/>
+  <File modified="2024 08 07 14:10:37" name="misc/clock_pll_1_tmpl.v" type="template_verilog"/>
+  <File modified="2024 08 07 14:10:37" name="misc/clock_pll_1_tmpl.vhd" type="template_vhdl"/>
+  <File modified="2024 08 07 14:10:37" name="rtl/clock_pll_1.v" type="top_level_verilog"/>
+  <File modified="2024 08 07 14:10:37" name="constraints/clock_pll_1.ldc" type="timing_constraints"/>
+  <File modified="2024 08 07 14:10:37" name="testbench/dut_params.v" type="dependency_file"/>
+  <File modified="2024 08 07 14:10:37" name="testbench/dut_inst.v" type="dependency_file"/>
+  <File modified="2024 08 07 14:10:37" name="component.xml" type="IP-XACT_component"/>
+  <File modified="2024 08 07 14:10:37" name="design.xml" type="IP-XACT_design"/>
+  <File modified="2024 04 15 21:53:01" name="testbench/tb_top.v" type="testbench_verilog"/>
+ </Package>
+</RadiantModule>

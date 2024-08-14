@@ -106,7 +106,7 @@ module  fifo_axis_common #(
     //endgenerate
     // DC Fifo in normal read mode, with a small FWFT single clock cache fifo for the read path
     //-----------------------------
-    wire [FIFO_DATA_WIDTH-1:0] fifo_data;
+    wire [FIFO_DATA_WIDTH-1:0] fifo_data; // output data of fifo
     reg fifo_read;
     reg fifo_read_data_valid;
     wire empty, fifo_almost_empty,full;
@@ -115,6 +115,13 @@ module  fifo_axis_common #(
     //-- Generate the FIFO instance based on parameters
     generate
         if (FIFO_DATA_WIDTH<=8) begin
+
+            
+            //wire [8:0] padded_in = { 'b0,fifo_data_in};
+            wire [7:0] padded_in = { {(8-FIFO_DATA_WIDTH){1'b0}},fifo_data_in};
+            wire [7:0] padded_out;
+            assign fifo_data = padded_out[FIFO_DATA_WIDTH-1:0];
+
             fifo_2clk_64x8 fifo (
                 .wr_clk_i   (s_axis_aclk),
                 .rd_clk_i   (m_axis_aclk),
@@ -122,11 +129,11 @@ module  fifo_axis_common #(
                 .rp_rst_i   (!s_axis_aresetn ),
 
                 .wr_en_i    (s_axis_tvalid),
-                .wr_data_i  (fifo_data_in),
+                .wr_data_i  (padded_in),
                 .full_o     (full),
 
                 .rd_en_i    (fifo_read),
-                .rd_data_o  (fifo_data),
+                .rd_data_o  (padded_out),
                 .empty_o    (empty ),
                 
                 .almost_full_o( almost_full ),
@@ -135,6 +142,11 @@ module  fifo_axis_common #(
             );
         end
         else if (FIFO_DATA_WIDTH<=32) begin
+
+            wire [31:0] padded_in = { {(32-FIFO_DATA_WIDTH){1'b0}},fifo_data_in};
+            wire [31:0] padded_out;
+            assign fifo_data = padded_out[FIFO_DATA_WIDTH-1:0];
+
             fifo_2clk_64x32 fifo (
                 .wr_clk_i   (s_axis_aclk),
                 .rd_clk_i   (m_axis_aclk),
@@ -142,11 +154,11 @@ module  fifo_axis_common #(
                 .rp_rst_i   (!s_axis_aresetn ),
 
                 .wr_en_i    (s_axis_tvalid),
-                .wr_data_i  (fifo_data_in),
+                .wr_data_i  (padded_in),
                 .full_o     (full),
 
                 .rd_en_i    (fifo_read),
-                .rd_data_o  (fifo_data),
+                .rd_data_o  (padded_out),
                 .empty_o    (empty ),
                 
                 .almost_full_o( almost_full ),
@@ -154,9 +166,9 @@ module  fifo_axis_common #(
                 
             );
         end
-        else begin
+        /*else begin
             error_fifo error_fifo();
-        end
+        end*/
     endgenerate
     
 

@@ -10,7 +10,7 @@ ${BASE}/rtl/top/astep24_3l_top_clocking.sv
 ## RFG Host
 ${BASE}/rtl/top/main_rfg.sv
 
-${BASE}/rtl/host/sw_ftdi245_spi_uart/sw_ftdi245_spi_uart.sv
+${BASE}/rtl/host/sw_spi_uart.sv
 
 ${BASE}/rtl/rfg/ftdi/ftdi_sync_fifo_axis.sv
 ${BASE}/rtl/rfg/ftdi/ftdi_interface_control_fsm.sv

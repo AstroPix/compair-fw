@@ -174,7 +174,7 @@ module axis_switch #(parameter PORTS=4,parameter TDATA_WIDTH=8 , parameter TID_W
     generate 
         for (f = 0 ; f < PORTS; f++) begin
 
-            logic [1:0] f_bits = f;
+            wire [1:0] f_bits = f;
 
             //-- Slave Side tuser, tdata, input fifo
             //------------

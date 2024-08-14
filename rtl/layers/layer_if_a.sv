@@ -137,7 +137,7 @@ module layer_if_a  #(LAYER_ID = 0)(
         .clk(clk_core),
         .resn(clk_core_resn),
 
-        .enable(/* WAIVED: Not implemented yet */),
+        .enable(1'b1),
         .interruptn(interruptn),
         
         .m_axis_tdata(frames_m_axis_tdata),

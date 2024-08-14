@@ -1,0 +1,44 @@
+## Bank Voltages
+ldc_set_sysconfig {CONFIGIO_VOLTAGE_BANK0=1.8 CONFIGIO_VOLTAGE_BANK1=3.3 MASTER_SPI_PORT=SERIAL JTAG_PORT=ENABLE PROGRAMN_PORT=DISABLE MCCLK_FREQ=112.5 CONFIG_IOSLEW=MEDIUM}
+ldc_set_vcc -bank 0 1.8
+ldc_set_vcc -bank 1 3.3
+ldc_set_vcc -bank 2 3.3
+ldc_set_vcc -bank 3 1.8
+ldc_set_vcc -bank 4 1.8
+ldc_set_vcc -bank 5 1.8
+ldc_set_vcc -bank 6 3.3
+ldc_set_vcc -bank 7 3.3
+
+## Clock
+#ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports osc_clk]
+#ldc_set_location -site {R4} [get_ports osc_clk]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports sysclk_125]
+ldc_set_location -site {N25} [get_ports sysclk_125]
+
+ldc_set_location -site {J5} [get_ports rst]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports rst]
+
+#ldc_set_location -site {N5} [get_ports {LED_GREEN[0]}]
+#ldc_set_location -site {N6} [get_ports {LED_GREEN[1]}]
+#ldc_set_location -site {N7} [get_ports {LED_GREEN[2]}]
+#ldc_set_location -site {N8} [get_ports {LED_GREEN[3]}]
+#ldc_set_location -site {L6} [get_ports {LED_GREEN[4]}]
+#ldc_set_location -site {N9} [get_ports {LED_GREEN[5]}]
+#ldc_set_location -site {L8} [get_ports {LED_GREEN[6]}]
+#ldc_set_location -site {M9} [get_ports {LED_GREEN[7]}]
+ldc_set_location -site {T4} [get_ports {LED_RED[0]}]
+ldc_set_location -site {T5} [get_ports {LED_RED[1]}]
+ldc_set_location -site {T6} [get_ports {LED_RED[2]}]
+ldc_set_location -site {T7} [get_ports {LED_RED[3]}]
+ldc_set_location -site {U8} [get_ports {LED_RED[4]}]
+ldc_set_location -site {T8} [get_ports {LED_RED[5]}]
+ldc_set_location -site {R9} [get_ports {LED_RED[6]}]
+ldc_set_location -site {P9} [get_ports {LED_RED[7]}]
+#ldc_set_location -site {N1} [get_ports {LED_YELLOW[0]}]
+#ldc_set_location -site {N2} [get_ports {LED_YELLOW[1]}]
+##ldc_set_location -site {N3} [get_ports {LED_YELLOW[2]}]
+#ldc_set_location -site {M1} [get_ports {LED_YELLOW[3]}]
+#ldc_set_location -site {M2} [get_ports {LED_YELLOW[4]}]
+#ldc_set_location -site {M3} [get_ports {LED_YELLOW[5]}]
+##ldc_set_location -site {L3} [get_ports {LED_YELLOW[6]}]
+#ldc_set_location -site {N4} [get_ports {LED_YELLOW[7]}]

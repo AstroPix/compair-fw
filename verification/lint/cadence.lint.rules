@@ -1,0 +1,113 @@
+// Use all default rules
+include default
+category RTL_NAMING default_on {
+    params KYEDIF {note} 
+    params DLNCML {off}
+}
+
+// ADL Customisations
+//------------
+
+// Move some checks to a special category to keep the visible, but not disturbing review
+category ADL_IGNORE "KIT-ADL - Annoying things to igore" default_on {
+
+
+    // Disable some unclassified checks that are annoying 
+    params DSEMEL {off}
+    params MACCDF {off}
+    params SPDUSD {off}
+
+
+    // Naming and stuff generating warnings from simulation model files 
+    params NOINSN {off}
+    params IFDDEF {off}
+    params NOSPEC {off}
+    params RTLNOG {off}
+        
+    // Other useless file format things 
+    params CTLCHR {off}
+    params MAXLEN {off}
+    params CDWARN {off}
+    params DIFFMN {off}
+    params AMSKWD {off}
+    params SEPLIN {off}
+    params NBGEND {off}
+    params DLNCML {off}
+    params NOTECH {off}
+    params MACCDF {off}
+    params USEMAC {off}
+
+}
+category ADL_IMPORTANT "KIT-ADL - Good to know" default_on {
+
+    FSMIDN {on}
+    NEGIDX {on} // Negative index in array, can be caused by bad parameter usage
+    UNDRIV {on} // Undriven stuff 
+    USEPRT {on} // Unused Port
+    CUVMPW {on} // Port size differ in connections
+    
+    MULNBA {on} // If a register has multiple non blocking in the same block after each other
+
+    BADFSM {on}
+    EXTFSM {on}
+    params HAL {fsm_state_coding_style="none"}
+
+    // Disable some unclassified checks that are annoying 
+    params DSEMEL {off}
+    params MACCDF {off}
+    params SPDUSD {off}
+
+}
+
+
+// Fatal ?
+
+// Errors 
+params KYEDIF {off} // Error if a non critical keyword like "external" is used 
+params OOMCAL {off} // Reported when using task calls on interfaces as not synthesisable (why? no idea)
+
+params CUVMPW {error} // Size mismatch in connections
+params USEPRT {error}
+
+// Warning degradation to help readability
+//--------------
+params STYVAL {off} // generates a warning if an array size is specified using a numeric value, like wire [3:0] signal; - Pollutes the warnings
+params LCVARN {off} // Uppercase in names, useless
+
+params TRUNCZ {off} // Truncated constants without precision loss. For example wire [2:0] test = 0 ; (0 is considered 32 bit, so truncates)
+params INTTOB {off} // ASsigned Int to bits, a bit the same as above, not really useful 
+
+// If an FSM doesn't separate state and data, or has extra things that don' contribute to the state
+params BADFSM {off}
+params EXTFSM {off}
+
+params IPRTEX{off} // Reports constants used in ports connections like .select(1'b0) , useless
+
+params NOBLKN{off} // Warning if a block is not named, annoying
+
+params PRMVAL{off} // Warning if parameters have no specific width, used like constants. This generates useless warnings for us
+params PRMBSE{off} // Warning is a paramter value has no base specified like 'h oder 'd, will be considered decimal implicitely 
+
+params IMPDTC{off} // Warning when doing something like "value <= 0", 0 is converted to unsigned from singed implicitely, useless for us 
+params IMPNET{off} // Warning that an assign is implicitely a wire "assign x = y" 
+
+params UELOPR{off} // Warning when doing "value <= value +1", the + 1 says the length of operands don't match. not usefull
+params ULRELE{off} // Warning when doing "value > 0", the right side is implicit 32 bit causing mismatch, not important for us
+params IMPTYP{off} // Warning when doing "value <= value +1", the right side is implicitly converted from int to register, not useful warning
+
+params POIASG{ignore poiasg="increment"} // This removes warnings that "+" on counters may trigger overflow, usually we want this
+params POIASG{off}
+
+params KEYWOD {off} // Warning is some keywords like "out" are used
+
+params FFWASR {off} // Reports when a flip flop has no async reset (but could have a sync one)
+
+// NOTE reports customisation to shorten the output of the linter
+//----------------
+params ALOWID {off} // Reports negative active signals without "n" at the end 
+params CDNOTE {off} // Reports directives used like `include in the RTL, which is ok for us 
+params IDLENG {off} // Checks the length of identifiers name (wires, modules etc...) - not interesting for us 
+params PRTCNT {off} // Reports the number of IO for each module, not interesting
+
+
+

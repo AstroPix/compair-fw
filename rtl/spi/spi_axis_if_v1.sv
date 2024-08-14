@@ -133,7 +133,7 @@ module spi_axis_if_v1 #(
                             miso_byte           <= {spi_miso[1],spi_miso[0],miso_byte[7:2]};
                         end
 
-                        miso_bit_counter    <= miso_bit_counter + 2;
+                        miso_bit_counter    <= miso_bit_counter + 2'd2;
                         
                     end
                     else begin 
@@ -143,7 +143,7 @@ module spi_axis_if_v1 #(
                         end else begin 
                             miso_byte           <= {spi_miso[0],miso_byte[7:1]};
                         end
-                        miso_bit_counter    <= miso_bit_counter + 1;
+                        miso_bit_counter    <= miso_bit_counter + 1'd1;
 
                     end
 
@@ -266,7 +266,7 @@ module spi_axis_if_v1 #(
                             mosi_byte           <= {1'b0,mosi_byte[7:1]};
                         end
                         
-                        mosi_bit_remaining  <= mosi_bit_remaining -1;
+                        mosi_bit_remaining  <= mosi_bit_remaining -1'd1;
                     end
                 end
 

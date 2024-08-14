@@ -96,7 +96,7 @@ module astropix_spi_protocol_av1 #(
 
             status_frame_decoding   <= 1'b0;
         end
-        else begin 
+        else if(enable) begin 
             
            // m_axis_tvalid <= 1'b0;
 
@@ -110,7 +110,7 @@ module astropix_spi_protocol_av1 #(
                 if (nodata_continue_counter==0) begin
                     readout_active <= 1'b0;
                 end else begin
-                    nodata_continue_counter <= nodata_continue_counter -1;
+                    nodata_continue_counter <= nodata_continue_counter - 1'd1;
                 end 
 
             end
@@ -136,7 +136,7 @@ module astropix_spi_protocol_av1 #(
 
                         // Length: ID + FRAME LENGTH + 4 TS bytes
                         frame_buffer                <= s_axis_tdata;
-                        m_axis_tdata                <= s_axis_tdata[2:0] + 6;
+                        m_axis_tdata                <= s_axis_tdata[2:0] + 3'd6;
                         m_axis_tvalid               <= 1'b1;
                         s_axis_tready               <= 1'b0; 
 
@@ -213,7 +213,7 @@ module astropix_spi_protocol_av1 #(
                         protocol_state          <= FORWARD; 
 
                         // Decount one byte
-                        receive_frame_length <= receive_frame_length -1;
+                        receive_frame_length <= receive_frame_length -1'd1;
 
                         // If master stage is ready for byte, leave slave to ready
                         s_axis_tready <= m_axis_tready;
@@ -239,14 +239,14 @@ module astropix_spi_protocol_av1 #(
                     if (master_byte_valid) begin 
                         protocol_state  <= TIMESTAMP2;
                         m_axis_tvalid   <= 1'b1;
-                        m_axis_tdata    <= forward_frozen_timestamp[24:16];
+                        m_axis_tdata    <= forward_frozen_timestamp[23:16];
                     end
                 end
                 TIMESTAMP2: begin 
                     if (master_byte_valid) begin 
                         protocol_state  <= TIMESTAMP3;
                         m_axis_tvalid   <= 1'b1;
-                        m_axis_tdata    <= forward_frozen_timestamp[31:25];
+                        m_axis_tdata    <= forward_frozen_timestamp[31:24];
                         m_axis_tlast    <= 1'b1;
                     end
                 end
