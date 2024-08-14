@@ -14,46 +14,6 @@ async def common_clock(dut):
     await RisingEdge(dut.clk)
 
 
-class MasterIf(): 
-
-    def __init__(self,dut,port):
-        self.dut = dut
-        self.port = port 
-
-    def reset(self):
-        self.dut.m_axis_tvalid[self.port].value = 0
-        self.set_tid(0)
-        #tid =  BinaryValue(value = 0, n_bits = 8)
-        #for i in range(8):
-        #    self.dut.m_axis_tid[self.port*8+i].value  = int(tid.binstr[7-i])
-        #self.dut.m_axis_tid[self.port*8:self.port*8+8].value  = BinaryValue(value = 0, n_bits = 8)
-
-    def valid(self,target:int):
-        self.dut.m_axis_tvalid[self.port].value = 1
-        self.set_tid(target)
-        #self.dut.m_axis_tid[self.port*8:self.port*8+8].value = BinaryValue(value = target, n_bits = 8)
-
-    def set_tid(self,target:int):
-        tid =  BinaryValue(value = target, n_bits = 8)
-        for i in range(8):
-            self.dut.m_axis_tid[self.port*8+i].value  = int(tid.binstr[i])
-
-
-class SlaveIf(): 
-
-    def __init__(self,dut,port):
-        self.dut = dut
-        self.port = port 
-
-    def reset(self):
-        self.dut.s_axis_tready[self.port].value = 0
-       
-
-    def ready(self):
-        self.dut.s_axis_tready[self.port].value = 1
-     
-
-
 async def init_clocking_interfaces(dut):
     ## Clk 
     dut.clk.value = 0
@@ -101,7 +61,7 @@ async def test_simple_2bytes_2frames(dut):
 
     ## Check number of bytes received on slave
     await Timer(100, units="us")
-    slaveBytesCount = sinks[2].getBytesCount()
+    slaveBytesCount = sinks[2].monitor.getBytesCount()
     dut._log.info(f"Number of bytes received on Slave 2: {slaveBytesCount}")
     assert(2 == slaveBytesCount)
 
@@ -110,7 +70,7 @@ async def test_simple_2bytes_2frames(dut):
     await sources[0].writeFrame([AxisCycle(0xAB),AxisCycle(0xCD)])
     await Timer(100, units="us")
 
-    slaveBytesCount = sinks[1].getBytesCount()
+    slaveBytesCount = sinks[1].monitor.getBytesCount()
     dut._log.info(f"Number of bytes received on Slave 1: {slaveBytesCount}")
     assert(2 == slaveBytesCount)
 
@@ -139,17 +99,17 @@ async def test_1frame_with_pauses(dut):
 
     await Timer(50, units="us")
     
-    dut._log.info(f"Number of bytes received on Sink 2: {sink.getBytesCount()}")
-    assert 5 == sink.getBytesCount() , f"Expected 5 bytes, received {sink.getBytesCount()}"
+    dut._log.info(f"Number of bytes received on Sink 2: {sink.monitor.getBytesCount()}")
+    assert 5 == sink.monitor.getBytesCount() , f"Expected 5 bytes, received {sink.monitor.getBytesCount()}"
 
-    sinkBytes = await sink.getBytes(5)
+    sinkBytes = await sink.monitor.getBytes(5)
     for i,b in enumerate(sinkBytes):
         dut._log.info(f"sink={hex(b)},source={hex(sourceBytes[i])}")
     assert(sourceBytes == sinkBytes)
 
     ## Send One Frame of 5 bytes from port 1 to port 2 with Not Ready on sink at beginning
     #########
-    dut._log.info(f"Starting test with delayed ready, bytes on Sink 2: {sink.getBytesCount()}")
+    dut._log.info(f"Starting test with delayed ready, bytes on Sink 2: {sink.monitor.getBytesCount()}")
     await Timer(50, units="us")
     sink.notReady()
     await Timer(10, units="us")
@@ -164,9 +124,9 @@ async def test_1frame_with_pauses(dut):
     await Timer(20, units="us")
 
     ## Check
-    dut._log.info(f"Number of bytes received on Sink 2: {sink.getBytesCount()}")
-    assert( 5 == sink.getBytesCount())
-    sinkBytes = await sink.getBytes(5)
+    dut._log.info(f"Number of bytes received on Sink 2: {sink.monitor.getBytesCount()}")
+    assert( 5 == sink.monitor.getBytesCount())
+    sinkBytes = await sink.monitor.getBytes(5)
     for i,b in enumerate(sinkBytes):
         dut._log.info(f"sink={hex(b)},source={hex(sourceBytes[i])}")
     assert(sourceBytes == sinkBytes)
@@ -202,8 +162,8 @@ async def test_frames_2sources_to_sink(dut):
     # Wait for Data to go through an checks
     await Timer(50, units="us")
 
-    assert sinks[targetSink].getBytesCount() == 10 , f"10 bytes expected, got {sinks[targetSink].getBytesCount()}"
-    await  sinks[targetSink].getAllBytes()
+    assert sinks[targetSink].monitor.getBytesCount() == 10 , f"10 bytes expected, got {sinks[targetSink].monitor.getBytesCount()}"
+    await  sinks[targetSink].monitor.getAllBytes()
 
     dut._log.info("=== Done 10 bytes from 2 ports ===")
 
@@ -225,7 +185,7 @@ async def test_frames_2sources_to_sink(dut):
 
     # Wait for Data to go through an checks
     await Timer(50, units="us")
-    assert sinks[targetSink].getBytesCount() == 26 , f"26 bytes expected, got {sinks[targetSink].getBytesCount()}"
+    assert sinks[targetSink].monitor.getBytesCount() == 26 , f"26 bytes expected, got {sinks[targetSink].monitor.getBytesCount()}"
 
     ## End
     ##############
@@ -259,7 +219,7 @@ async def test_frames_from_sources_to_sinks(dut):
     await Timer(200, units="us")
     receivedBytesCount = 0
     for sinki in range(4):
-        receivedBytesCount += sinks[sinki].getBytesCount()
+        receivedBytesCount += sinks[sinki].monitor.getBytesCount()
     dut._log.info(f" Received {receivedBytesCount} bytes, expected {totalBytesCount}")
 
     ## End

@@ -22,7 +22,7 @@ EXTRA_ARGS?=-input xcelium.tcl  -reflib ../xcelium_preparelib/lattice_compiled/l
 
 RANDOM_SEED=1722517216
 
-export PYTHONPATH=$(PWD)/../
+export PYTHONPATH=$(PWD)/../:$(shell pwd)/../../vendor/icflow_hdl_240807/cocotb_runner_v1/python
 
 inspect: export USER_ARGS=-gui
 inspect: sim
