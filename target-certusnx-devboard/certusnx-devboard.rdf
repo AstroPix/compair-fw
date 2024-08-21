@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RadiantProject version="4.2" radiant="2024.1.0.34.2" title="certusnx-devboard" device="LFCPNX-100-7ASG256C" performance_grade="7_Low-Power_1.0V" family_int="jd5d00" device_int="jd5d80" package_int="ASG256" operation_int="COM" speed_int="4" default_implementation="impl_1">
+<RadiantProject version="4.2" radiant="2024.1.0.34.2" title="certusnx-devboard" device="LFCPNX-100-9LFG672C" performance_grade="9_Low-Power_1.0V" family_int="jd5d00" device_int="jd5d80" package_int="LFG672" operation_int="COM" speed_int="6" default_implementation="impl_1">
     <Options/>
     <Implementation title="impl_1" dir="impl_1" description="impl_1" synthesis="lse" default_strategy="Strategy1">
         <Options VERILOG_DIRECTIVES="RFG_FW_ID=32'd2;RFG_FW_BUILD=32'd3" VerilogStandard="System Verilog" def_top="edge_detect">
@@ -99,7 +99,7 @@
         <Source name="constraints.sdc" type="Pre-Synthesis Constraints File" type_short="SDC">
             <Options/>
         </Source>
-        <Source name="constraints_io.sdc" type="Pre-Synthesis Constraints File" type_short="SDC" excluded="TRUE">
+        <Source name="constraints_io.pdc" type="Physical Constraints File" type_short="PDC">
             <Options/>
         </Source>
     </Implementation>
