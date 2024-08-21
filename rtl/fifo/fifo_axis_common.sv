@@ -124,9 +124,10 @@ module  fifo_axis_common #(
 
             fifo_2clk_64x8 fifo (
                 .wr_clk_i   (s_axis_aclk),
+                .rst_i      (!m_axis_aresetn),
+
                 .rd_clk_i   (m_axis_aclk),
-                .rst_i      (!s_axis_aresetn),
-                .rp_rst_i   (!s_axis_aresetn ),
+                .rp_rst_i   (!m_axis_aresetn),
 
                 .wr_en_i    (s_axis_tvalid),
                 .wr_data_i  (padded_in),
@@ -149,9 +150,10 @@ module  fifo_axis_common #(
 
             fifo_2clk_64x32 fifo (
                 .wr_clk_i   (s_axis_aclk),
-                .rd_clk_i   (m_axis_aclk),
                 .rst_i      (!s_axis_aresetn),
-                .rp_rst_i   (!s_axis_aresetn ),
+
+                .rd_clk_i   (m_axis_aclk),
+                .rp_rst_i   (!m_axis_aresetn),
 
                 .wr_en_i    (s_axis_tvalid),
                 .wr_data_i  (padded_in),

@@ -52,9 +52,9 @@ def getUARTDriver(dut):
     ## UART
     #########
     if dut._name == "astep24_3l_top":
-        rfg_io = UARTIO(dut.uart_rx,dut.uart_tx) ## INtervert Rx/Tx to send to rx and receive from tx!
+        rfg_io = UARTIO(dut.uart_rx,dut.uart_tx,baud = 115200) ## INtervert Rx/Tx to send to rx and receive from tx!
     else:
-        rfg_io = UARTIO(dut.uart_tx_in,dut.uart_rx_out)
+        rfg_io = UARTIO(dut.ftdi_tx,dut.ftdi_rx,baud = 115200)
 
     #rfg_io = UARTIO(dut.uart_rx,dut.uart_tx)
     firmwareRF.withIODriver(rfg_io)

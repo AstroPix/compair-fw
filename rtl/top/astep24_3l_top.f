@@ -18,7 +18,7 @@ ${BASE}/rtl/rfg/ftdi/ftdi_interface_control_fsm.sv
 ${BASE}/rtl/rfg/spi/spi_slave_axis_egress.sv
 ${BASE}/rtl/rfg/spi/spi_slave_axis_igress.sv
 
-${BASE}/rtl/rfg/uart/uart_lite_driver.sv
+${BASE}/rtl/lattice/uart_lattice_axis_driver.sv
 
 ${BASE}/rtl/rfg/protocol/rfg_axis_protocol_srl_fifo.sv
 ${BASE}/rtl/rfg/protocol/rfg_axis_protocol.sv
@@ -28,9 +28,9 @@ ${BASE}/rtl/rfg/protocol/rfg_axis_readout_framing.sv
 ${BASE}/rtl/axis_switch/axis_switch.sv
 ${BASE}/rtl/axis_switch/round_robin_arbiter.sv
 
-${BASE}/rtl/utilities/fifo_axis_common.sv
-${BASE}/rtl/utilities/mini_fwft_fifo.sv
-
+${BASE}/rtl/fifo/fifo_axis_common.sv
+${BASE}/rtl/fifo/mini_fwft_fifo.sv
+${BASE}/rtl/fifo/fifo_ptr_logic.sv
 
 ## Patgen for injection
 ${BASE}/rtl/layers/sync_async_patgen.sv

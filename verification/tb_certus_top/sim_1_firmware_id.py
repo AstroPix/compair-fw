@@ -10,11 +10,11 @@ from cocotbext.uart import UartSource, UartSink
 import vip.cctb
 
 ## Import simulation target driver
-import astep24_3l_sim
+from vip import astep24_3l_sim
 
 
 
-@cocotb.test(timeout_time = 2 , timeout_unit = "ms")
+@cocotb.test(timeout_time = 5 , timeout_unit = "ms")
 async def test_fw_id_uart(dut):
 
     driver = astep24_3l_sim.getUARTDriver(dut)
@@ -25,15 +25,15 @@ async def test_fw_id_uart(dut):
     ## Read Firmware Type
     version = await driver.readFirmwareVersion()
     print("Version: ",version)
-    assert version == 0xffab
+    assert version == 0x3
 
     ## Read Firmware ID
     id = await driver.readFirmwareID()
     print("FW ID:",hex(id))
-    assert id == 0xff00
+    assert id == 0x2
 
 
-@cocotb.test(timeout_time = 1 , timeout_unit = "ms" , skip=True)
+@cocotb.test(timeout_time = 1 , timeout_unit = "ms",skip=True)
 async def test_fw_id_spi(dut):
 
     

@@ -38,8 +38,12 @@ def load_fsp():
 #    from astep_ml1_top      import main_rfg
 
 async def common_system_clock(dut):
-    cocotb.start_soon(Clock(dut.sysclk, 10, units='ns').start())
-    await RisingEdge(dut.sysclk)
+    if dut._name == "astep24_3l_top":
+        cocotb.start_soon(Clock(dut.sysclk, 10, units='ns').start())
+        await RisingEdge(dut.sysclk)
+    else:
+        cocotb.start_soon(Clock(dut.sysclk_125, 8, units='ns').start())
+        await RisingEdge(dut.sysclk_125)
     
 async def common_clock_reset_nexys(dut):
     cocotb.start_soon(Clock(dut.sysclk, 10, units='ns').start())
@@ -53,13 +57,26 @@ async def common_clock_reset_nexys(dut):
 
 
 async def common_clock_reset(dut):
-    cocotb.start_soon(Clock(dut.sysclk, 10, units='ns').start())
-    dut.warm_resn.value = 0
-    dut.cold_resn.value = 0
-    await Timer(1, units="us")
-    dut.warm_resn.value = 1
-    dut.cold_resn.value = 1
-    await RisingEdge(dut.clk_core_resn)
+
+    if dut._name == "astep24_3l_top":
+        cocotb.start_soon(Clock(dut.sysclk,  8, units='ns').start())
+        await RisingEdge(dut.sysclk)
+        dut.warm_resn.value = 0
+        dut.cold_resn.value = 0
+        await Timer(1, units="us")
+        dut.warm_resn.value = 1
+        dut.cold_resn.value = 1
+        await RisingEdge(dut.clk_core_resn)
+    else:
+        cocotb.start_soon(Clock(dut.sysclk_125, 8, units='ns').start())
+        await RisingEdge(dut.sysclk_125)
+        dut.rst.value = 1
+        await Timer(1, units="us")
+        dut.rst.value = 0
+        await Timer(1, units="us")
+
+    #cocotb.start_soon(Clock(dut.sysclk, 10, units='ns').start())
+    
 
 async def warm_reset(dut):
     dut.warm_resn.value = 0

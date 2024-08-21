@@ -17,3 +17,4 @@
 ${BASE}/verification/ip/fifo_2clk_64x32.v
 ${BASE}/verification/ip/fifo_2clk_64x8.v
 ${BASE}/verification/ip/clock_pll_1.v
+${BASE}/verification/ip/uart.v
