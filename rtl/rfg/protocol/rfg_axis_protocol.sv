@@ -1,5 +1,4 @@
-
-`include "axi_ifs.sv" 
+`include "../../includes/axi_ifs.sv" 
 
 /**
     This module receives bytes from AXIS and transmits to the classic rf_protocol_processor
@@ -10,7 +9,7 @@
 */
 module rfg_axis_protocol  #(
     parameter DATA_WIDTH = 8,
-    parameter ID_WIDTH = 8,
+    parameter ID_DEST_WIDTH = 8,
     parameter AXIS_MASTER_DEST = 0) (
 
 
@@ -26,15 +25,15 @@ module rfg_axis_protocol  #(
     output wire                     m_axis_tvalid,
     input  wire                     m_axis_tready,
     output wire                     m_axis_tlast,
-    output reg [ID_WIDTH-1:0]       m_axis_tid, // ID is passed back to readout from header
-    output reg  [7:0]               m_axis_tdest, // Destination is set from slave ID input
+    output reg  [ID_DEST_WIDTH-1:0] m_axis_tid, // ID is passed back to readout from header
+    output reg  [ID_DEST_WIDTH-1:0] m_axis_tdest, // Destination is set from slave ID input
 
     
     // AXIS slave to receive protocol bytes from IO interface
     input  wire [DATA_WIDTH-1:0]    s_axis_tdata,
     input  wire                     s_axis_tvalid,
     output reg                      s_axis_tready,
-    input  wire [ID_WIDTH-1:0]      s_axis_tid, // Source Port from slave so that answers are forwared back to the right port
+    input  wire [ID_DEST_WIDTH-1:0] s_axis_tid, // Source Port from slave so that answers are forwared back to the right port
  
 
     output reg [7:0]                rfg_address,
@@ -43,7 +42,11 @@ module rfg_axis_protocol  #(
     output reg                      rfg_write_last,
     output reg                      rfg_read,
     input  wire                     rfg_read_valid,
-    input  wire [7:0]               rfg_read_value
+    input  wire [7:0]               rfg_read_value,
+    
+    // Some debug outputs
+    output reg                      debug_got_byte,
+    output reg [3:0]                debug_state // This signal can be tapped to logic analyzer in lattice
 );
 
 
@@ -52,10 +55,10 @@ module rfg_axis_protocol  #(
 
         // Master inferface to write data to SW I/O
         AXIS #(
-        .AXIS_ADDR_WIDTH(8),
+        .AXIS_ADDR_WIDTH(ID_DEST_WIDTH),
         .AXIS_USER_WIDTH(1),
         .AXIS_DATA_WIDTH(DATA_WIDTH),
-        .AXIS_ID_WIDTH(ID_WIDTH))    switch_m_axis_if ();
+        .AXIS_ID_WIDTH(ID_DEST_WIDTH))    switch_m_axis_if ();
 
         assign m_axis_tdata             = switch_m_axis_if.tdata;
         assign m_axis_tvalid            = switch_m_axis_if.tvalid;
@@ -122,7 +125,17 @@ module rfg_axis_protocol  #(
         //----------------
         
 
-        typedef enum {RFP_HEADER,RFP_ADDRESS,RFP_LENGTHA,RFP_LENGTHB,RFP_WRITE_VALUE,RFP_READ_VALUE,RFP_READ,RFP_FORWARD,RFP_READ_FINISH}   rf_protocol_states;
+        typedef enum logic [3:0] {
+            RFP_HEADER,
+            RFP_ADDRESS,
+            RFP_LENGTHA,
+            RFP_LENGTHB,
+            RFP_WRITE_VALUE,
+            RFP_READ_VALUE,
+            RFP_READ,
+            RFP_FORWARD,
+            RFP_READ_FINISH
+        }   rf_protocol_states;
         rf_protocol_states rfp_state;
         
         assign rfg_read = !read_buffer_almost_full && rfp_state == RFP_READ;
@@ -137,15 +150,17 @@ module rfg_axis_protocol  #(
                 s_axis_tready <= 1'b0;
 
                 switch_m_axis_if.reset_master();
-                m_axis_tdest  <= 8'h00;
-                //m_axis_tid    <= {}
 
                 read_buffer_write <= 1'b0;
                 read_buffer_read  <= 1'b0;
 
+                debug_got_byte <= 1'b0;
+
             end
             else begin 
-           
+                
+                debug_state <= rfp_state;
+
                 // Readback AXIS Master stage
                 //-------------
                 case (rfp_state)
@@ -178,6 +193,10 @@ module rfg_axis_protocol  #(
 
                 // RFG Side state
                 //----------------
+                if (axis_sink_byte_valid) begin
+                    debug_got_byte <= 1'b1;
+                end
+
                 case (rfp_state)
 
                     RFP_HEADER: begin 

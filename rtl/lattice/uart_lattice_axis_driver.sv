@@ -1,5 +1,5 @@
 
-`include "axi_ifs.sv"
+`include "../includes/axi_ifs.sv"
 
 /**
 UART Driver module to interface to Lattice UART IP with an Axi Stream interface
@@ -121,7 +121,7 @@ module uart_lattice_axis_driver #(
             uart_state                      <= INIT;
             uart_rcv_byte                   <= 8'h00;
             uart_rcv_byte_valid             <= 1'b0;
-            uart_got_byte                   <= 1'b0;
+            
 
             uart_status_updated             <= 1'b0;
 
@@ -240,16 +240,7 @@ module uart_lattice_axis_driver #(
                         uart_state      <= WAIT_READY;
                         uart_state_next <= READ_STATUS;
                     end
-                    /*uart_s_axis_if.s_not_ready();
-
-                    if (uart_axi_if.aw_valid==0)
-                    begin
-                        uart_axi_if.master_single_write(4'h04,uart_byte_to_send);
-                    end
-                    else if (uart_axi_if.aw_ready) begin
-                        uart_axi_if.master_write_done();
-                        uart_write_state        <= UFW_WAIT_STATUS;
-                    end*/
+                 
                 end
 
                 WAIT_READY: begin 
@@ -258,26 +249,9 @@ module uart_lattice_axis_driver #(
                         apb_psel_i <= 'b0;
                         apb_penable_i <= 'b0;
                     end
-
-                    if (apb_pready_o && apb_pwrite_i == 1'b0) begin
-              
-                        // Was reading byte
-                        if (apb_paddr_i==4'h0) begin
-                            uart_rcv_byte       <= apb_prdata_o[7:0];
-                            uart_rcv_byte_valid <= 1'b1;
-                            uart_got_byte       <= !uart_got_byte;
-                        end
-                        // Was reading status
-                        else  begin
-                            uart_status_updated <= 1'b1;
-                            uart_status         <= apb_prdata_o[7:0];
-                        end
-                    end
-                    /*if (uart_status_updated) begin 
-                        uart_write_state <= UFW_IDLE;
-                    end*/
                 end
-
+                
+            
 
             endcase;
 
@@ -294,7 +268,7 @@ module uart_lattice_axis_driver #(
                         if (apb_paddr_i==4'h0) begin
                             uart_rcv_byte       <= apb_prdata_o[7:0];
                             uart_rcv_byte_valid <= 1'b1;
-                            uart_got_byte       <= !uart_got_byte;
+                            //uart_got_byte       <= !uart_got_byte;
                         end
                         // Was reading status
                         else  begin
@@ -303,6 +277,7 @@ module uart_lattice_axis_driver #(
                         end
                     end
                 end
+
                 // The bytes received should be reset, unless the axis stage was stalled
                 default: begin
                     if (uart_rcv_byte_valid && !axis_master_stalled) begin
@@ -312,108 +287,6 @@ module uart_lattice_axis_driver #(
                 end
 
             endcase
-
-            //---------------------------
-            // UART Read: Read Data and Status Registers
-            //---------------------------
-            /*case (uart_fifo_readout_state)
-                UFR_WAIT_INIT: begin 
-                    if (uart_init_done) begin 
-                        uart_fifo_readout_state <= UFR_IDLE;
-                    end
-                end
-                UFR_IDLE: begin
-                    if (axi_start_read && !axis_master_stalled) begin
-                        uart_fifo_readout_state <= UFR_READ_STATUS;
-                    end
-                end
-                
-                // Read Status of Module to see if there are data
-                //------------
-                UFR_READ_STATUS: begin
-                    
-                    apb_psel_i <= 'b1;
-                    apb_penable_i <= apb_psel_i;
-                    apb_paddr_i <= 6'h14; // Line status register
-
-                    if (apb_psel_i && apb_penable_i) begin
-                        uart_fifo_readout_state <= UFR_AXI_DATA;
-                        uart_fifo_readout_state_next <= UFR_READ_FIFO;
-                    end
-                    
-                end
-            
-                // Read Byte from FIFO
-                //-----------------
-                UFR_READ_FIFO: begin
-                
-                    // REad fifo is preceded by status read
-                    // If status shows no data, don't read and go back to waiting
-                    if (apb_prdata_o[0]==1'b1 && !axis_master_stalled) // Data available
-                    begin
-
-                        apb_psel_i <= 'b1;
-                        apb_penable_i <= apb_psel_i;
-                        apb_paddr_i <= 6'h0; // Line status register
-
-                        if (apb_psel_i && apb_penable_i) begin
-                            uart_fifo_readout_state <= UFR_AXI_DATA;
-                            uart_fifo_readout_state_next <= UFR_READ_STATUS;
-                        end
-                        
-                    end
-                    else if (apb_prdata_o[0]==1'b1 && !axis_master_stalled)
-                        uart_fifo_readout_state <= UFR_READ_FIFO;
-                    else begin
-                        uart_fifo_readout_state <= interrupt_uart ? UFR_READ_STATUS : UFR_IDLE;
-                    end
-                    
-                
-                    
-                end
-                
-                // GET Axi Data and go to next provided state
-                // If reading from FIFO, save to byte register
-                //----------------
-                UFR_AXI_DATA: begin
-                    if (apb_pready_o) begin
-                        uart_fifo_readout_state <= uart_fifo_readout_state_next; 
-                    end
-                    apb_psel_i <= 'b0;
-                    apb_penable_i <= 'b0;
-                end
-            
-            endcase;*/
-            
-            // Data Path: Receiving UART byte
-            // When AXI_DATA state reached and the read address was the RX fifo, we got a byte
-            //------------------
-            /*case (uart_state)
-                
-                WAIT_READY: begin
-                    if (apb_pready_o && apb_pwrite == 1'b0) begin
-              
-                        // Was reading byte
-                        if (apb_paddr_i==4'h0) begin
-                            uart_rcv_byte       <= apb_prdata_o[7:0];
-                            uart_rcv_byte_valid <= 1'b1;
-                            uart_got_byte       <= !uart_got_byte;
-                        end
-                        // Was reading status
-                        else  begin
-                            uart_status_updated <= 1'b1;
-                            uart_status         <= apb_prdata_o[7:0];
-                        end
-                    end
-                end
-                
-                default: begin
-                    uart_status_updated <= 1'b0;
-                    uart_rcv_byte_valid <= 1'b0;
-                end
-                
-            endcase;*/
-        
         
         end     
     end
@@ -428,12 +301,15 @@ module uart_lattice_axis_driver #(
 
             // AXIS <- UART (uart receive, axis master)
             m_axis_tvalid <= 'b0;
+
+            uart_got_byte                   <= 1'b0;
         end
         else begin
             
             if (uart_rcv_byte_valid && !m_axis_tvalid) begin
                 m_axis_tdata <= uart_rcv_byte;
                 m_axis_tvalid <= 1'b1;
+                uart_got_byte <= 1'b1;
             end else if (m_axis_tvalid && m_axis_tready) begin
                 m_axis_tvalid <= 'b0;
             end

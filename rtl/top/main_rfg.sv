@@ -302,8 +302,8 @@ module main_rfg(
     // ---------------
     always@(posedge clk) begin
         if (!resn) begin
-            hk_firmware_id_reg <= `RFG_FW_ID;
-            hk_firmware_version_reg <= `RFG_FW_BUILD;
+            hk_firmware_id_reg <= 32'd2;
+            hk_firmware_version_reg <= 32'd3;
             hk_xadc_temperature_reg <= 0;
             hk_xadc_vccint_reg <= 0;
             hk_conversion_trigger_reg <= 0;
@@ -1090,7 +1090,7 @@ module main_rfg(
                 spi_layers_ckdivider_divided_clk <= !spi_layers_ckdivider_divided_clk;
                 spi_layers_ckdivider_counter <= 8'h00;
             end else begin
-                spi_layers_ckdivider_counter <= spi_layers_ckdivider_counter+1;
+                spi_layers_ckdivider_counter <= spi_layers_ckdivider_counter+1'b1;
             end
         end
     end
@@ -1114,7 +1114,7 @@ module main_rfg(
                 spi_hk_ckdivider_divided_clk <= !spi_hk_ckdivider_divided_clk;
                 spi_hk_ckdivider_counter <= 8'h00;
             end else begin
-                spi_hk_ckdivider_counter <= spi_hk_ckdivider_counter+1;
+                spi_hk_ckdivider_counter <= spi_hk_ckdivider_counter+1'b1;
             end
         end
     end

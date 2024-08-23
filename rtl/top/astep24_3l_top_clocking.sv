@@ -22,11 +22,7 @@ module astep24_3l_top_clocking (
 
     // Clock for UART -> 33Mhz
     output wire				clk_uart,
-    output wire				clk_uart_resn,
-
-    // FTDI Clock reset synchronisation
-    input  wire				clk_ftdi,
-    output wire				clk_ftdi_resn
+    output wire				clk_uart_resn
 );
 
     
@@ -43,30 +39,18 @@ module astep24_3l_top_clocking (
     wire pll_locked;
     // Module Instance
     clock_pll_1 top_clocking_core_io_uart(.clki_i(sysclk_in ),
-    .rstn_i( !shutdown),
-    .pllpd_en_n_i( !shutdown),
-    .clkop_o(clk_core ),
-    .clkos_o( clk_uart ),
-    .lock_o( pll_locked ));
-
-   /* top_clocking_core_io_uart  top_clocking_core_io_uart_I(
-        .clk_in1(sysclk_in),
-
-        .clk_100(clk_100),
-        .clk_core(clk_core),
-        .clk_sample(clk_sample),
-        .clk_timestamp(clk_timestamp),
-        .clk_uart(clk_uart),
-        .locked(pll_locked),
-        .power_down(shutdown),
-        .resetn(!shutdown)
-    );*/
+        .rstn_i( !shutdown),
+        .pllpd_en_n_i( !shutdown),
+        .clkop_o(clk_core ),
+        .clkos_o( clk_uart ),
+        .lock_o( pll_locked )
+    );
             
     wire reset_condition = pll_locked && warm_resn_in && cold_resn_in;
-    resets_synchronizer #(.CLOCKS(3),.RESET_DELAY(15)) resets (
+    resets_synchronizer #(.CLOCKS(2),.RESET_DELAY(5)) resets (
         .async_resn_in(reset_condition),
-        .input_clocks({clk_ftdi,clk_uart,clk_core}),
-        .output_resn({clk_ftdi_resn,clk_uart_resn,clk_core_resn}),
+        .input_clocks({clk_uart,clk_core}),
+        .output_resn({clk_uart_resn,clk_core_resn}),
         .master_all_reset(all_reset)
     );    
 

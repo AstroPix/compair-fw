@@ -15,7 +15,7 @@
         parameter MTU_SIZE = 16
         ) (
  
-        input  wire                     resn,
+   
         input  wire                     spi_csn,
         input  wire                     spi_clk, 
         output wire [MISO_SIZE-1:0]     spi_miso,
@@ -76,7 +76,7 @@
      //---------------------
      task reset();
         state                   <= WAIT;
-        egress_byte             <= s_axis_tuser;
+        //egress_byte             <= s_axis_tuser;
         egress_bit_counter      <= 3'b000;
 
         s_axis_tready           <= 1'b0;
@@ -88,30 +88,32 @@
 
         // Output on Posedge
         //-----------------
-        if (MISO_SIZE == 1) begin 
-            egress_bit_counter <= egress_bit_counter + 1'd1;
-
-            if (MSB_FIRST)
-                egress_byte <= {egress_byte[6:0],1'b0};
-            else 
-                egress_byte <= {1'b0,egress_byte[7:1]};
-
-        end else begin 
-            egress_bit_counter <= egress_bit_counter +2'd2;
-
-            if (MSB_FIRST)
-                egress_byte <= {egress_byte[5:0],2'b00};
-            else 
-                egress_byte <= {2'b00,egress_byte[7:2]};
-        end
- 
+        
         // Load next byte
-        if (/*egress_bit_counter_last*/egress_bit_counter==0) begin 
+        if (egress_bit_counter==0) begin 
             if (s_axis_tvalid) begin 
                 egress_byte <= s_axis_tdata;
             end
             else begin 
                 egress_byte <= s_axis_tuser;
+            end
+        end
+        else begin
+            if (MISO_SIZE == 1) begin 
+                egress_bit_counter <= egress_bit_counter + 1'd1;
+    
+                if (MSB_FIRST)
+                    egress_byte <= {egress_byte[6:0],1'b0};
+                else 
+                    egress_byte <= {1'b0,egress_byte[7:1]};
+    
+            end else begin 
+                egress_bit_counter <= egress_bit_counter +2'd2;
+    
+                if (MSB_FIRST)
+                    egress_byte <= {egress_byte[5:0],2'b00};
+                else 
+                    egress_byte <= {2'b00,egress_byte[7:2]};
             end
         end
 
@@ -121,8 +123,6 @@
         
         always @(posedge spi_clk or posedge spi_csn) begin 
             if ( spi_csn) begin
-                reset();
-            end else if (!resn) begin
                 reset();
             end else begin 
                 send();

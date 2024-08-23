@@ -5,8 +5,6 @@ module reset_sync #(parameter RESET_DELAY = 3 ) (
 );
 
 
-    (* IOB = "false" *)
-    (* ASYNC_REG = "TRUE" *)
     reg [RESET_DELAY-1:0] resn_main_reg;
     assign resn_out = resn_main_reg[RESET_DELAY-1];
     always@(posedge clk or negedge resn_in) begin 

@@ -71,6 +71,8 @@ module astep24_3l_top(
 
     input  wire				uart_rx,
     output wire				uart_tx,
+    output wire             uart_init_done,
+    output wire             uart_got_byte,
 
     // Target Specific
     //---------------
@@ -96,23 +98,17 @@ module astep24_3l_top(
     wire clk_uart_resn; // size=1
     wire clk_core; // size=1
     wire clk_core_resn; // size=1
-    wire clk_ftdi_resn;
     astep24_3l_top_clocking  clocking_reset_I (
         .sysclk_in(sysclk),
         .cold_resn_in(cold_resn),
         .io_aresn(io_aresn),
         .warm_resn_in(warm_resn),
-        //.clk_100(clk_100),
-        //.clk_100_resn(clk_100_resn),
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
         .clk_sample(clk_sample),
         .clk_timestamp(clk_timestamp),
         .clk_uart(clk_uart),
-        .clk_uart_resn(clk_uart_resn),
-        .clk_ftdi(ftdi_clko),
-        .clk_ftdi_resn(clk_ftdi_resn)
-        
+        .clk_uart_resn(clk_uart_resn)
     );
 
     // Interrupt Input Sychronisation
@@ -165,7 +161,11 @@ module astep24_3l_top(
         .spi_mosi(spi_mosi),
 
         .uart_rx(uart_rx),
-        .uart_tx(uart_tx)
+        .uart_tx(uart_tx),
+        .uart_init_done(uart_init_done),
+        .uart_got_byte(uart_got_byte),
+
+        .rfg_debug_got_byte(rfg_debug_got_byte)
     
     );
 

@@ -12,7 +12,6 @@ module spi_slave_axis_igress #(
     parameter MSB_FIRST     = 1  ) (
 
         // Async reset
-        input  wire                         resn,
         input  wire                         spi_clk, 
         input  wire                         spi_csn,
         input  wire                         spi_mosi,
@@ -31,7 +30,7 @@ module spi_slave_axis_igress #(
 
     // State
     //-------------------------------
-    enum {DATA,WRITE} state;
+    enum reg {DATA,WRITE} state;
     reg [2:0] counter;
     reg [7:0] rcv_byte;
 
@@ -56,7 +55,7 @@ module spi_slave_axis_igress #(
             rcv_byte <= {spi_mosi,rcv_byte[7:1]};
         else 
             rcv_byte <= {rcv_byte[6:0],spi_mosi};
-        counter      <= counter + 1;
+        counter      <= counter + 1'b1;
 
 
         // When counter is 7, byte done is 1 (overflow), otherwise byte done is 0
@@ -80,27 +79,15 @@ module spi_slave_axis_igress #(
     endtask
     generate
 
-        if (ASYNC_RES) begin 
-            always @(negedge spi_clk or posedge spi_csn or negedge resn) begin 
-                if ( spi_csn) begin
-                    reset();
-                end else if (!resn) begin
-                    reset();
-                end else begin 
-                    receive();
-                end
-            end
+
+    always @(negedge spi_clk or posedge spi_csn) begin 
+        if ( spi_csn) begin
+            reset();
         end else begin 
-            always @(negedge spi_clk or posedge spi_csn) begin 
-                if ( spi_csn) begin
-                    reset();
-                end else if (!resn) begin
-                    reset();
-                end else begin 
-                    receive();
-                end
-            end
+            receive();
         end
+    end
+      
         
         
 

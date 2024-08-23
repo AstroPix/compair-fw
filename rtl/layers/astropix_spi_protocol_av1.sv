@@ -1,4 +1,4 @@
-`include "axi_ifs.sv"
+`include "../includes/axi_ifs.sv" 
 
 /**
 

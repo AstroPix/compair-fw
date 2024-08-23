@@ -102,6 +102,9 @@
         <Source name="constraints_io.pdc" type="Physical Constraints File" type_short="PDC">
             <Options/>
         </Source>
+        <Source name="source/impl_1.xcf" type="Programming Project File" type_short="Programming">
+            <Options/>
+        </Source>
     </Implementation>
     <Strategy name="Strategy1" file="certusnx-devboard1.sty"/>
 </RadiantProject>

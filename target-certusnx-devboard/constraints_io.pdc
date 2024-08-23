@@ -15,14 +15,20 @@ ldc_set_vcc -bank 7 3.3
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports sysclk_125]
 ldc_set_location -site {N25} [get_ports sysclk_125]
 
-ldc_set_location -site {J5} [get_ports rst]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports rst]
+ldc_set_location -site {J5} [get_ports rstn]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports rstn]
 
 ## UART
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports ftdi_tx]
 ldc_set_location -site {L2} [get_ports ftdi_tx]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports ftdi_rx]
 ldc_set_location -site {L1} [get_ports ftdi_rx]
+
+## SPI Slave
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports spi_clk]
+ldc_set_location -site {N23} [get_ports spi_clk]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports spi_csn]
+ldc_set_location -site {V6} [get_ports spi_csn]
 
 ## LED
 #ldc_set_location -site {N5} [get_ports {LED_GREEN[0]}]
@@ -49,3 +55,15 @@ ldc_set_location -site {P9} [get_ports {LED_RED[7]}]
 #ldc_set_location -site {M3} [get_ports {LED_YELLOW[5]}]
 ##ldc_set_location -site {L3} [get_ports {LED_YELLOW[6]}]
 #ldc_set_location -site {N4} [get_ports {LED_YELLOW[7]}]
+
+
+## Post Syn FIFO Constraints
+## Constraints when Nexus HARD_IP is used 
+set WR_MAXDLY [expr 8*0.8]
+set RD_MAXDLY [expr 8*0.8]
+set_max_delay -datapath_only -from [get_cells -hierarchical */*.FIFO16K_MODE_inst] -to [get_cells -hierarchical */*.full_r*.*_inst]   $WR_MAXDLY 
+set_max_delay -datapath_only -from [get_cells -hierarchical */*.FIFO16K_MODE_inst] -to [get_cells -hierarchical */*.afull_r*.*_inst]  $WR_MAXDLY 
+set_max_delay -datapath_only -from [get_cells -hierarchical */*.FIFO16K_MODE_inst] -to [get_cells -hierarchical */*.empty_r*.*_inst]  $RD_MAXDLY 
+set_max_delay -datapath_only -from [get_cells -hierarchical */*.FIFO16K_MODE_inst] -to [get_cells -hierarchical */*.aempty_r*.*_inst] $RD_MAXDLY 
+set_false_path -from [get_pins -hierarchical */*.FIFO16K_MODE_inst/EMPTY] -to [get_pins -hierarchical */*.FIFO16K_MODE_inst/EMPTYI] 
+set_false_path -from [get_pins -hierarchical */*.FIFO16K_MODE_inst/FULL] -to [get_pins -hierarchical */*.FIFO16K_MODE_inst/FULLI] 
