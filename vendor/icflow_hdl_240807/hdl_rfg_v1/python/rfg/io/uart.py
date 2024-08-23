@@ -37,7 +37,7 @@ class UARTIO(rfg.core.RFGIO):
         else: 
             self.serialPort = serial.Serial(port = self.port,baudrate=self.baud,timeout=self.timeout)
             atexit.register(exit_close,self)
-            logger.info("Opened Serial port %s",self.port)
+            logger.info(f"Opened Serial port {self.port} with baud {self.baud} bps")
             #self.serialPort.open()
 
     def close(self):
@@ -52,9 +52,9 @@ class UARTIO(rfg.core.RFGIO):
         remaining = len(bytesToWrite)
         total = len(bytesToWrite)
         while remaining > 0:
-            #logger.debug("Writing %d bytes to UART",len(bytes))
+            logger.debug("Writing %d bytes to UART",len(bytesToWrite))
             written = self.serialPort.write(bytesToWrite[total-remaining:total:1])
-            #logger.debug("Written %d bytes to UART",written)
+            logger.debug("Written %d bytes to UART",written)
             if written>0:
                 remaining = remaining - written
             else:
@@ -77,7 +77,7 @@ class UARTIO(rfg.core.RFGIO):
         remaining = count 
         bytes = bytearray()
         while remaining > 0 :
-            #logger.debug("Reading %d bytes from UART",remaining)
+            logger.debug("Reading %d bytes from UART",remaining)
             rbytes = self.serialPort.read(remaining)
             #logger.debug("Read %d bytes from UART",len(rbytes))
             if len(rbytes)>0:

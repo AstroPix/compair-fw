@@ -21,11 +21,11 @@ if serialLoader is not None:
     import rfg.io.uart
 
 
-    def withUARTIO(self,port, speed:int | None = None) -> rfg.core.AbstractRFG :
+    def withUARTIO(self,port, baud:int | None = None) -> rfg.core.AbstractRFG :
         uartIO = rfg.io.uart.UARTIO()
         uartIO.port = port 
-        if not speed is None:
-            uartIO.baud = speed
+        if not baud is None:
+            uartIO.baud = baud
         self.withIODriver(uartIO)
         return self
 
