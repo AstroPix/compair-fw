@@ -1,0 +1,82 @@
+<Project SigType="0" ModBy="Inserter" Date="2024-08-23" Name="/home/rleys/git/adl/compair-fw/target-certusnx-devboard/certusnxdevboard.rvl">
+    <IP Version="1_6_042617"/>
+    <Design DesignName="certusnx-devboard" Stage="presyn" DesignEntry="Schematic/Verilog HDL" JTAG="hard" DeviceName="LFCPNX-100" DeviceFamily="LFCPNX" Synthesis="lse"/>
+    <Core ID="0" Insert="1" InsertDataset="0" Reveal_sig="573500429" Name="compair_fpga_top_LA0">
+        <Setting>
+            <Clock EnableClk_Pri="0" EnableClk="" SampleClk="astep24_3l_top_I/clocking_reset_I/clk_core" SampleEnable="0"/>
+            <TraceBuffer Implementation="0" IncTrigSig="0" BufferDepth="2048" hasTimeStamp="0" BitTimeStamp="0"/>
+            <Capture Mode="0" MinSamplesPerTrig="16"/>
+            <Event MaxEventCnt="8" CntEnable="0"/>
+            <TrigOut TrigOutNetType="1" TrigOutNet="reveal_debug_compair_fpga_top_LA0_net" Polarity="0" EnableTrigOut="0" MinPulseWidth="0"/>
+            <DistRAM Disable="0"/>
+        </Setting>
+        <Dataset Name="Base">
+            <Trace>
+                <Bus Name="astep24_3l_top_I/sw_if/rfg_protocol/debug_state">
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/debug_state:0"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/debug_state:1"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/debug_state:2"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/debug_state:3"/>
+                </Bus>
+                <Bus Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value">
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:0"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:1"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:2"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:3"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:4"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:5"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:6"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:7"/>
+                </Bus>
+                <Bus Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value">
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:0"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:1"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:2"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:3"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:4"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:5"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:6"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:7"/>
+                </Bus>
+                <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_valid"/>
+                <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read"/>
+                <Bus Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address">
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:0"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:1"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:2"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:3"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:4"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:5"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:6"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:7"/>
+                </Bus>
+                <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tready"/>
+                <Bus Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid">
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:0"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:1"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:2"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:3"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:4"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:5"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:6"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:7"/>
+                </Bus>
+                <Bus Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata">
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:0"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:1"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:2"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:3"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:4"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:5"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:6"/>
+                    <Sig Type="SIG" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:7"/>
+                </Bus>
+            </Trace>
+            <Trigger>
+                <TU Type="0" ID="1" Sig="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tvalid," Serialbits="0"/>
+                <TU Type="0" ID="2" Sig="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write," Serialbits="0"/>
+                <TE ID="1" MaxSequence="16" Resource="0" MaxEvnCnt="16"/>
+            </Trigger>
+        </Dataset>
+    </Core>
+</Project>

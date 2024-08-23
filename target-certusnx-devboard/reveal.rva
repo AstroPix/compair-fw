@@ -1,0 +1,111 @@
+<!DOCTYPE ispTLA>
+<ispTLA>
+ <CreationDate>Fri Aug 23 13:17:19 2024</CreationDate>
+ <XCFFileName/>
+ <CableSetting>
+  <IsTRSTConnected val="false"/>
+  <TRSTSetting val="0"/>
+  <IsBSCANConnected val="false"/>
+  <BSCANSetting val="0"/>
+  <CableType val="USB2"/>
+  <PortAddress val="0"/>
+  <PortSetting val="0"/>
+  <TCKDelay val="1"/>
+ </CableSetting>
+ <DeviceCount>1</DeviceCount>
+ <Device>
+  <DeviceIndex>0</DeviceIndex>
+  <DeviceName>1. LFCPNX-100</DeviceName>
+  <DeviceID>0x010F4043 (debug enabled)</DeviceID>
+  <HasIspTRACY>true</HasIspTRACY>
+  <HasJTAG2WB>false</HasJTAG2WB>
+  <SERDES/>
+  <IRBypassLen>8</IRBypassLen>
+  <RVLFileName>certusnxdevboard.rvl</RVLFileName>
+  <RVSFileName>certusnxdevboard.rvs</RVSFileName>
+  <LACoreCount>1</LACoreCount>
+  <WinUI CoreType="LA" CoreIndex="0">
+   <TraceSigTreeData>
+    <TraceSignal NodeType="1" PortIndex="-1" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal NodeType="2" PortIndex="46" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:7"/>
+     <TraceSignal NodeType="2" PortIndex="45" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:6"/>
+     <TraceSignal NodeType="2" PortIndex="44" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:5"/>
+     <TraceSignal NodeType="2" PortIndex="43" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:4"/>
+     <TraceSignal NodeType="2" PortIndex="42" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:3"/>
+     <TraceSignal NodeType="2" PortIndex="41" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:2"/>
+     <TraceSignal NodeType="2" PortIndex="40" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:1"/>
+     <TraceSignal NodeType="2" PortIndex="39" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tdata:0"/>
+    </TraceSignal>
+    <TraceSignal NodeType="1" PortIndex="-1" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal NodeType="2" PortIndex="38" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:7"/>
+     <TraceSignal NodeType="2" PortIndex="37" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:6"/>
+     <TraceSignal NodeType="2" PortIndex="36" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:5"/>
+     <TraceSignal NodeType="2" PortIndex="35" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:4"/>
+     <TraceSignal NodeType="2" PortIndex="34" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:3"/>
+     <TraceSignal NodeType="2" PortIndex="33" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:2"/>
+     <TraceSignal NodeType="2" PortIndex="32" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:1"/>
+     <TraceSignal NodeType="2" PortIndex="31" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tid:0"/>
+    </TraceSignal>
+    <TraceSignal NodeType="0" PortIndex="30" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/s_axis_tready"/>
+    <TraceSignal NodeType="1" PortIndex="-1" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal NodeType="2" PortIndex="29" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:7"/>
+     <TraceSignal NodeType="2" PortIndex="28" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:6"/>
+     <TraceSignal NodeType="2" PortIndex="27" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:5"/>
+     <TraceSignal NodeType="2" PortIndex="26" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:4"/>
+     <TraceSignal NodeType="2" PortIndex="25" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:3"/>
+     <TraceSignal NodeType="2" PortIndex="24" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:2"/>
+     <TraceSignal NodeType="2" PortIndex="23" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:1"/>
+     <TraceSignal NodeType="2" PortIndex="22" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_address:0"/>
+    </TraceSignal>
+    <TraceSignal NodeType="0" PortIndex="21" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read"/>
+    <TraceSignal NodeType="0" PortIndex="20" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_valid"/>
+    <TraceSignal NodeType="1" PortIndex="-1" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal NodeType="2" PortIndex="19" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:7"/>
+     <TraceSignal NodeType="2" PortIndex="18" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:6"/>
+     <TraceSignal NodeType="2" PortIndex="17" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:5"/>
+     <TraceSignal NodeType="2" PortIndex="16" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:4"/>
+     <TraceSignal NodeType="2" PortIndex="15" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:3"/>
+     <TraceSignal NodeType="2" PortIndex="14" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:2"/>
+     <TraceSignal NodeType="2" PortIndex="13" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:1"/>
+     <TraceSignal NodeType="2" PortIndex="12" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_read_value:0"/>
+    </TraceSignal>
+    <TraceSignal NodeType="1" PortIndex="-1" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal NodeType="2" PortIndex="11" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:7"/>
+     <TraceSignal NodeType="2" PortIndex="10" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:6"/>
+     <TraceSignal NodeType="2" PortIndex="9" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:5"/>
+     <TraceSignal NodeType="2" PortIndex="8" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:4"/>
+     <TraceSignal NodeType="2" PortIndex="7" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:3"/>
+     <TraceSignal NodeType="2" PortIndex="6" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:2"/>
+     <TraceSignal NodeType="2" PortIndex="5" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:1"/>
+     <TraceSignal NodeType="2" PortIndex="4" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfg_write_value:0"/>
+    </TraceSignal>
+    <TraceSignal NodeType="1" PortIndex="-1" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfp_state">
+     <BusRadix Radix="RVL_ENUM_astep24_3l_top_I_sw_if_rfg_protocol_rfp_state"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal NodeType="2" PortIndex="3" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfp_state:3"/>
+     <TraceSignal NodeType="2" PortIndex="2" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfp_state:2"/>
+     <TraceSignal NodeType="2" PortIndex="1" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfp_state:1"/>
+     <TraceSignal NodeType="2" PortIndex="0" IsHidden="false" Color="" Name="astep24_3l_top_I/sw_if/rfg_protocol/rfp_state:0"/>
+    </TraceSignal>
+   </TraceSigTreeData>
+   <TriggerUI UserSelect="0" PreSelect="1" PreSelectType="2" UserSelectPos="0"/>
+   <CoreRun Run="true"/>
+   <CoreWndUIData>
+    <ClockFrequency Unit="ns" Frequency="-1.0"/>
+   </CoreWndUIData>
+  </WinUI>
+  <WinUI CoreType="Controller" CoreIndex="1">
+   <CoreRun Run="false"/>
+  </WinUI>
+ </Device>
+</ispTLA>
