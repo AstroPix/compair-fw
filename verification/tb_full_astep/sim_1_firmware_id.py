@@ -10,7 +10,7 @@ from cocotbext.uart import UartSource, UartSink
 import vip.cctb
 
 ## Import simulation target driver
-import astep24_3l_sim
+from vip import astep24_3l_sim
 
 
 

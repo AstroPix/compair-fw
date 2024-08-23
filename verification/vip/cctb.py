@@ -70,9 +70,9 @@ async def common_clock_reset(dut):
     else:
         cocotb.start_soon(Clock(dut.sysclk_125, 8, units='ns').start())
         await RisingEdge(dut.sysclk_125)
-        dut.rst.value = 1
+        dut.rstn.value = 0
         await Timer(1, units="us")
-        dut.rst.value = 0
+        dut.rstn.value = 1
         await Timer(1, units="us")
 
     #cocotb.start_soon(Clock(dut.sysclk, 10, units='ns').start())

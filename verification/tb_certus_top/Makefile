@@ -7,9 +7,12 @@ SHELL=/bin/bash
 SIM ?= xcelium
 TOPLEVEL_LANG ?= verilog
 
-VERILOG_SOURCES ?= $(PWD)/certusnx-devboard_impl_1_syn.v
+#VERILOG_SOURCES ?= $(PWD)/certusnx-devboard_impl_1_syn.v
 #VERILOG_SOURCES += $(PWD)/my_design.sv
 # use VHDL_SOURCES for VHDL files
+
+#VERILOG_SOURCES ?= $(PWD)/../../target-certusnx-devboard/impl_1/certusnx-devboard_impl_1_vo.vo
+VERILOG_SOURCES ?= $(PWD)/../../target-certusnx-devboard/impl_1/certusnx-devboard_impl_1_syn.vo
 
 # TOPLEVEL is the name of the toplevel module in your Verilog or VHDL file
 TOPLEVEL ?= compair_fpga_top
@@ -18,7 +21,7 @@ TOPLEVEL ?= compair_fpga_top
 #MODULE ?= sim_fifo
 WAVES ?= 1
 USER_ARGS?=
-EXTRA_ARGS?=-input xcelium.tcl -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
+EXTRA_ARGS?=-input xcelium.tcl -vlog_ext .vo -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
 
 RANDOM_SEED=1722517216
 
@@ -31,7 +34,10 @@ TESTCASE?=
 export BASE=$(PWD)/../../
 export PYTHONPATH := $(shell pwd)/../:$(shell pwd)/../../rtl/top:$(shell pwd)/../../sw:$(shell pwd)/../../vendor/icflow_hdl_240807/hdl_rfg_v1/python:$(shell pwd)/../../vendor/icflow_hdl_240807/cocotb_runner_v1/python:$(PYTHONPATH)
 
-#%.verify: 
+mrproper:
+	@rm -Rf sim_build waves.shm 
+
+
 %.verify: MODULE = $(basename $@)
 %.verify: 
 	@PYTHONPATH=$(PYTHONPATH) make GUI=$(GUI) MODULE=$(MODULE) TESTCASE=$(TESTCASE) sim
