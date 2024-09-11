@@ -20,7 +20,7 @@ ${BASE}/rtl/rfg/spi/spi_slave_axis_igress.sv
 
 ${BASE}/rtl/lattice/uart_lattice_axis_driver.sv
 
-${BASE}/rtl/rfg/protocol/rfg_axis_protocol_srl_fifo.sv
+
 ${BASE}/rtl/rfg/protocol/rfg_axis_protocol.sv
 ${BASE}/rtl/rfg/protocol/rfg_axis_readout_framing.sv
 
@@ -35,15 +35,17 @@ ${BASE}/rtl/fifo/fifo_ptr_logic.sv
 ## Patgen for injection
 ${BASE}/rtl/layers/sync_async_patgen.sv
 
-## Layer 
+## Layer
+${BASE}/rtl/layers/loopback_spi_if.sv
 -f ${BASE}/rtl/layers/layers_readout_switched.f
 
 ## Housekeeping
-#-f ${BASE}/rtl/housekeeping/housekeeping_main.f
+-f ${BASE}/rtl/housekeeping/housekeeping_main.f
 
 
 ## Helpers
 +incdir+${BASE}/rtl/includes
++incdir+${BASE}/rtl/rfg/protocol
 ${BASE}/rtl/utilities/reset_sync.sv
 ${BASE}/rtl/utilities/edge_detect.sv
 ${BASE}/rtl/utilities/async_input_sync.sv

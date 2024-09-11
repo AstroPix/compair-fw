@@ -209,6 +209,23 @@ module astep24_3l_top(
     wire hk_conversion_trigger_interrupt;
     wire hk_ctrl_select_adc;
 
+    wire [7:0]  layer_0_loopback_miso_m_axis_tdata;
+    wire [31:0] layer_0_loopback_miso_write_size;
+    wire [7:0]  layer_0_loopback_mosi_s_axis_tdata;
+    wire [31:0] layer_0_loopback_mosi_read_size;
+
+    wire [7:0]  layer_1_loopback_miso_m_axis_tdata;
+    wire [31:0] layer_1_loopback_miso_write_size;
+    wire [7:0]  layer_1_loopback_mosi_s_axis_tdata;
+    wire [31:0] layer_1_loopback_mosi_read_size;
+
+    wire [7:0]  layer_2_loopback_miso_m_axis_tdata;
+    wire [31:0] layer_2_loopback_miso_write_size;
+    wire [7:0]  layer_2_loopback_mosi_s_axis_tdata;
+    wire [31:0] layer_2_loopback_mosi_read_size;
+
+    wire layer_0_cfg_ctrl_loopback,layer_1_cfg_ctrl_loopback,layer_2_cfg_ctrl_loopback;
+    
     main_rfg  main_rfg_I (
             
         .clk(clk_core),
@@ -265,13 +282,16 @@ module astep24_3l_top(
         .layer_0_cfg_ctrl_hold(layer_0_hold),
         .layer_0_cfg_ctrl_cs(layer_0_cfg_ctrl_cs),
         .layer_0_cfg_ctrl_disable_miso(layer_0_cfg_ctrl_disable_miso),
-        
+        .layer_0_cfg_ctrl_loopback(layer_0_cfg_ctrl_loopback),
+
         .layer_1_cfg_ctrl(),
         .layer_1_cfg_ctrl_disable_autoread(layer_1_cfg_ctrl_disable_autoread),
         .layer_1_cfg_ctrl_reset(layer_1_reset),
         .layer_1_cfg_ctrl_hold(layer_1_hold),
         .layer_1_cfg_ctrl_cs(layer_1_cfg_ctrl_cs),
         .layer_1_cfg_ctrl_disable_miso(layer_1_cfg_ctrl_disable_miso),
+        .layer_1_cfg_ctrl_loopback(layer_1_cfg_ctrl_loopback),
+
 
         .layer_2_cfg_ctrl(),
         .layer_2_cfg_ctrl_disable_autoread(layer_2_cfg_ctrl_disable_autoread),
@@ -279,6 +299,7 @@ module astep24_3l_top(
         .layer_2_cfg_ctrl_hold(layer_2_hold),
         .layer_2_cfg_ctrl_cs(layer_2_cfg_ctrl_cs),
         .layer_2_cfg_ctrl_disable_miso(layer_2_cfg_ctrl_disable_miso),
+        .layer_2_cfg_ctrl_loopback(layer_2_cfg_ctrl_loopback),
 
         .layer_0_status(),   
         .layer_0_status_interruptn(layers_interruptn_synced[0]),
@@ -320,6 +341,51 @@ module astep24_3l_top(
         .layer_2_mosi_m_axis_tlast(layer_2_mosi_tlast),
         .layer_2_mosi_write_size(layer_2_mosi_write_size),
         .layer_2_mosi_write_size_write(1'b1),
+
+        // Loopbacks
+        //--------------------
+        
+        .layer_0_loopback_miso_m_axis_tdata(layer_0_loopback_miso_m_axis_tdata),
+        .layer_0_loopback_miso_m_axis_tvalid(layer_0_loopback_miso_m_axis_tvalid),
+        .layer_0_loopback_miso_m_axis_tready(layer_0_loopback_miso_m_axis_tready),
+        .layer_0_loopback_miso_write_size(layer_0_loopback_miso_write_size),
+        .layer_0_loopback_miso_write_size_write(1'b1),
+
+        .layer_0_loopback_mosi_s_axis_tdata(layer_0_loopback_mosi_s_axis_tdata),
+        .layer_0_loopback_mosi_s_axis_tvalid(layer_0_loopback_mosi_s_axis_tvalid),
+        .layer_0_loopback_mosi_s_axis_tready(layer_0_loopback_mosi_s_axis_tready),
+        .layer_0_loopback_mosi_read_size(layer_0_loopback_mosi_read_size),
+        .layer_0_loopback_mosi_read_size_write(1'b1),
+
+        .layer_1_loopback_miso_m_axis_tdata(layer_1_loopback_miso_m_axis_tdata),
+        .layer_1_loopback_miso_m_axis_tvalid(layer_1_loopback_miso_m_axis_tvalid),
+        .layer_1_loopback_miso_m_axis_tready(layer_1_loopback_miso_m_axis_tready),
+        .layer_1_loopback_miso_write_size(layer_1_loopback_miso_write_size),
+        .layer_1_loopback_miso_write_size_write(1'b1),
+
+        .layer_1_loopback_mosi_s_axis_tdata(layer_1_loopback_mosi_s_axis_tdata),
+        .layer_1_loopback_mosi_s_axis_tvalid(layer_1_loopback_mosi_s_axis_tvalid),
+        .layer_1_loopback_mosi_s_axis_tready(layer_1_loopback_mosi_s_axis_tready),
+        .layer_1_loopback_mosi_read_size(layer_1_loopback_mosi_read_size),
+        .layer_1_loopback_mosi_read_size_write(1'b1),
+
+
+        .layer_2_loopback_miso_m_axis_tdata(layer_2_loopback_miso_m_axis_tdata),
+        .layer_2_loopback_miso_m_axis_tvalid(layer_2_loopback_miso_m_axis_tvalid),
+        .layer_2_loopback_miso_m_axis_tready(layer_2_loopback_miso_m_axis_tready),
+        .layer_2_loopback_miso_write_size(layer_2_loopback_miso_write_size),
+        .layer_2_loopback_miso_write_size_write(1'b1),
+
+        .layer_2_loopback_mosi_s_axis_tdata(layer_2_loopback_mosi_s_axis_tdata),
+        .layer_2_loopback_mosi_s_axis_tvalid(layer_2_loopback_mosi_s_axis_tvalid),
+        .layer_2_loopback_mosi_s_axis_tready(layer_2_loopback_mosi_s_axis_tready),
+        .layer_2_loopback_mosi_read_size(layer_2_loopback_mosi_read_size),
+        .layer_2_loopback_mosi_read_size_write(1'b1),
+
+
+
+        // Configs
+        //---------------
       
         .layers_cfg_frame_tag_counter_ctrl(),
         .layers_cfg_frame_tag_counter_ctrl_force_count(layers_cfg_frame_tag_counter_ctrl_force_count),
@@ -387,6 +453,9 @@ module astep24_3l_top(
     // Layers Readout Module
     // - Contains Each Layer Interface with Protocol management, and the Switched buffer
     //-------------------------------
+    wire [1:0] layer_0_spi_miso_internal;
+    wire [1:0] layer_1_spi_miso_internal;
+    wire [1:0] layer_2_spi_miso_internal;
     layers_readout_switched #(.LAYER_COUNT(3)) switched_readout(
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
@@ -407,9 +476,9 @@ module astep24_3l_top(
             layer_1_spi_mosi,
             layer_0_spi_mosi}),
         .layers_spi_miso({
-            layer_2_spi_miso,
-            layer_1_spi_miso,
-            layer_0_spi_miso}),
+            layer_2_spi_miso_internal,
+            layer_1_spi_miso_internal,
+            layer_0_spi_miso_internal}),
         .layers_spi_csn(),
 
         // MOSI
@@ -435,6 +504,8 @@ module astep24_3l_top(
             layer_1_mosi_write_size,
             layer_0_mosi_write_size
         }),
+
+        
 
         // MISO readout
         //-------------------
@@ -503,7 +574,8 @@ module astep24_3l_top(
 
     // Housekeeping
     //--------------------
-    /*housekeeping_main  housekeeping(
+    housekeeping_main  housekeeping(
+
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
 
@@ -525,15 +597,89 @@ module astep24_3l_top(
         .ext_spi_clk(ext_spi_clk_internal),
         .ext_spi_csn(ext_spi_csn_internal),
         .ext_spi_miso(ext_adc_spi_miso),
-        .ext_spi_mosi(ext_spi_mosi),
+        .ext_spi_mosi(ext_spi_mosi)
+    );
 
 
-        .xadc_conversion_trigger(hk_conversion_trigger_interrupt),
-        .xadc_temperature(hk_xadc_temperature),
-        .xadc_temperature_write(hk_xadc_temperature_write),
-        .xadc_vccint(hk_xadc_vccint),
-        .xadc_vccint_write(hk_xadc_vccint_write)
-    );*/
+    // SPI Loopbacks
+    //-----------------------
+    wire layer_0_loopback_csn = layer_0_spi_csn || !(layer_0_cfg_ctrl_loopback);
+    wire layer_1_loopback_csn = layer_1_spi_csn || !(layer_1_cfg_ctrl_loopback);
+    wire layer_2_loopback_csn = layer_2_spi_csn || !(layer_2_cfg_ctrl_loopback);
+
+    wire [1:0] layer_0_spi_miso_loopback;
+    wire [1:0] layer_1_spi_miso_loopback;
+    wire [1:0] layer_2_spi_miso_loopback;
+
+    loopback_spi_if  loopback_spi_layer_0 (
+        .clk_core(clk_core),
+        .clk_core_resn(clk_core_resn),
+
+        .spi_clk(spi_layers_ckdivider_divided_clk),
+        .spi_clk_resn(spi_layers_ckdivider_divided_resn),
+
+        .spi_io_clk(layer_0_spi_clk),
+        .spi_mosi(layer_0_spi_mosi),
+        .spi_miso(layer_0_spi_miso_loopback),
+        .spi_csn(layer_0_loopback_csn),
+
+        .miso_s_axis_tdata(layer_0_loopback_miso_m_axis_tdata),
+        .miso_s_axis_tready(layer_0_loopback_miso_m_axis_tready),
+        .miso_s_axis_tvalid(layer_0_loopback_miso_m_axis_tvalid),
+        .miso_s_write_size(layer_0_loopback_miso_write_size),
+
+        .mosi_m_axis_tdata(layer_0_loopback_mosi_s_axis_tdata),
+        .mosi_m_axis_tready(layer_0_loopback_mosi_s_axis_tready),
+        .mosi_m_axis_tvalid(layer_0_loopback_mosi_s_axis_tvalid),
+        .mosi_m_read_size(layer_0_loopback_mosi_read_size)
+    );
+    
+    loopback_spi_if  loopback_spi_layer_1 (
+        .clk_core(clk_core),
+        .clk_core_resn(clk_core_resn),
+
+        .spi_clk(spi_layers_ckdivider_divided_clk),
+        .spi_clk_resn(spi_layers_ckdivider_divided_resn),
+
+        .spi_io_clk(layer_1_spi_clk),
+        .spi_mosi(layer_1_spi_mosi),
+        .spi_miso(layer_1_spi_miso_loopback),
+        .spi_csn(layer_1_loopback_csn),
+
+        .miso_s_axis_tdata(layer_1_loopback_miso_m_axis_tdata),
+        .miso_s_axis_tready(layer_1_loopback_miso_m_axis_tready),
+        .miso_s_axis_tvalid(layer_1_loopback_miso_m_axis_tvalid),
+        .miso_s_write_size(layer_1_loopback_miso_write_size),
+
+        .mosi_m_axis_tdata(layer_1_loopback_mosi_s_axis_tdata),
+        .mosi_m_axis_tready(layer_1_loopback_mosi_s_axis_tready),
+        .mosi_m_axis_tvalid(layer_1_loopback_mosi_s_axis_tvalid),
+        .mosi_m_read_size(layer_1_loopback_mosi_read_size)
+    );
+
+    loopback_spi_if  loopback_spi_layer_2 (
+        .clk_core(clk_core),
+        .clk_core_resn(clk_core_resn),
+
+        .spi_clk(spi_layers_ckdivider_divided_clk),
+        .spi_clk_resn(spi_layers_ckdivider_divided_resn),
+
+        .spi_io_clk(layer_2_spi_clk),
+        .spi_mosi(layer_2_spi_mosi),
+        .spi_miso(layer_2_spi_miso_loopback),
+        .spi_csn(layer_2_loopback_csn),
+
+        .miso_s_axis_tdata(layer_2_loopback_miso_m_axis_tdata),
+        .miso_s_axis_tready(layer_2_loopback_miso_m_axis_tready),
+        .miso_s_axis_tvalid(layer_2_loopback_miso_m_axis_tvalid),
+        .miso_s_write_size(layer_2_loopback_miso_write_size),
+
+        .mosi_m_axis_tdata(layer_2_loopback_mosi_s_axis_tdata),
+        .mosi_m_axis_tready(layer_2_loopback_mosi_s_axis_tready),
+        .mosi_m_axis_tvalid(layer_2_loopback_mosi_s_axis_tvalid),
+        .mosi_m_read_size(layer_2_loopback_mosi_read_size)
+    );
+
     
     // SPI IO
     //-----------------
@@ -547,6 +693,11 @@ module astep24_3l_top(
     assign layer_1_spi_csn = !(layer_1_cfg_ctrl_cs || !layer_1_cfg_ctrl_disable_autoread) ;
     assign layer_2_spi_csn = !(layer_2_cfg_ctrl_cs || !layer_2_cfg_ctrl_disable_autoread) ;
     assign layers_spi_csn = layer_0_spi_csn & layer_1_spi_csn & layer_2_spi_csn;
+    
+    
+    assign layer_0_spi_miso_internal =  layer_0_loopback_csn ? layer_0_spi_miso : layer_0_spi_miso_loopback  ;
+    assign layer_1_spi_miso_internal =  layer_1_loopback_csn ? layer_1_spi_miso : layer_1_spi_miso_loopback  ;
+    assign layer_2_spi_miso_internal =  layer_2_loopback_csn ? layer_2_spi_miso : layer_2_spi_miso_loopback  ;
 
     //-- Housekeeping
     //--------------
@@ -554,13 +705,9 @@ module astep24_3l_top(
     //-- MOSI and CLK is shared
     //-- CSN is selected based on RFG control
     
-    //assign ext_spi_clk = hk_ctrl_select_adc ? !ext_spi_clk_internal : ext_spi_clk_internal;
-    //assign ext_dac_spi_csn = !hk_ctrl_select_adc ? ext_spi_csn_internal : 1;
-    //assign ext_adc_spi_csn =  hk_ctrl_select_adc ? ext_spi_csn_internal : 1;
-
-    assign ext_spi_clk = 0;
-    assign ext_dac_spi_csn =  1;
-    assign ext_adc_spi_csn =  1;
+    assign ext_spi_clk = hk_ctrl_select_adc ? !ext_spi_clk_internal : ext_spi_clk_internal;
+    assign ext_dac_spi_csn = !hk_ctrl_select_adc ? ext_spi_csn_internal : 1;
+    assign ext_adc_spi_csn =  hk_ctrl_select_adc ? ext_spi_csn_internal : 1;
     
     `ifdef SIMULATION
     GSR GSR_INST ( .GSR_N(1'b1), .CLK(1'b0));

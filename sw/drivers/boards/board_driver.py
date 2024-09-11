@@ -1,11 +1,14 @@
 
+from deprecated import deprecated
+
 import drivers.astep.housekeeping
 import rfg.io
 import rfg.core
 import asyncio
 
 from drivers.astropix.asic import Asic
-from deprecated import deprecated
+
+from drivers.astropix.loopback_model import Astropix3LBModel
 
 class BoardDriver():
 
@@ -21,30 +24,30 @@ class BoardDriver():
         ## Useful to start or stop tasks dependent on open/close state of the driver
         self.openedEvent = asyncio.Event()
 
-    def selectUARTIO(self,portPath : str | None = None , baud = 921600 ):
+    def selectUARTIO(self,portPath : str | None = None ):
         """This method is common to all targets now, because all targets have a USB-UART Converter available"""
         if (portPath == None):
             import drivers.astep.serial
             port = drivers.astep.serial.selectFirstLinuxFTDIPort()
             if port:
-                self.rfg.withUARTIO(port.device,baud)
+                self.rfg.withUARTIO(port.device)
                 return self
             else:
                 raise RuntimeError("No Serial Port could be listed")
         else:
-            self.rfg.withUARTIO(portPath,baud)
+            self.rfg.withUARTIO(portPath)
             return self
         
 
-    def open(self):
+    async def open(self):
         """Open the Register File I/O Connection to the underlying driver"""
-        self.rfg.io.open()
+        await self.rfg.io.open()
         self.openedEvent.set()
 
-    def close(self):
+    async def close(self):
         """Close the Register File I/O Connection to the underlying driver"""
         self.openedEvent.clear()
-        self.rfg.io.close()
+        await self.rfg.io.close()
 
     async def waitOpened(self):
         await self.openedEvent.wait()
@@ -86,6 +89,11 @@ class BoardDriver():
         return self.getVoltageBoard(slot = 4 )
     def geccoGetInjectionBoard(self):
         return self.getInjectionBoard(slot = 3 )
+
+    ## Loopback Model
+    ################
+    def getLoopbackModelForLayer(self,layer):
+        return Astropix3LBModel(self,layer)
 
     ## Chips
     ################
@@ -154,6 +162,20 @@ class BoardDriver():
 
     ## Layers
     ##################
+    async def configureLayersFrameTag(self,enable, flush = False):
+        await self.rfg.write_layers_cfg_frame_tag_counter_ctrl(1 if enable is True else 0,flush)
+
+    async def configureLayersFrameTagFrequency(self, targetFrequencyHz : int , flush = False):
+        """Calculated required divider to reach the provided target SPI clock frequency"""
+        coreFrequency = self.getFPGACoreFrequency()
+        divider = int( coreFrequency / ( targetFrequencyHz))
+        assert divider >=1 and divider <=255 , (f"Divider {divider} is too high, min. clock frequency: {int(coreFrequency/255)}")
+        await self.configureLayersFrameTagDivider(divider,flush)
+
+    async def configureLayersFrameTagDivider(self, divider , flush = False):
+        await self.rfg.write_layers_cfg_frame_tag_counter_trigger_match(divider,False)
+        await self.rfg.write_layers_cfg_frame_tag_counter_trigger(0,flush)
+        
     async def configureLayerSPIFrequency(self, targetFrequencyHz : int , flush = False):
         """Calculated required divider to reach the provided target SPI clock frequency"""
         coreFrequency = self.getFPGACoreFrequency()
@@ -163,6 +185,30 @@ class BoardDriver():
 
     async def configureLayerSPIDivider(self, divider:int , flush = False):
         await self.rfg.write_spi_layers_ckdivider(divider,flush)
+
+
+    async def layerSelectSPI(self, layer , cs : bool, flush = False):
+        """This helper method asserts the shared CSN to 0 by selecting CS on layer 0
+        it's a helper to be used only if the hardware uses a shared Chip Select!!
+        If any Layer is in autoread mode, chip select will be already asserted
+        """
+        layerCfg = await getattr(self.rfg, f"read_layer_{layer}_cfg_ctrl")()
+        layerCfg = (layerCfg | (1 << 3)) if cs else (layerCfg & ~(1 << 3))
+        await getattr(self.rfg, f"write_layer_{layer}_cfg_ctrl")(layerCfg,flush)
+
+
+    async def layersSetSPICSN(self, cs = False, flush = False):
+        """This helper method asserts the shared CSN to 0 by selecting CS on layer 0
+        it's a helper to be used only if the hardware uses a shared Chip Select!!
+        If any Layer is in autoread mode, chip select will be already asserted
+        """
+        layer0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
+        if cs:
+            layer0Cfg = layer0Cfg | (1 << 3)
+        else:
+            layer0Cfg = layer0Cfg & ~(1 << 3)
+            
+        await self.rfg.write_layer_0_cfg_ctrl(layer0Cfg,flush)
 
     async def layersSelectSPI(self, flush = False):
         """This helper method asserts the shared CSN to 0 by selecting CS on layer 0
