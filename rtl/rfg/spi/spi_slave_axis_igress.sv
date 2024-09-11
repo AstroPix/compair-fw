@@ -51,10 +51,11 @@ module spi_slave_axis_igress #(
 
         // Shift MOSI in SPI Byte LSB First
         //---------------
-        if (MSB_FIRST)     
-            rcv_byte <= {spi_mosi,rcv_byte[7:1]};
-        else 
+        if (MSB_FIRST == 1)
             rcv_byte <= {rcv_byte[6:0],spi_mosi};
+        else 
+            rcv_byte <= {spi_mosi,rcv_byte[7:1]};
+
         counter      <= counter + 1'b1;
 
 
