@@ -7,7 +7,7 @@ SHELL=/bin/bash
 SIM ?= xcelium
 TOPLEVEL_LANG ?= verilog
 
-VERILOG_SOURCES += $(PWD)/../../rtl/fifo/fifo_axis_common.sv $(PWD)/../../rtl/fifo/mini_fwft_fifo.sv $(PWD)/../../rtl/fifo/fifo_ptr_logic.sv $(PWD)/../ip/fifo_2clk_64x8.v
+VERILOG_SOURCES += $(PWD)/../../rtl/fifo/fifo_axis_common.sv $(PWD)/../../rtl/fifo/mini_fwft_fifo.sv $(PWD)/../../rtl/fifo/fifo_ptr_logic.sv $(PWD)/../ip/fifo_2clk_64x32.v
 #VERILOG_SOURCES += $(PWD)/my_design.sv
 # use VHDL_SOURCES for VHDL files
 
@@ -29,6 +29,8 @@ ifeq ($(SIM),xcelium)
 else
 	EXTRA_ARGS?=-define SIMULATION  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
 endif
+
+
 
 inspect: export USER_ARGS=-gui
 inspect: sim
