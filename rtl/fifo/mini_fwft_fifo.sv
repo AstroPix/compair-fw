@@ -11,7 +11,9 @@ module mini_fwft_fifo #(parameter AWIDTH = 2,parameter DWIDTH=8) (
     input wire read,
 
     input  wire [DWIDTH-1:0] data_in,
-    output reg [DWIDTH-1:0] data_out
+    output reg [DWIDTH-1:0] data_out,
+
+    output reg [AWIDTH:0] rd_data_count
 
 );
 
@@ -47,7 +49,7 @@ module mini_fwft_fifo #(parameter AWIDTH = 2,parameter DWIDTH=8) (
 
     always @(posedge clk) begin
         if (!resn) begin
-            
+            rd_data_count <= 'b0;
         end else begin
             
             // Mem write
@@ -64,6 +66,16 @@ module mini_fwft_fifo #(parameter AWIDTH = 2,parameter DWIDTH=8) (
             else if (reading && !write_in_to_out) begin
                 data_out <= mem[read_pointer];
             end
+
+            // Count
+            //------------
+            if (writing && !reading) begin
+                rd_data_count <= rd_data_count + 1;
+            end
+            else if (!writing && reading) begin
+                rd_data_count <= rd_data_count - 1;
+            end
+            //rd_data_count <= write_pointer - read_pointer;
             
         end
     end

@@ -39,7 +39,7 @@ module  fifo_axis_common #(
     input  wire  [TUSER_WIDTH-1:0]  s_axis_tuser,
     input  wire                     s_axis_tlast,
 
-    output wire [31:0]              axis_wr_data_count,
+    output reg [31:0]              axis_wr_data_count,
 
 
     // Read interface -> AXIS Master
@@ -54,7 +54,7 @@ module  fifo_axis_common #(
     output wire  [TUSER_WIDTH-1:0]  m_axis_tuser,
     output wire                     m_axis_tlast,
 
-    output wire [31:0]              axis_rd_data_count,
+    output reg   [31:0]              axis_rd_data_count,
 
     // Sideband Signals
     output wire                     almost_empty,
@@ -112,22 +112,54 @@ module  fifo_axis_common #(
     wire empty, fifo_almost_empty,full;
     assign s_axis_tready = !full;
 
+    wire [2:0] cache_fifo_rd_data_count;
+
+    wire combined_res = !(s_axis_aresetn & m_axis_aresetn);
     //-- Generate the FIFO instance based on parameters
     generate
-        if (FIFO_DATA_WIDTH<=8) begin
+        if (DUAL_CLOCK==0) begin
+
+            wire [31:0] padded_in = { {(32-FIFO_DATA_WIDTH){1'b0}},fifo_data_in};
+            wire [31:0] padded_out;
+            assign fifo_data = padded_out[FIFO_DATA_WIDTH-1:0];
+
+            wire [10:0] data_count;
+
+            fifo_1clk_1024x32  fifo (
+                .clk_i(s_axis_aclk),
+                .rst_i(!s_axis_aresetn),
+                .wr_en_i(s_axis_tvalid),
+                .rd_en_i(fifo_read),
+                .wr_data_i(padded_in),
+                .full_o(full),
+                .empty_o(empty),
+                .almost_full_o(almost_full),
+                .almost_empty_o(fifo_almost_empty),
+                .rd_data_o(padded_out),
+                .data_cnt_o(data_count)
+            );
+
+            // Data count
+            always @(posedge s_axis_aclk) begin
+                axis_rd_data_count <= data_count + cache_fifo_rd_data_count;
+            end
+        end
+        else if (FIFO_DATA_WIDTH<=8) begin
 
             
-            //wire [8:0] padded_in = { 'b0,fifo_data_in};
             wire [7:0] padded_in = { {(8-FIFO_DATA_WIDTH){1'b0}},fifo_data_in};
             wire [7:0] padded_out;
             assign fifo_data = padded_out[FIFO_DATA_WIDTH-1:0];
 
+            wire [6:0] rdata_count;
+            wire [6:0] wdata_count;
+
             fifo_2clk_64x8 fifo (
                 .wr_clk_i   (s_axis_aclk),
-                .rst_i      (!m_axis_aresetn),
+                .rst_i      (combined_res),
 
                 .rd_clk_i   (m_axis_aclk),
-                .rp_rst_i   (!m_axis_aresetn),
+                .rp_rst_i   (1'b0),
 
                 .wr_en_i    (s_axis_tvalid),
                 .wr_data_i  (padded_in),
@@ -138,22 +170,37 @@ module  fifo_axis_common #(
                 .empty_o    (empty ),
                 
                 .almost_full_o( almost_full ),
-                .almost_empty_o(fifo_almost_empty )
+                .almost_empty_o(fifo_almost_empty ),
+
+                .rd_data_cnt_o(rdata_count),
+                .wr_data_cnt_o(wdata_count)
                 
             );
+
+            // Data count
+            always @(posedge m_axis_aclk) begin
+                axis_rd_data_count <= rdata_count + cache_fifo_rd_data_count;
+            end
+            always @(posedge s_axis_aclk) begin
+                axis_wr_data_count <= wdata_count;
+            end
         end
         else if (FIFO_DATA_WIDTH<=32) begin
 
             wire [31:0] padded_in = { {(32-FIFO_DATA_WIDTH){1'b0}},fifo_data_in};
             wire [31:0] padded_out;
             assign fifo_data = padded_out[FIFO_DATA_WIDTH-1:0];
+            
+            wire [6:0] rdata_count;
+            wire [6:0] wdata_count;
+
 
             fifo_2clk_64x32 fifo (
                 .wr_clk_i   (s_axis_aclk),
-                .rst_i      (!s_axis_aresetn),
+                .rst_i      (combined_res),
 
                 .rd_clk_i   (m_axis_aclk),
-                .rp_rst_i   (!m_axis_aresetn),
+                .rp_rst_i   (1'b0),
 
                 .wr_en_i    (s_axis_tvalid),
                 .wr_data_i  (padded_in),
@@ -164,13 +211,21 @@ module  fifo_axis_common #(
                 .empty_o    (empty ),
                 
                 .almost_full_o( almost_full ),
-                .almost_empty_o(fifo_almost_empty )
-                
+                .almost_empty_o(fifo_almost_empty ),
+
+                .rd_data_cnt_o(rdata_count),
+                .wr_data_cnt_o(wdata_count)
             );
+
+            // Data count
+            always @(posedge m_axis_aclk) begin
+                axis_rd_data_count <= rdata_count + cache_fifo_rd_data_count;
+            end
+            always @(posedge s_axis_aclk) begin
+                axis_wr_data_count <= wdata_count;
+            end
         end
-        /*else begin
-            error_fifo error_fifo();
-        end*/
+   
     endgenerate
     
 
@@ -193,7 +248,8 @@ module  fifo_axis_common #(
         .write(fifo_read_data_valid),
         .read(m_axis_tready),
         .data_in(fifo_data),
-        .data_out(cache_fifo_data_out)
+        .data_out(cache_fifo_data_out),
+        .rd_data_count(cache_fifo_rd_data_count)
     );
 
     //-- Map Outputs to cache fifo out

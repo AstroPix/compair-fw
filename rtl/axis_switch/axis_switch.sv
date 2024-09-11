@@ -209,7 +209,8 @@ module axis_switch #(parameter PORTS=4,parameter TDATA_WIDTH=8 , parameter TID_W
                 .data_out(m_axis_slave_output[f]),
                 .read(slave_selected &&  m_axis_tready[current_target_master] /*& slave_selected*/ && m_axis_tvalid[current_target_master] ),
                 .empty(source_port_fifo_empty[f]),
-                .almost_empty()
+                .almost_empty(),
+                .rd_data_count()
             );
 
             
