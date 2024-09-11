@@ -24,14 +24,14 @@ class UARTIO(rfg.core.RFGIO):
         self.rx = rx
         self.baud = baud
 
-    def open(self):
+    async def open(self):
         #dir(dut)
         #dir(self.dut)["uart_tx_in"]
         self.uart_source = UartSource(self.tx, baud= self.baud, bits=8)
         self.uart_sink   = UartSink(self.rx,  baud= self.baud, bits=8)
 
 
-    def close(self):
+    async def close(self):
         self.uart_source = None
         self.uart_sink =   None
         pass
