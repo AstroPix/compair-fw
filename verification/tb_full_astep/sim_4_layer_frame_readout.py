@@ -14,7 +14,7 @@ import vip.astropix3
 
 
 ## Import simulation target driver
-import astep24_3l_sim
+from vip import astep24_3l_sim
 
 
 @cocotb.test(timeout_time = 0.8 , timeout_unit = "ms")
@@ -49,6 +49,9 @@ async def test_layer_0_single_frame_noautoread(dut):
     await Timer(50, units="us")
     assert  await driver.readoutGetBufferSize() == 12
     await Timer(50, units="us")
+
+    await driver.close()
+    await Timer(150, units="us")
 
 @cocotb.test(timeout_time = 2 , timeout_unit = "ms")
 async def test_layer_0_double_frame_noautoread(dut):
@@ -88,6 +91,9 @@ async def test_layer_0_double_frame_noautoread(dut):
         print(f"B={hex(b)}")
     await Timer(50, units="us")
 
+    await driver.close()
+    await Timer(150, units="us")
+
 @cocotb.test(timeout_time = 2 , timeout_unit = "ms")
 async def test_layer_0_single_frame_autoread(dut):
 
@@ -115,7 +121,8 @@ async def test_layer_0_single_frame_autoread(dut):
     ## Length should be 6 Frame bytes (header + 5 payload), +2 Readout Frame Header + 4 Timestamp bytes = 12
     assert readoutLength == 12
 
-    await Timer(50, units="us")
+    await driver.close()
+    await Timer(150, units="us")
 
 
 @cocotb.test(timeout_time = 2, timeout_unit = "ms")
@@ -156,11 +163,17 @@ async def test_3_layers_single_frame(dut):
 
     dut._log.info("Done Frames in sequence")
 
+
     ###########
+
+    await Timer(50, units="us")
 
     ## Same test but generate the frames in parallel
     ## First warm reset
+    await driver.close()
     await vip.cctb.warm_reset(dut)
+    await Timer(50, units="us")
+    await driver.open()
     await Timer(50, units="us")
 
     ## Start the layers, with autoread enabled
@@ -181,4 +194,5 @@ async def test_3_layers_single_frame(dut):
     readoutLength = await driver.readoutGetBufferSize()
     assert readoutLength == 3*12
 
-    await Timer(50, units="us")
+    await driver.close()
+    await Timer(150, units="us")

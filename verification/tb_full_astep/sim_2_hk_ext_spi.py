@@ -17,9 +17,9 @@ import vip.spi
 vip.spi.info()
 
 ## Import simulation target driver
-import astep24_3l_sim
+from vip import astep24_3l_sim
 
-@cocotb.test(timeout_time = 1 , timeout_unit = "ms")
+@cocotb.test(timeout_time = 1 , timeout_unit = "ms",skip=False)
 async def test_hk_ext_spi_adc(dut):
 
     ## Init Driver
@@ -29,7 +29,7 @@ async def test_hk_ext_spi_adc(dut):
 
     ## Create VIP SPi Slave
     slave = vip.spi.VSPISlave(clk = dut.ext_spi_clk, csn = dut.ext_adc_spi_csn,mosi=dut.ext_spi_mosi,miso = dut.ext_adc_spi_miso,misoSize=1,cpol=1)
-    slave.start_monitor()
+    slaveTask = slave.start_monitor()
 
     ## 
     await driver.houseKeeping.selectADC()
@@ -46,12 +46,12 @@ async def test_hk_ext_spi_adc(dut):
     assert(len(adcBytes) ==2)
     await Timer(5, units="us")
 
+    await driver.close()
+    await Timer(50, units="us")
     
 
-    await Timer(50, units="us")
 
-
-@cocotb.test(timeout_time = 1 , timeout_unit = "ms")
+@cocotb.test(timeout_time = 1 , timeout_unit = "ms",skip=False)
 async def test_hk_ext_spi_dac(dut):
 
     ## Init Driver
@@ -59,9 +59,10 @@ async def test_hk_ext_spi_dac(dut):
     await Timer(10, units="us")
     driver = await astep24_3l_sim.getDriver(dut)
    
+    
     ## Create VIP SPi Slave
     slave = vip.spi.VSPISlave(clk = dut.ext_spi_clk, csn = dut.ext_dac_spi_csn,mosi=dut.ext_spi_mosi,miso = dut.ext_adc_spi_miso,misoSize=1,cpol=0)
-    slave.start_monitor()
+    slaveTask = slave.start_monitor()
 
     ## 
     await driver.houseKeeping.selectDAC()
@@ -75,4 +76,5 @@ async def test_hk_ext_spi_dac(dut):
     assert (slaveByte) == 0xAB
     assert (await slave.getByte()) == 0xCD
 
+    await driver.close()
     await Timer(50, units="us")

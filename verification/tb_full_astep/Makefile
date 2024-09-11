@@ -21,15 +21,18 @@ USER_ARGS?=
 EXTRA_ARGS?=-input xcelium.tcl -f $(PWD)/astep24_3l_top.sim.f  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
 
 RANDOM_SEED=1722517216
-
 GUI?=0
 TESTCASE?=
-
+MODULE?=$(shell echo $(basename $(wildcard sim*.py)) | tr ' ' ',')
 
 
 #####
 export BASE=$(PWD)/../../
 export PYTHONPATH := $(shell pwd)/../:$(shell pwd)/../../rtl/top:$(shell pwd)/../../sw:$(shell pwd)/../../vendor/icflow_hdl_240807/hdl_rfg_v1/python:$(shell pwd)/../../vendor/icflow_hdl_240807/cocotb_runner_v1/python:$(PYTHONPATH)
+
+verify.full:
+	@echo "Modules: $(MODULE)"
+#@PYTHONPATH=$(PYTHONPATH) make GUI=$(GUI) sim
 
 #%.verify: 
 %.verify: MODULE = $(basename $@)

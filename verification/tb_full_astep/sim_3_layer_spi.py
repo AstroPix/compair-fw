@@ -18,7 +18,7 @@ import vip.spi
 vip.spi.info()
 
 ## Import simulation target driver
-import astep24_3l_sim
+from vip import astep24_3l_sim
 
 @cocotb.test(timeout_time = 1 , timeout_unit = "ms")
 async def test_layers_spi_chipselect(dut):
@@ -79,7 +79,8 @@ async def test_layers_spi_chipselect(dut):
     await Timer(1, units="us")
     check_cs(1,1,1,1)
 
-    await Timer(10, units="us")
+    await driver.close()
+    await Timer(150, units="us")
 
 
 
@@ -99,6 +100,7 @@ async def test_layer_0_spi_mosi(dut):
     await driver.setLayerConfig(layer = 0, reset = False, hold = False, autoread = False , flush = True )
     await driver.layersSelectSPI(flush = True)
     await driver.writeLayerBytes(layer = 0 , bytes = [0xAB],flush=True)
+    await Timer(10, units="us") # Wait for FW to have driven all bytes out (wait instead of polling to avoid too many requests in waveforms)
     assert (await slave.getByte()) == 0xAB
 
     ## Check IDLE byte counter, we are getting 2 bytes on MISO for one send byte on MOSI
@@ -107,12 +109,14 @@ async def test_layer_0_spi_mosi(dut):
     ## Write 2 MOSI Bytes to Layer
     await driver.layersSelectSPI(flush = True)
     await driver.writeLayerBytes(layer = 0 , bytes = [0xCD,0xEF],flush=True)
+    await Timer(10, units="us")
     assert (await slave.getByte()) == 0xCD
     assert (await slave.getByte()) == 0xEF
 
     assert (await driver.getLayerStatIDLECounter(0)) == 6
 
-    await Timer(50, units="us")
+    await driver.close()
+    await Timer(150, units="us")
 
 @cocotb.test(timeout_time = 2 , timeout_unit = "ms",skip = False)
 async def test_layers_spi_mosi(dut):
@@ -144,6 +148,9 @@ async def test_layers_spi_mosi(dut):
         await driver.setLayerConfig(layer = i, reset = False, hold = True, autoread = False , chipSelect = True, flush = True )
         await driver.writeLayerBytes(layer = i , bytes = [0x01,0x02],flush=True)
 
+    # Wait for FW to have driven all bytes out (wait instead of polling to avoid too many requests in waveforms)
+    await Timer(10, units="us") 
+
     ## Check
     for i in range(3):
         if i < 3:
@@ -154,7 +161,8 @@ async def test_layers_spi_mosi(dut):
         assert (await driver.getLayerStatIDLECounter(i)) == 4
         dut._log.info(f"Checked Bytes and Counter for layer={i}")
 
-    await Timer(50, units="us")
+    await driver.close()
+    await Timer(150, units="us")
 
 
 
@@ -174,7 +182,7 @@ async def test_layer_0_spi_miso_disable(dut):
     await driver.setLayerConfig(layer = 0, reset = False, hold = False, autoread = False , flush = True )
     await driver.layersSelectSPI()
     await driver.writeLayerBytes(layer = 0 , bytes = [0xAB],flush=True)
-    await Timer(5, units="us")
+    await Timer(10, units="us")
 
     ## Check IDLE byte counter, we are getting 2 bytes on MISO for one send byte on MOSI
     assert (await driver.getLayerStatIDLECounter(0)) == 2
@@ -183,5 +191,8 @@ async def test_layer_0_spi_miso_disable(dut):
     await driver.setLayerConfig(layer = 0, reset = False, hold = False, autoread = False , disableMISO = True, flush = True )
     await driver.layersSelectSPI()
     await driver.writeLayerBytes(layer = 0 , bytes = [0xAB],flush=True)
-    await Timer(5, units="us")
+    await Timer(10, units="us")
     assert (await driver.getLayerStatIDLECounter(0)) == 2
+
+    await driver.close()
+    await Timer(150, units="us")

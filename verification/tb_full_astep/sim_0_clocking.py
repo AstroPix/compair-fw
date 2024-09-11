@@ -10,7 +10,7 @@ from cocotbext.uart import UartSource, UartSink
 import vip.cctb
 
 ## Import simulation target driver
-import astep24_3l_sim
+from vip import astep24_3l_sim
 
 @cocotb.test(timeout_time = 1,timeout_unit="ms")
 async def test_clocking_resets(dut):
@@ -57,10 +57,10 @@ async def test_clocking_dividers(dut,skip=True):
 
 
 @cocotb.test(timeout_time = 1,timeout_unit="ms")
-async def test_buffers_reset(dut,skip=True):
+async def test_buffers_reset(dut):
   
     ## Get Target Driver
-    driver = astep24_3l_sim.getUARTDriver(dut)
+    driver = await astep24_3l_sim.getDriver(dut)
 
     ## Clock/Reset
     await vip.cctb.common_clock_reset(dut)
@@ -79,11 +79,11 @@ async def test_buffers_reset(dut,skip=True):
     
     await Timer(50, units="us")
 
-@cocotb.test(timeout_time = 1,timeout_unit="ms",skip=True)
+@cocotb.test(timeout_time = 1,timeout_unit="ms")
 async def test_spi_divider_api(dut):
   
     ## Get Target Driver
-    boardDriver = astep24_3l_sim.getUARTDriver(dut)
+    boardDriver = await astep24_3l_sim.getDriver(dut)
 
     ## Clock/Reset
     await vip.cctb.common_clock_reset(dut)

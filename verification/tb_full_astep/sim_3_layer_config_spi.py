@@ -22,7 +22,7 @@ vip.spi.info()
 import rfg.core
 
 ## Import simulation target driver
-import astep24_3l_sim
+from vip import astep24_3l_sim
 
 SPI_HEADER_SR       = 0b011 << 5
 SPI_SR_BROADCAST    = 0x7E
@@ -67,6 +67,7 @@ async def test_layers_config_spi_chip0(dut):
     # Check header
     assert (await slave.getByte() == (SPI_SR_BROADCAST))
 
+    await driver.close()
     await Timer(150, units="us")
 
 @cocotb.test(timeout_time = 3 , timeout_unit = "ms")
@@ -100,6 +101,7 @@ async def test_layers_config_spi_chip0_checkbits(dut):
     ## Chip 0 in the config is 1011, so the SR bits must be reversed: 1101
     assert(srbits == [1,1,0,1])
 
+    await driver.close()
     await Timer(150, units="us")
 
 @cocotb.test(timeout_time = 5 , timeout_unit = "ms")
@@ -181,8 +183,7 @@ async def test_layers_config_spi_chips_checkbits(dut):
     assert(await astropix.parseSPIBytesAsConfig(broadcast = True) == [0,0,0,1] )
 
 
-    
-
+    await driver.close()
     await Timer(150, units="us")
 
 
@@ -224,4 +225,5 @@ async def test_layer_0_config_sr_multichip(dut):
     #    FallingEdge(dut._id(f"layers_sr_out_ld0", extended=False))
     #)
     
+    await driver.close()
     await Timer(150, units="us")

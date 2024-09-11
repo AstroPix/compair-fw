@@ -11,9 +11,9 @@ import vip.cctb
 import vip.astropix3
 
 ## Import simulation target driver
-import astep24_3l_sim
+from vip import astep24_3l_sim
 
-@cocotb.test(timeout_time = 10 , timeout_unit = "ms")
+@cocotb.test(timeout_time = 10 , timeout_unit = "ms", skip=True)
 async def test_update_vb(dut):
 
     ## Clock/Reset

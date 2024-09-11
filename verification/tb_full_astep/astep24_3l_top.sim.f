@@ -16,5 +16,6 @@
 #-f ${BASE}/fw/astep24-3l/verification/xilinx_sim_libs.f
 ${BASE}/verification/ip/fifo_2clk_64x32.v
 ${BASE}/verification/ip/fifo_2clk_64x8.v
+${BASE}/verification/ip/fifo_1clk_1024x32.v
 ${BASE}/verification/ip/clock_pll_1.v
 ${BASE}/verification/ip/uart.v

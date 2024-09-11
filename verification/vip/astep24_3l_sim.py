@@ -10,8 +10,8 @@ from    rfg.cocotb.cocotb_spi  import SPIIO
 
 
 from   drivers.boards.board_driver import BoardDriver
-#from   drivers.gecco.voltageboard import VoltageBoard
-#from   drivers.gecco.injectionboard import InjectionBoard
+from   drivers.gecco.voltageboard import VoltageBoard
+from   drivers.gecco.injectionboard import InjectionBoard
 
 from cocotb.triggers import Timer,RisingEdge
 
@@ -44,7 +44,7 @@ async def getDriver(dut):
     else:
         return await getSPIDriver(dut)
 
-def getUARTDriver(dut):
+async def getUARTDriver(dut):
 
     ## Load RF and Setup UARTIO
     firmwareRF = rfg.discovery.loadOneFSPRFGOrFail()
@@ -60,7 +60,7 @@ def getUARTDriver(dut):
     firmwareRF.withIODriver(rfg_io)
 
     boardDriver = SimBoard(firmwareRF)
-    boardDriver.open()
+    await boardDriver.open()
 
     
 
@@ -75,7 +75,7 @@ async def getSPIDriver(dut):
 
     ## SPI
     #########
-    rfg_io = SPIIO(dut)
+    rfg_io = SPIIO(dut,msbFirst=False)
     await Timer(10, units="us")
 
     #rfg.cocotb.cocotb_spi.debug()
@@ -84,10 +84,11 @@ async def getSPIDriver(dut):
     #await rfg_io.softReset()
 
     firmwareRF.withIODriver(rfg_io)
-    await rfg_io.open()
+    #await rfg_io.open()
     await Timer(10, units="us")
 
     boardDriver = SimBoard(firmwareRF)
-
+    await boardDriver.open()
+    await Timer(10, units="us")
 
     return boardDriver

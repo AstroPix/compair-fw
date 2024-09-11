@@ -21,7 +21,7 @@ vip.spi.info()
 import rfg.core
 
 ## Import simulation target driver
-import astep24_3l_sim
+from vip import astep24_3l_sim
 
 @cocotb.test(timeout_time = 3 , timeout_unit = "ms")
 async def test_layers_config_sr(dut):
@@ -47,6 +47,7 @@ async def test_layers_config_sr(dut):
         await Join(fallingEdgeTask)
     
 
+    await driver.close()
     await Timer(150, units="us")
 
 
@@ -73,13 +74,7 @@ async def test_layer_0_config_sr_multichip(dut):
     fallingEdgeTask = cocotb.start_soon( wait_for_load() )
     await asic.writeConfigSR(ckdiv = 2)
     await Join(fallingEdgeTask)
-    #await asyncio.gather(asic.writeConfigSR(ckdiv = 2))
-    #,FallingEdge(dut._id(f"layers_sr_out_ld0", extended=False))
-    #await asic.writeConfigSR(ckdiv = 2)
-    #await Combine(
-    #    asic.writeConfigSR(ckdiv = 2),
-    #    ## After last bit to load = 4 written, we can wait for a falling edge of load
-    #    FallingEdge(dut._id(f"layers_sr_out_ld0", extended=False))
-    #)
+   
     
+    await driver.close()
     await Timer(150, units="us")

@@ -9,7 +9,8 @@ from cocotbext.uart import UartSource, UartSink
 
 import vip.cctb
 
-import astep24_3l_sim
+## Import simulation target driver
+from vip import astep24_3l_sim
 
 @cocotb.test(timeout_time = 2 , timeout_unit = "ms")
 async def test_injection(dut):
@@ -17,10 +18,10 @@ async def test_injection(dut):
     ## Clock/Reset
     await vip.cctb.common_clock_reset(dut)
     await Timer(10, units="us")
-    boardDriver = await astep24_3l_sim.getDriver(dut)
+    driver = await astep24_3l_sim.getDriver(dut)
 
     # Get Injection Board from driver
-    injBoard = boardDriver.geccoGetInjectionBoard()
+    injBoard = driver.geccoGetInjectionBoard()
 
     # Configure
     injBoard.initdelay = 4
@@ -53,4 +54,5 @@ async def test_injection(dut):
     assert dut.injection_generator.done.value == 1 
     
    
-    await Timer(500, units="us")
+    await driver.close()
+    await Timer(150, units="us")
