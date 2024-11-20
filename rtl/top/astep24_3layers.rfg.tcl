@@ -18,15 +18,16 @@ proc rrepeat {count lst} {
  #[rrepeat 3 {LAYER_${i}_IDLE_COUNTER   -size 16 -sw_read_only -counter -enable}]
 icDefineParameter RFG_FW_ID "FW ID for the target"
 if {[catch {set ::RFG_FW_ID}]} {
-    #set ::RFG_FW_ID 32'h0000ff00
-    set ::RFG_FW_ID `RFG_FW_ID
+    set ::RFG_FW_ID 32'h0000ff00
+    #set ::RFG_FW_ID `RFG_FW_ID
 }
 if {[catch {set ::RFG_EXTRA_BOARD_REGS}]} {
     set ::RFG_EXTRA_BOARD_REGS {}
 }
 
 ## Build version, taken from define set in simulation or fpga project
-set ::RFG_FW_BUILD `RFG_FW_BUILD
+#set ::RFG_FW_BUILD `RFG_FW_BUILD
+set ::RFG_FW_BUILD 32'd2024112001
 
 ## Main registers definition
 ######################

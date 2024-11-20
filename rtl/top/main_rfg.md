@@ -72,7 +72,7 @@
 **Address**: 0x0
 
 
-**Reset Value**: `RFG_FW_ID
+**Reset Value**: 32'h0000ff00
 
 
 
@@ -86,7 +86,7 @@
 **Address**: 0x4
 
 
-**Reset Value**: `RFG_FW_BUILD
+**Reset Value**: 32'd2024112001
 
 
 
