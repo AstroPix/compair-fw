@@ -1,0 +1,60 @@
+set device "LFCPNX-100"
+set device_int "jd5d80"
+set package "LFG672"
+set package_int "LFG672"
+set speed "9_Low-Power_1.0V"
+set speed_int "6"
+set operation "Commercial"
+set family "LFCPNX"
+set architecture "jd5d00"
+set partnumber "LFCPNX-100-9LFG672C"
+set WRAPPER_INST "lscc_fifo_dc_inst"
+set WADDR_DEPTH 64
+set WDATA_WIDTH 32
+set RADDR_DEPTH 64
+set RDATA_WIDTH 32
+set FIFO_CONTROLLER "FABRIC"
+set FWFT 0
+set FORCE_FAST_CONTROLLER 0
+set IMPLEMENTATION "EBR"
+set WADDR_WIDTH 6
+set RADDR_WIDTH 6
+set REGMODE "noreg"
+set OREG_IMPLEMENTATION "LUT"
+set RESETMODE "sync"
+set ENABLE_ALMOST_FULL_FLAG "TRUE"
+set ALMOST_FULL_ASSERTION "static-dual"
+set ALMOST_FULL_ASSERT_LVL 63
+set ALMOST_FULL_DEASSERT_LVL 62
+set ENABLE_ALMOST_EMPTY_FLAG "TRUE"
+set ALMOST_EMPTY_ASSERTION "static-dual"
+set ALMOST_EMPTY_ASSERT_LVL 1
+set ALMOST_EMPTY_DEASSERT_LVL 2
+set ENABLE_DATA_COUNT_WR "TRUE"
+set ENABLE_DATA_COUNT_RD "TRUE"
+set FAMILY "LFCPNX"
+
+
+if {$FAMILY == "LAV-AT"} {
+    set WR_CLK_PERIOD 5
+    set RD_CLK_PERIOD 5
+    
+    create_clock -name {wr_clk_i} -period $WR_CLK_PERIOD [get_ports wr_clk_i]
+    create_clock -name {rd_clk_i} -period $RD_CLK_PERIOD [get_ports rd_clk_i]
+}
+
+if {$FAMILY == "LIFCL" | $FAMILY == "LFCPNX" | $FAMILY == "LFD2NX" | $FAMILY == "LFMXO5"} {
+    set WR_CLK_PERIOD 8
+    set RD_CLK_PERIOD 8
+    
+    create_clock -name {wr_clk_i} -period $WR_CLK_PERIOD [get_ports wr_clk_i]
+    create_clock -name {rd_clk_i} -period $RD_CLK_PERIOD [get_ports rd_clk_i]
+}
+
+if {$FAMILY == "iCE40UP"} {
+    set WR_CLK_PERIOD 10
+    set RD_CLK_PERIOD 10
+    
+    create_clock -name {wr_clk_i} -period $WR_CLK_PERIOD [get_ports wr_clk_i]
+    create_clock -name {rd_clk_i} -period $RD_CLK_PERIOD [get_ports rd_clk_i]
+}
