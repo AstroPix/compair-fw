@@ -58,7 +58,8 @@ class astepRun:
         elif cmod and not uart:
             self.boardDriver = drivers.boards.getCMODDriver()
         elif not cmod and uart:
-            self.boardDriver = drivers.boards.getGeccoUARTDriver(drivers.astep.serial.getFirstCOMPort())
+            #self.boardDriver = drivers.boards.getGeccoUARTDriver(drivers.astep.serial.getFirstCOMPort())
+            self.boardDriver = drivers.boards.getGeccoUARTDriver("COM10")
         elif not cmod and not uart:
             self.boardDriver = drivers.boards.getGeccoFTDIDriver()
 

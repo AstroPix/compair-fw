@@ -28,9 +28,13 @@ async def main(args, saveName):
     logger.debug("creating object")
     astro = astepRun(SR=args.shiftRegister)
 
-    
-    cmod = False if args.gecco else True
-    uart = False if args.gecco else True
+    #hard coded for GECCO bench running
+
+    cmod = False
+    uart = True
+
+    #cmod = False if args.gecco else True
+    #uart = False if args.gecco else True
 
     logger.info(f"opening fpga,cmod={cmod},uart={uart}")
     try:
