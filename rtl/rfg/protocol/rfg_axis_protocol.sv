@@ -78,6 +78,7 @@ module rfg_axis_protocol  #(
 
         typedef struct packed {
             bit [7:4] vchannel;
+            bit extended_address;
             bit RSVD;
             bit address_increment;
             bit read;
@@ -133,6 +134,7 @@ module rfg_axis_protocol  #(
         typedef enum logic [3:0] {
             RFP_HEADER,
             RFP_ADDRESS,
+            RFP_ADDRESSB,
             RFP_LENGTHA,
             RFP_LENGTHB,
             RFP_WRITE_VALUE,
@@ -225,10 +227,21 @@ module rfg_axis_protocol  #(
                     end
 
                     RFP_ADDRESS: begin 
-                        if (axis_sink_byte_valid) begin 
-                            rfp_state     <= RFP_LENGTHA;
-                            rfg_address   <= s_axis_tdata;
+
+                        // 12/12/2024: Added Extendeed address mode to allow 16bit addresses
+                        if (axis_sink_byte_valid && rfg_header.extended_address) begin
+                            rfp_state     <= RFP_ADDRESSB;
+                            rfg_address[7:0] <= s_axis_tdata;
                         end
+                        else if (axis_sink_byte_valid) begin 
+                            rfp_state     <= RFP_LENGTHA;
+                            rfg_address   <= {8'h00, s_axis_tdata};
+                        end
+                    end
+
+                    RFP_ADDRESSB: begin
+                        rfg_address[15:8]   <= s_axis_tdata;
+                        rfp_state           <= RFP_LENGTHA;
                     end
 
                     RFP_LENGTHA: begin 
