@@ -36,7 +36,7 @@ module rfg_axis_protocol  #(
     input  wire [ID_DEST_WIDTH-1:0] s_axis_tid, // Source Port from slave so that answers are forwared back to the right port
  
 
-    output reg [7:0]                rfg_address,
+    output reg [15:0]                rfg_address,
     output reg [7:0]                rfg_write_value,
     output reg                      rfg_write,
     output reg                      rfg_write_last,
