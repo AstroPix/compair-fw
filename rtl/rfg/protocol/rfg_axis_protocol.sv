@@ -36,7 +36,9 @@ module rfg_axis_protocol  #(
     input  wire [ID_DEST_WIDTH-1:0] s_axis_tid, // Source Port from slave so that answers are forwared back to the right port
  
 
-    output reg [15:0]                rfg_address,
+
+    output reg [15:0]               rfg_address,
+
     output reg [7:0]                rfg_write_value,
     output reg                      rfg_write,
     output reg                      rfg_write_last,
@@ -79,7 +81,6 @@ module rfg_axis_protocol  #(
         typedef struct packed {
             bit [7:4] vchannel;
             bit extended_address;
-            bit RSVD;
             bit address_increment;
             bit read;
             bit write;
@@ -226,16 +227,18 @@ module rfg_axis_protocol  #(
                         end
                     end
 
+                    
+
                     RFP_ADDRESS: begin 
 
-                        // 12/12/2024: Added Extendeed address mode to allow 16bit addresses
-                        if (axis_sink_byte_valid && rfg_header.extended_address) begin
+                        // 12/12/2024: Added Extended address mode to allow 16bit addresses
+                        if (axis_sink_byte_valid && rfg_header.extended_address) begin 
                             rfp_state     <= RFP_ADDRESSB;
-                            rfg_address[7:0] <= s_axis_tdata;
+                            rfg_address[7:0]   <= s_axis_tdata;
                         end
-                        else if (axis_sink_byte_valid) begin 
+                        else if (axis_sink_byte_valid) begin
                             rfp_state     <= RFP_LENGTHA;
-                            rfg_address   <= {8'h00, s_axis_tdata};
+                            rfg_address   <= {8'h00,s_axis_tdata};
                         end
                     end
 
