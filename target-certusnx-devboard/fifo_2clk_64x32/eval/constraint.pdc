@@ -1,0 +1,7 @@
+## Set clock period per design requirements 
+set WR_CLK_PERIOD 8
+set RD_CLK_PERIOD 8
+
+create_clock -name {wr_clk_i} -period $WR_CLK_PERIOD [get_ports wr_clk_i]
+create_clock -name {rd_clk_i} -period $RD_CLK_PERIOD [get_ports rd_clk_i]
+
