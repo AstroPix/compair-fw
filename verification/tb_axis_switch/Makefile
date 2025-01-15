@@ -7,7 +7,7 @@ SHELL=/bin/bash
 SIM ?= xcelium
 TOPLEVEL_LANG ?= verilog
 
-VERILOG_SOURCES += $(PWD)/../../rtl/axis_switch/axis_switch.sv $(PWD)/../../rtl/axis_switch/round_robin_arbiter.sv $(PWD)/../../rtl/utilities/mini_fwft_fifo.sv
+VERILOG_SOURCES += $(PWD)/../../rtl/axis_switch/axis_switch.sv $(PWD)/../../rtl/axis_switch/round_robin_arbiter.sv $(PWD)/../../rtl/fifo/mini_fwft_fifo.sv $(PWD)/../../rtl/fifo/fifo_ptr_logic.sv
 #VERILOG_SOURCES += $(PWD)/my_design.sv
 # use VHDL_SOURCES for VHDL files
 
