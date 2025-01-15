@@ -104,9 +104,9 @@ set V2I_1V_EN "ENABLED"
 
 
 set CLK_PERIOD [expr {double(round(1000000/$CLKI_FREQ))/1000}]
-#create_clock -name {clki_i} -period $CLK_PERIOD [get_ports clki_i]
+create_clock -name {clki_i} -period $CLK_PERIOD [get_ports clki_i]
 
 # IO_TYPE constraint - Refclk
-#if {$PLL_REFCLK_FROM_PIN} {
-#  ldc_set_port -iobuf IO_TYPE=$IO_TYPE [get_ports clki_i]
-#}
+if {$PLL_REFCLK_FROM_PIN} {
+  ldc_set_port -iobuf IO_TYPE=$IO_TYPE [get_ports clki_i]
+}

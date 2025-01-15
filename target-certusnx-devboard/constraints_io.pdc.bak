@@ -8,27 +8,23 @@ ldc_set_vcc -bank 4 1.8
 ldc_set_vcc -bank 5 1.8
 ldc_set_vcc -bank 6 3.3
 ldc_set_vcc -bank 7 3.3
-
 ## Clock and reset
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports osc_clk]
 #ldc_set_location -site {R4} [get_ports osc_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports sysclk_125]
 ldc_set_location -site {N25} [get_ports sysclk_125]
-
 ldc_set_location -site {J5} [get_ports rstn]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports rstn]
-
 ## UART
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports ftdi_tx]
 ldc_set_location -site {L1} [get_ports ftdi_tx]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports ftdi_rx]
 ldc_set_location -site {L2} [get_ports ftdi_rx]
 ## SPI Slave
-ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports spi_clk]
-ldc_set_location -site {N23} [get_ports spi_clk]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports spi_csn]
-ldc_set_location -site {V6} [get_ports spi_csn]
-
+#ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports spi_clk]
+#ldc_set_location -site {N23} [get_ports spi_clk]
+#ldc_set_port -iobuf {TERMINATION=OFF PULLMODE=UP IO_TYPE=LVCMOS18H} [get_ports spi_csn]
+#ldc_set_location -site {V6} [get_ports spi_csn]
 ## LED
 #ldc_set_location -site {N5} [get_ports {LED_GREEN[0]}]
 #ldc_set_location -site {N6} [get_ports {LED_GREEN[1]}]

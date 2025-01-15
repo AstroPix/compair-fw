@@ -17,10 +17,10 @@ interface AXIS #(
   
     localparam int unsigned AXIS_STRB_WIDTH = AXIS_DATA_WIDTH / 8;
 
-    typedef logic [AXIS_ADDR_WIDTH-1:0] addr_t;
-    typedef logic [AXIS_ID_WIDTH-1:0]   id_t;
-    typedef logic [AXIS_USER_WIDTH-1:0] user_t;
-    typedef logic [AXIS_DATA_WIDTH-1:0] data_t;
+    typedef logic [3:0] addr_t;
+    typedef logic [1:0]   id_t;
+    typedef logic [3:0] user_t;
+    typedef logic [7:0] data_t;
 
     addr_t    tdest;
     id_t      tid;
@@ -204,7 +204,7 @@ interface AXI_LITE #(
         r_ready <= 1'b1;
 
         // Read
-        ar_valid <= 1'b0; 
+        ar_valid = 1'b0; 
 
     endfunction
   
