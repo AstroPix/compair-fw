@@ -4,7 +4,7 @@ SHELL=/bin/bash
 # Makefile
 
 # defaults
-SIM ?= xcelium
+SIM ?= questa
 TOPLEVEL_LANG ?= verilog
 
 VERILOG_SOURCES ?=
