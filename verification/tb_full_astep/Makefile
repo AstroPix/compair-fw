@@ -4,7 +4,7 @@ SHELL=/bin/bash
 # Makefile
 
 # defaults
-SIM ?= xcelium
+SIM?=xcelium
 TOPLEVEL_LANG ?= verilog
 
 VERILOG_SOURCES ?=
@@ -18,7 +18,21 @@ TOPLEVEL ?= astep24_3l_top
 #MODULE ?= sim_fifo
 WAVES ?= 1
 USER_ARGS?=
-EXTRA_ARGS?=-input xcelium.tcl -f $(PWD)/astep24_3l_top.sim.f  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
+VERILOG_SOURCES?=
+
+export VHDL_GPI_INTERFACE=vhpi
+
+ifeq ($(SIM),xcelium)
+	EXTRA_ARGS=-input xcelium.tcl -f $(PWD)/astep24_3l_top.sim.f  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
+endif
+ifeq ($(SIM),questa) 
+	VERILOG_SOURCES=$(BASE)/verification/ip/uart.v
+	VLOG_ARGS=-64 -f $(PWD)/astep24_3l_top.sim_questa.f      $(USER_ARGS)
+	EXTRA_ARGS=-Ldir $(BASE)/verification/xcelium_preparelib/lattice_compiled_questa/ -L lfcpnx
+	VSIM_ARGS=-no_autoacc
+endif
+
+
 
 RANDOM_SEED=1722517216
 GUI?=0
@@ -31,7 +45,7 @@ export BASE=$(PWD)/../../
 export PYTHONPATH := $(shell pwd)/../:$(shell pwd)/../../rtl/top:$(shell pwd)/../../sw:$(shell pwd)/../../vendor/icflow_hdl_240807/hdl_rfg_v1/python:$(shell pwd)/../../vendor/icflow_hdl_240807/cocotb_runner_v1/python:$(PYTHONPATH)
 
 verify.full:
-	@echo "Modules: $(MODULE)"
+	@echo "Modules: $(MODULE) with $(SIM) $(EXTRA_ARGS)"
 #@PYTHONPATH=$(PYTHONPATH) make GUI=$(GUI) sim
 
 #%.verify: 
