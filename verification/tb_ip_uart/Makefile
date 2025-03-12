@@ -4,7 +4,7 @@ SHELL=/bin/bash
 # Makefile
 
 # defaults
-SIM ?= xcelium
+SIM ?= questa
 TOPLEVEL_LANG ?= verilog
 
 VERILOG_SOURCES += $(PWD)/tb_uart.sv $(PWD)/../ip/uart.v $(PWD)/../../rtl/lattice/uart_lattice_axis_driver.sv

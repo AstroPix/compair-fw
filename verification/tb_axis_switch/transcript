@@ -1,0 +1,36 @@
+# do sim_build/runsim.do
+# QuestaSim-64 vmap 2023.2_1 Lib Mapping Utility 2023.05 May 12 2023
+# vmap -c 
+# ** Warning: vmap will not overwrite local modelsim.ini.
+# QuestaSim-64 vmap 2023.2_1 Lib Mapping Utility 2023.05 May 12 2023
+# vmap work sim_build/work 
+# Modifying modelsim.ini
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:04:38 on Jan 14,2025
+# vlog -work work "+define+COCOTB_SIM" -sv -timescale 1ns/1ps -mfcu "+acc" -L ../xcelium_preparelib/lattice_compiled/lfcpnx /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/axis_switch/axis_switch.sv /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/axis_switch/round_robin_arbiter.sv /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/fifo/mini_fwft_fifo.sv 
+# -- Compiling module axis_switch
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/axis_switch/axis_switch.sv(253): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/axis_switch/axis_switch.sv(255): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/axis_switch/axis_switch.sv(256): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/axis_switch/axis_switch.sv(257): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/axis_switch/axis_switch.sv(259): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/axis_switch/axis_switch.sv(260): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# -- Compiling module round_robin_arbiter
+# -- Compiling module mini_fwft_fifo
+# 
+# Top level modules:
+# 	axis_switch
+# End time: 15:04:38 on Jan 14,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 6
+# vsim -onfinish exit -pli "/mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so" -L ../xcelium_preparelib/lattice_compiled/lfcpnx work.axis_switch 
+# Start time: 15:04:38 on Jan 14,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vsim-3865) Due to PLI being present, global +acc is being enabled automatically. This will cause your simulation to run very slowly. Please use vsim -no_autoacc to disable this feature. This feature is now deprecated and will be removed from future releases.
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Error: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_axis_switch/../../rtl/fifo/mini_fwft_fifo.sv(29): Module 'fifo_ptr_logic' is not defined.
+#  For instance 'fifo_ptr_logic_inst' at path 'axis_switch.genblk1[0].input_fifo'
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=1, Warnings=2.
+# Error loading design
+# End time: 15:04:39 on Jan 14,2025, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 2

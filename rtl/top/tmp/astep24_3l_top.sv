@@ -131,7 +131,7 @@ module astep24_3l_top(
 
     // SW interface
     //-------------
-    wire [15:0] sw_if_rfg_address; 
+    wire [7:0] sw_if_rfg_address; 
     wire [7:0] sw_if_rfg_write_value;
     wire [7:0] sw_if_rfg_read_value;
     wire sw_if_rfg_write; 

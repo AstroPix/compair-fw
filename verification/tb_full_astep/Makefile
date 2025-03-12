@@ -4,10 +4,10 @@ SHELL=/bin/bash
 # Makefile
 
 # defaults
-SIM?=xcelium
+SIM ?= questa
 TOPLEVEL_LANG ?= verilog
 
-VERILOG_SOURCES ?=
+
 #VERILOG_SOURCES += $(PWD)/my_design.sv
 # use VHDL_SOURCES for VHDL files
 
@@ -48,11 +48,22 @@ verify.full:
 	@echo "Modules: $(MODULE) with $(SIM) $(EXTRA_ARGS)"
 #@PYTHONPATH=$(PYTHONPATH) make GUI=$(GUI) sim
 
+## Arguments for simulator
+ifeq ($(SIM),xcelium)
+        EXTRA_ARGS?=-input xcelium.tcl -define SIMULATION +incdir+$(PWD)/../../rtl/includes  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
+else
+        EXTRA_ARGS?=-define SIMULATION  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
+endif
+
+inspect: export USER_ARGS=-gui
+inspect: sim
+
+# include cocotb's make rules to take care of the simulator setup
+include $(shell cocotb-config --makefiles)/Makefile.sim
+
 #%.verify: 
 %.verify: MODULE = $(basename $@)
 %.verify: 
 	@PYTHONPATH=$(PYTHONPATH) make GUI=$(GUI) MODULE=$(MODULE) TESTCASE=$(TESTCASE) sim
 	
-# include cocotb's make rules to take care of the simulator setup
-include $(shell cocotb-config --makefiles)/Makefile.sim
 

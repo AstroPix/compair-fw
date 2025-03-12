@@ -7,23 +7,23 @@
     At the moment there is one SPI Master, ADC/DAC are selected over Chip Select
 */
 module housekeeping_main(
-    input  wire				clk_core,
-    input  wire				clk_core_resn,
-    input  wire				clk_spi,
-    input  wire				clk_spi_resn,
-    input  wire             select_adc,
+    input  wire			clk_core,
+    input  wire			clk_core_resn,
+    input  wire			clk_spi,
+    input  wire			clk_spi_resn,
+    input  wire                 select_adc,
     output wire [7:0]		ext_adc_miso_m_axis_tdata,
-    input  wire				ext_adc_miso_m_axis_tready,
-    output wire				ext_adc_miso_m_axis_tvalid,
+    input  wire			ext_adc_miso_m_axis_tready,
+    output wire			ext_adc_miso_m_axis_tvalid,
     output wire [31:0]		ext_adc_miso_read_size,
     input  wire [7:0]		ext_adcdac_mosi_s_axis_tdata,
-    input  wire				ext_adcdac_mosi_s_axis_tlast,
-    output wire				ext_adcdac_mosi_s_axis_tready,
-    input  wire				ext_adcdac_mosi_s_axis_tvalid,
-    output wire				ext_spi_clk,
-    output wire				ext_spi_csn,
-    input  wire				ext_spi_miso,
-    output wire				ext_spi_mosi
+    input  wire			ext_adcdac_mosi_s_axis_tlast,
+    output wire			ext_adcdac_mosi_s_axis_tready,
+    input  wire			ext_adcdac_mosi_s_axis_tvalid,
+    output wire			ext_spi_clk,
+    output wire			ext_spi_csn,
+    input  wire			ext_spi_miso,
+    output wire			ext_spi_mosi
 
 );
 
@@ -95,7 +95,7 @@ module housekeeping_main(
             
 
     // Module Instance
-    wire miso_valid = spi_io_m_axis_tvalid & select_adc; // Slave out bytes are only valid if adc is selected
+    wire miso_valid = spi_io_m_axis_tvalid & select_adc;// Slave out bytes are only valid if adc is selected
     fifo_axis_common #(.AWIDTH(5),.USE_TID(0),.USE_TDEST(0),.TLAST(0))  miso_fifo(
 
         
