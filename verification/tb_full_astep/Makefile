@@ -12,7 +12,7 @@ TOPLEVEL_LANG ?= verilog
 # use VHDL_SOURCES for VHDL files
 
 # TOPLEVEL is the name of the toplevel module in your Verilog or VHDL file
-TOPLEVEL ?= astep24_3l_top
+TOPLEVEL ?= astep24_20l_top
 
 # MODULE is the basename of the Python test file -define LFCPNX -define LFCPNX_100 -define jd5d00
 #MODULE ?= sim_fifo
