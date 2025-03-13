@@ -243,8 +243,11 @@ module rfg_axis_protocol  #(
                     end
 
                     RFP_ADDRESSB: begin
-                        rfg_address[15:8]   <= s_axis_tdata;
-                        rfp_state           <= RFP_LENGTHA;
+                        if (axis_sink_byte_valid) begin
+                            rfg_address[15:8]   <= s_axis_tdata;
+                            rfp_state           <= RFP_LENGTHA;
+                        end
+                        
                     end
 
                     
