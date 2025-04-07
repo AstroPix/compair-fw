@@ -54,15 +54,14 @@ def getCMODDriver():
 def getGeccoNODriver():
     return getGeccoDriver()
 
-def getGeccoUARTDriver(portPath : str | None = None,baud = 921600):
-    return getGeccoDriver().selectUARTIO(portPath,baud)
+def getGeccoUARTDriver(portPath : str | None = None):
+    return getGeccoDriver().selectUARTIO(portPath)
 
 def getGeccoFTDIDriver():
     return getGeccoDriver().selectFTDIFifoIO()
 
-
-def getCMODUartDriver(portPath : str | None = None,baud = 921600):
-    return getCMODDriver().selectUARTIO(portPath,baud)
+def getCMODUartDriver(portPath : str | None = None):
+    return getCMODDriver().selectUARTIO(portPath)
 
 def getCMODSPIDriver():
     raise NotImplementedError
