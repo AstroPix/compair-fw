@@ -1,0 +1,176 @@
+
+mainmenu_option next_comment
+comment 'LEON5 Processor system'
+  int 'Number of processors' CONFIG_PROC_NUM 1
+  choice 'FPU type              ' \
+    "nanofpu    CONFIG_FPU_NANOFPU \
+     grfpu5     CONFIG_FPU_GRFPU5" nanofpu
+  choice 'Cache/TLB performance configuration ' \
+    "Highest-performance CONFIG_LEON5_HP \
+     General-purpose     CONFIG_LEON5_GP \
+     Minimal             CONFIG_LEON5_EP " Highest-performance
+  if [ "$CONFIG_LEON5_HP" = "y" ]; then
+    define_int  CONFIG_LEON5_PERFCFG 0
+  fi
+  if [ "$CONFIG_LEON5_GP" = "y" ]; then
+    define_int  CONFIG_LEON5_PERFCFG 1
+  fi
+  if [ "$CONFIG_LEON5_EP" = "y" ]; then
+    define_int  CONFIG_LEON5_PERFCFG 2
+  fi
+  choice 'Register File implementation ' \
+    "2-port-memories CONFIG_LEON5_RF_0 \
+     flip-flops      CONFIG_LEON5_RF_1 " 2-port-memories
+  if [ "$CONFIG_LEON5_RF_0" = "y" ]; then
+    define_int  CONFIG_LEON5_RFCFG 0
+  fi
+  if [ "$CONFIG_LEON5_RF_1" = "y" ]; then
+    define_int  CONFIG_LEON5_RFCFG 1
+  fi
+  mainmenu_option next_comment
+  comment 'Cache memory Configuration  '
+      int 'Data Cache Tag ' CONFIG_LEON5_CMCFG_TAG 0
+      int 'Data Cache Data' CONFIG_LEON5_CMCFG_DATA 0
+  endmenu
+  mainmenu_option next_comment
+  comment 'Tightly coupled memory      '
+      choice 'Instruction TCM ' \
+          "None             CONFIG_LEON5_ITCM_NONE \
+           1KiB             CONFIG_LEON5_ITCM_1K \
+           2KiB             CONFIG_LEON5_ITCM_2K \
+           4KiB             CONFIG_LEON5_ITCM_4K \
+           8KiB             CONFIG_LEON5_ITCM_8K \
+           16KiB            CONFIG_LEON5_ITCM_16K \
+           32KiB            CONFIG_LEON5_ITCM_32K \
+           64KiB            CONFIG_LEON5_ITCM_64K \
+           128KiB           CONFIG_LEON5_ITCM_128K \
+           256KiB           CONFIG_LEON5_ITCM_256K \
+           512KiB           CONFIG_LEON5_ITCM_512K \
+           1MiB             CONFIG_LEON5_ITCM_1M" None
+      choice 'Data TCM            ' \
+          "None             CONFIG_LEON5_DTCM_NONE \
+           1KiB             CONFIG_LEON5_DTCM_1K \
+           2KiB             CONFIG_LEON5_DTCM_2K \
+           4KiB             CONFIG_LEON5_DTCM_4K \
+           8KiB             CONFIG_LEON5_DTCM_8K \
+           16KiB            CONFIG_LEON5_DTCM_16K \
+           32KiB            CONFIG_LEON5_DTCM_32K \
+           64KiB            CONFIG_LEON5_DTCM_64K \
+           128KiB           CONFIG_LEON5_DTCM_128K \
+           256KiB           CONFIG_LEON5_DTCM_256K \
+           512KiB           CONFIG_LEON5_DTCM_512K \
+           1MiB             CONFIG_LEON5_DTCM_1M" None
+  endmenu
+  if [ "$CONFIG_LEON5_ITCM_NONE" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 0
+  fi
+  if [ "$CONFIG_LEON5_ITCM_1K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 7
+  fi
+  if [ "$CONFIG_LEON5_ITCM_2K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 8
+  fi
+  if [ "$CONFIG_LEON5_ITCM_4K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 9
+  fi
+  if [ "$CONFIG_LEON5_ITCM_8K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 10
+  fi
+  if [ "$CONFIG_LEON5_ITCM_16K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 11
+  fi
+  if [ "$CONFIG_LEON5_ITCM_32K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 12
+  fi
+  if [ "$CONFIG_LEON5_ITCM_64K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 13
+  fi
+  if [ "$CONFIG_LEON5_ITCM_128K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 14
+  fi
+  if [ "$CONFIG_LEON5_ITCM_256K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 15
+  fi
+  if [ "$CONFIG_LEON5_ITCM_512K" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 16
+  fi
+  if [ "$CONFIG_LEON5_ITCM_1M" = "y" ]; then
+    define_int  CONFIG_LEON5_ITCMCFG 17
+  fi
+  if [ "$CONFIG_LEON5_DTCM_NONE" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 0
+  fi
+  if [ "$CONFIG_LEON5_DTCM_1K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 7
+  fi
+  if [ "$CONFIG_LEON5_DTCM_2K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 8
+  fi
+  if [ "$CONFIG_LEON5_DTCM_4K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 9
+  fi
+  if [ "$CONFIG_LEON5_DTCM_8K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 10
+  fi
+  if [ "$CONFIG_LEON5_DTCM_16K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 11
+  fi
+  if [ "$CONFIG_LEON5_DTCM_32K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 12
+  fi
+  if [ "$CONFIG_LEON5_DTCM_64K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 13
+  fi
+  if [ "$CONFIG_LEON5_DTCM_128K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 14
+  fi
+  if [ "$CONFIG_LEON5_DTCM_256K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 15
+  fi
+  if [ "$CONFIG_LEON5_DTCM_512K" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 16
+  fi
+  if [ "$CONFIG_LEON5_DTCM_1M" = "y" ]; then
+    define_int  CONFIG_LEON5_DTCMCFG 17
+  fi
+
+  mainmenu_option next_comment
+  comment 'Fault-tolerance  '      
+      choice 'IU Register file protection     ' \
+	"None		CONFIG_IUFT_NONE \
+	FPGA-builtin-error-correction	CONFIG_IUFT_TECHSPEC \
+	RTL-based-error-correction	CONFIG_IUFT_RTL" None
+      choice 'Cache memory protection     ' \
+	  "None		CONFIG_CACHE_FT_NONE \
+           FPGA-builtin-error-correction CONFIG_CACHE_FT_TECHSPEC \
+	   RTL-based-error-correction	CONFIG_CACHE_FT_RTL" None
+  endmenu
+  if [ "$CONFIG_IUFT_NONE" = "y" ]; then
+    define_int  CONFIG_LEON5_RF_FTCFG 0
+  fi
+  if [ "$CONFIG_IUFT_TECHSPEC" = "y" ]; then
+    define_int  CONFIG_LEON5_RF_FTCFG 16
+  fi
+  if [ "$CONFIG_IUFT_RTL" = "y" ]; then
+    define_int  CONFIG_LEON5_RF_FTCFG 32
+  fi
+  if [ "$CONFIG_CACHE_FT_NONE" = "y" ]; then
+    define_int  CONFIG_LEON5_CACHE_FTCFG 0
+  fi
+  if [ "$CONFIG_CACHE_FT_TECHSPEC" = "y" ]; then
+    define_int  CONFIG_LEON5_CACHE_FTCFG 16
+  fi
+  if [ "$CONFIG_CACHE_FT_RTL" = "y" ]; then
+    define_int  CONFIG_LEON5_CACHE_FTCFG 32
+  fi
+  choice 'AHB data width for wide slaves' \
+        "32-bit                 CONFIG_AHB_32BIT \
+         64-bit                 CONFIG_AHB_64BIT \
+         128-bit                CONFIG_AHB_128BIT" 64-bit
+  if [ "$CONFIG_CACHE_32BIT" != "y" ]; then
+    hex 'Wide slave AHB bus map                         ' CONFIG_BWMASK 0000
+  fi
+  hex 'Fixed cacheability map  ' CONFIG_CACHE_FIXED 0
+
+endmenu
+

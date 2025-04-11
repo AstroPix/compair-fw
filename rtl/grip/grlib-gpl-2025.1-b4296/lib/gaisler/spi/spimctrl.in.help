@@ -1,0 +1,95 @@
+SPI memory controller
+CONFIG_SPIMCTRL
+  Say Y here to enable a simple SPI memory controller.
+  The controller maps a SPI memory device into AMBA address space and
+  also has a simple interface that allows sending commands directly
+  to the SPI device.
+
+Read command
+CONFIG_SPIMCTRL_READCMD
+  Read instruction for SPI memory device (hex).
+
+Dummy byte
+CONFIG_SPIMCTRL_DUMMYBYTE
+  Output 8 dummy cycles after address when issuing read instruction.
+
+Dual output
+CONFIG_SPIMCTRL_DUALOUTPUT
+  Memory device supports dual output when reading data.
+
+Quad output
+CONFIG_SPIMCTRL_QUADOUTPUT
+  Memory device supports quad output when reading data.
+
+Dual input
+CONFIG_SPIMCTRL_DUALINPUT
+  Memory device supports dual input when reading data.
+
+Quad input
+CONFIG_SPIMCTRL_QUADINPUT
+  Memory device supports quad input when reading data.
+
+DSPI
+CONFIG_SPIMCTRL_DSPI
+  Enables DSPI (Dual SPI) mode. All communication with
+  the device will happen using two data lines.
+
+QSPI
+CONFIG_SPIMCTRL_QSPI
+  Enables QSPI (Quad SPI) mode. All communication with
+  the device will happen using four data lines.
+
+Dummy cycles
+CONFIG_SPIMCTRL_DUMMYCYCLES
+  Determines number of dummy cycles to be used. 
+  (Not used if DUMMYBYTE is set, then 8 cycles are always used)
+
+Extended Address
+CONFIG_SPIMCTRL_EXTADDR
+  Use 4 bytes of address instead of 3 for memory reads.
+
+Address offset
+CONFIG_SPIMCTRL_OFFSET
+  Offset that will be added by core on SPI memory address (hex).
+
+Clock scaler
+CONFIG_SPIMCTRL_SCALER
+  Selects the divisor used when dividing the system clock to produce
+  the memory device clock. The divisor used is two to the power of the
+  specified value. This value must be at least 1.
+
+Alternate clock scaler
+CONFIG_SPIMCTRL_ASCALER
+  Selects the divisor used when dividing the system clock to produce 
+  the alternate memory device clock. If the selected memory device is 
+  a SD Card this clock will be used during card initialization. The
+  divisor used is two to the power of the specified value. This
+  value must be at least 1.
+
+Reconfigurable configuration
+CONFIG_SPIMCTRL_RECONF
+  Enables writing to the configuration register.
+
+Write command
+CONFIG_SPIMCTRL_WRITECMD
+  Write instruction for SPI memory device (hex).
+
+Allow writes
+CONFIG_SPIMCTRL_WRITES
+  Writes to ROM area is accpeted. If not set, all AHB writes to the
+  ROM area of the core will give error responses.
+
+XIP byte
+CONFIG_SPIMCTRL_XIPBYTE
+  Send one byte worth of data after the address phase, containing
+  either 0x00 or 0xff depending on the value of xip_polarity. 
+  Used so commands which require XIP are supported for some 
+  memory devices.
+
+XIP polarity
+CONFIG_SPIMCTRL_XIPPOL
+  Sets bit value sent to the memory device while in the 
+  dummy cycles and XIP byte phase. Should be set so a XIP 
+  disable activation command is sent to the memory device.
+  Has to be either '0' or '1'.
+  
