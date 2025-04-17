@@ -38,7 +38,7 @@ def load_fsp():
 #    from astep_ml1_top      import main_rfg
 
 async def common_system_clock(dut):
-    if dut._name == "astep24_3l_top":
+    if dut._name == "astep24_20l_top":
         cocotb.start_soon(Clock(dut.sysclk, 10, units='ns').start())
         await RisingEdge(dut.sysclk)
     else:
@@ -58,7 +58,7 @@ async def common_clock_reset_nexys(dut):
 
 async def common_clock_reset(dut):
 
-    if dut._name == "astep24_3l_top":
+    if dut._name == "astep24_20l_top":
         cocotb.start_soon(Clock(dut.sysclk,  8, units='ns').start())
         await RisingEdge(dut.sysclk)
         dut.warm_resn.value = 0
@@ -98,7 +98,7 @@ def sw_uart_init(dut):
 
     ## UART
     #########
-    if loadedFirmware.__name__ == "fsp.astep24_3l_top":
+    if loadedFirmware.__name__ == "fsp.astep24_20l_top":
         rfg_io = UARTIO(dut.uart_rx,dut.uart_tx) ## INtervert Rx/Tx to send to rx and receive from tx!
     else:
         rfg_io = UARTIO(dut.tx_in,dut.rx_out)

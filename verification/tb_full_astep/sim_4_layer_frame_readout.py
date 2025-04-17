@@ -34,8 +34,9 @@ async def test_layer_0_single_frame_noautoread(dut):
         pass
 
    
-    dut._log.info("Current Readout size after untapped frame: %d",await driver.readoutGetBufferSize())
-    assert  await driver.readoutGetBufferSize() == 0
+    bufferSize = await driver.readoutGetBufferSize()
+    dut._log.info("Current Readout size after untapped frame: 0x%x",bufferSize)
+    assert  bufferSize == 0
 
     ## Now Restart frame generator with a Readout in parallel
     ## Then Write 10 NULL Bytes, which will be enought to readout the whole frame

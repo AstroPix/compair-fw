@@ -60,7 +60,6 @@ def getGeccoUARTDriver(portPath : str | None = None):
 def getGeccoFTDIDriver():
     return getGeccoDriver().selectFTDIFifoIO()
 
-
 def getCMODUartDriver(portPath : str | None = None):
     return getCMODDriver().selectUARTIO(portPath)
 

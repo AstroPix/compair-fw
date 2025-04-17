@@ -1,0 +1,50 @@
+# do sim_build/runsim.do
+# QuestaSim-64 vmap 2023.2_1 Lib Mapping Utility 2023.05 May 12 2023
+# vmap work sim_build/work 
+# Modifying modelsim.ini
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 17:17:36 on Jan 10,2025
+# vlog -work work "+define+COCOTB_SIM" -sv -timescale 1ns/1ps -mfcu "+acc" "+define+SIMULATION" -L ../xcelium_preparelib/lattice_compiled/lfcpnx /mnt/c/Project/COMPAIR/compair-fw/verification/tb_ip_uart/tb_uart.sv /mnt/c/Project/COMPAIR/compair-fw/verification/tb_ip_uart/../ip/uart.v /mnt/c/Project/COMPAIR/compair-fw/verification/tb_ip_uart/../../rtl/lattice/uart_lattice_axis_driver.sv 
+# -- Compiling module tb_uart
+# -- Compiling module uart
+# -- Compiling package tb_uart_sv_unit
+# -- Compiling package axi_ifs
+# -- Compiling interface AXIS
+# -- Compiling interface AXI_LITE
+# -- Compiling module uart_lattice_axis_driver
+# 
+# Top level modules:
+# 	tb_uart
+# End time: 17:17:36 on Jan 10,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim -onfinish exit -pli "/home/ssheikh/.local/share/pipx/venvs/cocotb/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so" "+define+SIMULATION" -L ../xcelium_preparelib/lattice_compiled/lfcpnx work.tb_uart 
+# Start time: 17:17:36 on Jan 10,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vsim-3865) Due to PLI being present, global +acc is being enabled automatically. This will cause your simulation to run very slowly. Please use vsim -no_autoacc to disable this feature. This feature is now deprecated and will be removed from future releases.
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Note: (vopt-143) Recognized 1 FSM in module "uart_lattice_axis_driver(fast)".
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=2.
+# //  Questa Sim-64
+# //  Version 2023.2_1 linux_x86_64 May 12 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.tb_uart_sv_unit(fast)
+# Loading work.tb_uart(fast)
+# Loading work.uart(fast)
+# Loading work.uart_lattice_axis_driver(fast)
+# Loading /home/ssheikh/.local/share/pipx/venvs/cocotb/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so
+#      -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+#      -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+# End time: 17:17:40 on Jan 10,2025, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 2
