@@ -6,8 +6,10 @@ import rfg
 async def test_fpga():
 
     boardDriver = drivers.boards.getGeccoUARTDriver("COM4")
+    print('Open')
     await boardDriver.open()
     
+    print('ID')
     id =      await boardDriver.readFirmwareID()
     print(f"Firmware ID: {hex(id)}")
     version = await boardDriver.readFirmwareVersion()
