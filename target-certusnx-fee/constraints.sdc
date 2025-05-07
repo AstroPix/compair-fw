@@ -1,6 +1,6 @@
 
 ## 100Mhz Clocks
-create_clock -period 8 -name sysclk_100 [get_ports sysclk_100]
+create_clock -period 10 -name sysclk_100 [get_ports sysclk_100]
 
 
 ## SPI Clocks

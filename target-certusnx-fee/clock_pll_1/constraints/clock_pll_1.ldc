@@ -1,13 +1,13 @@
 set device "LFCPNX-100"
 set device_int "jd5d80"
-set package "LFG672"
-set package_int "LFG672"
-set speed "9_Low-Power_1.0V"
-set speed_int "6"
-set operation "Commercial"
+set package "BBG484"
+set package_int "BBG484"
+set speed "7_High-Performance_1.0V"
+set speed_int "10"
+set operation "Automotive"
 set family "LFCPNX"
 set architecture "jd5d00"
-set partnumber "LFCPNX-100-9LFG672C"
+set partnumber "LFCPNX-100-7BBG484A"
 set WRAPPER_INST "lscc_pll_inst"
 set INTFBKDEL_SEL "DISABLED"
 set PMU_WAITFORLOCK "ENABLED"
@@ -15,12 +15,12 @@ set REF_OSC_CTRL "3P2"
 set REF_COUNTS "0000"
 set EN_REFCLK_MON 0
 set FVCO 1500.000000
-set CLKI_FREQ 125.000000
+set CLKI_FREQ 100.000000
 set CLKI_DIVIDER_ACTUAL_STR "2"
 set FRAC_N_EN 1
 set FBK_MODE "INTCLKOP"
-set FBCLK_DIVIDER_ACTUAL_STR "24"
-set SSC_N_CODE_STR "0b000011000"
+set FBCLK_DIVIDER_ACTUAL_STR "30"
+set SSC_N_CODE_STR "0b000011110"
 set SSC_F_CODE_STR "0b000000000000000"
 set SS_EN 0
 set SSC_PROFILE "DOWN"
@@ -104,9 +104,9 @@ set V2I_1V_EN "ENABLED"
 
 
 set CLK_PERIOD [expr {double(round(1000000/$CLKI_FREQ))/1000}]
-#create_clock -name {clki_i} -period $CLK_PERIOD [get_ports clki_i]
+create_clock -name {clki_i} -period $CLK_PERIOD [get_ports clki_i]
 
 # IO_TYPE constraint - Refclk
-#if {$PLL_REFCLK_FROM_PIN} {
-#  ldc_set_port -iobuf IO_TYPE=$IO_TYPE [get_ports clki_i]
-#}
+if {$PLL_REFCLK_FROM_PIN} {
+  ldc_set_port -iobuf IO_TYPE=$IO_TYPE [get_ports clki_i]
+}

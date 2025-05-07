@@ -1,0 +1,157 @@
+<!DOCTYPE ispTLA>
+<ispTLA>
+ <CreationDate>Wed Apr 30 16:24:11 2025</CreationDate>
+ <XCFFileName/>
+ <CableSetting>
+  <IsTRSTConnected val="false"/>
+  <TRSTSetting val="0"/>
+  <IsBSCANConnected val="false"/>
+  <BSCANSetting val="0"/>
+  <CableType val="USB2"/>
+  <PortAddress val="1"/>
+  <PortSetting val="0"/>
+  <TCKDelay val="1"/>
+ </CableSetting>
+ <DeviceCount>1</DeviceCount>
+ <Device>
+  <DeviceIndex>0</DeviceIndex>
+  <DeviceName>1. LFCPNX-100</DeviceName>
+  <DeviceID>0x010F4043 (debug enabled)</DeviceID>
+  <HasIspTRACY>true</HasIspTRACY>
+  <HasJTAG2WB>false</HasJTAG2WB>
+  <SERDES/>
+  <IRBypassLen>8</IRBypassLen>
+  <RVLFileName>certusnxfee.rvl</RVLFileName>
+  <RVSFileName>certusnxfee.rvs</RVSFileName>
+  <LACoreCount>1</LACoreCount>
+  <WinUI CoreType="LA" CoreIndex="0">
+   <TraceSigTreeData>
+    <TraceSignal PortIndex="99" Color="" NodeType="0" IsHidden="false" Name="ftdi_rx"/>
+    <TraceSignal PortIndex="98" Color="" NodeType="0" IsHidden="false" Name="ftdi_tx"/>
+    <TraceSignal PortIndex="-1" Color="" NodeType="1" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal PortIndex="97" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:15"/>
+     <TraceSignal PortIndex="96" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:14"/>
+     <TraceSignal PortIndex="95" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:13"/>
+     <TraceSignal PortIndex="94" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:12"/>
+     <TraceSignal PortIndex="93" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:11"/>
+     <TraceSignal PortIndex="92" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:10"/>
+     <TraceSignal PortIndex="91" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:9"/>
+     <TraceSignal PortIndex="90" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:8"/>
+     <TraceSignal PortIndex="89" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:7"/>
+     <TraceSignal PortIndex="88" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:6"/>
+     <TraceSignal PortIndex="87" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:5"/>
+     <TraceSignal PortIndex="86" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:4"/>
+     <TraceSignal PortIndex="85" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:3"/>
+     <TraceSignal PortIndex="84" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:2"/>
+     <TraceSignal PortIndex="83" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:1"/>
+     <TraceSignal PortIndex="82" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_address:0"/>
+    </TraceSignal>
+    <TraceSignal PortIndex="81" Color="" NodeType="0" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read"/>
+    <TraceSignal PortIndex="80" Color="" NodeType="0" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_valid"/>
+    <TraceSignal PortIndex="-1" Color="" NodeType="1" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_value">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal PortIndex="79" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_value:7"/>
+     <TraceSignal PortIndex="78" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_value:6"/>
+     <TraceSignal PortIndex="77" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_value:5"/>
+     <TraceSignal PortIndex="76" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_value:4"/>
+     <TraceSignal PortIndex="75" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_value:3"/>
+     <TraceSignal PortIndex="74" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_value:2"/>
+     <TraceSignal PortIndex="73" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_value:1"/>
+     <TraceSignal PortIndex="72" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/rfg_read_value:0"/>
+    </TraceSignal>
+    <TraceSignal PortIndex="-1" Color="" NodeType="1" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_paddr_i">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal PortIndex="71" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_paddr_i:5"/>
+     <TraceSignal PortIndex="70" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_paddr_i:4"/>
+     <TraceSignal PortIndex="69" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_paddr_i:3"/>
+     <TraceSignal PortIndex="68" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_paddr_i:2"/>
+     <TraceSignal PortIndex="67" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_paddr_i:1"/>
+     <TraceSignal PortIndex="66" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_paddr_i:0"/>
+    </TraceSignal>
+    <TraceSignal PortIndex="-1" Color="" NodeType="1" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal PortIndex="65" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:31"/>
+     <TraceSignal PortIndex="64" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:30"/>
+     <TraceSignal PortIndex="63" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:29"/>
+     <TraceSignal PortIndex="62" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:28"/>
+     <TraceSignal PortIndex="61" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:27"/>
+     <TraceSignal PortIndex="60" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:26"/>
+     <TraceSignal PortIndex="59" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:25"/>
+     <TraceSignal PortIndex="58" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:24"/>
+     <TraceSignal PortIndex="57" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:23"/>
+     <TraceSignal PortIndex="56" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:22"/>
+     <TraceSignal PortIndex="55" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:21"/>
+     <TraceSignal PortIndex="54" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:20"/>
+     <TraceSignal PortIndex="53" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:19"/>
+     <TraceSignal PortIndex="52" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:18"/>
+     <TraceSignal PortIndex="51" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:17"/>
+     <TraceSignal PortIndex="50" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:16"/>
+     <TraceSignal PortIndex="49" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:15"/>
+     <TraceSignal PortIndex="48" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:14"/>
+     <TraceSignal PortIndex="47" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:13"/>
+     <TraceSignal PortIndex="46" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:12"/>
+     <TraceSignal PortIndex="45" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:11"/>
+     <TraceSignal PortIndex="44" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:10"/>
+     <TraceSignal PortIndex="43" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:9"/>
+     <TraceSignal PortIndex="42" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:8"/>
+     <TraceSignal PortIndex="41" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:7"/>
+     <TraceSignal PortIndex="40" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:6"/>
+     <TraceSignal PortIndex="39" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:5"/>
+     <TraceSignal PortIndex="38" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:4"/>
+     <TraceSignal PortIndex="37" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:3"/>
+     <TraceSignal PortIndex="36" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:2"/>
+     <TraceSignal PortIndex="35" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:1"/>
+     <TraceSignal PortIndex="34" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_prdata_o:0"/>
+    </TraceSignal>
+    <TraceSignal PortIndex="-1" Color="" NodeType="1" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i">
+     <BusRadix Radix="0"/>
+     <IsExpanded Expand="false"/>
+     <TraceSignal PortIndex="33" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:31"/>
+     <TraceSignal PortIndex="32" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:30"/>
+     <TraceSignal PortIndex="31" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:29"/>
+     <TraceSignal PortIndex="30" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:28"/>
+     <TraceSignal PortIndex="29" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:27"/>
+     <TraceSignal PortIndex="28" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:26"/>
+     <TraceSignal PortIndex="27" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:25"/>
+     <TraceSignal PortIndex="26" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:24"/>
+     <TraceSignal PortIndex="25" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:23"/>
+     <TraceSignal PortIndex="24" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:22"/>
+     <TraceSignal PortIndex="23" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:21"/>
+     <TraceSignal PortIndex="22" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:20"/>
+     <TraceSignal PortIndex="21" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:19"/>
+     <TraceSignal PortIndex="20" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:18"/>
+     <TraceSignal PortIndex="19" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:17"/>
+     <TraceSignal PortIndex="18" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:16"/>
+     <TraceSignal PortIndex="17" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:15"/>
+     <TraceSignal PortIndex="16" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:14"/>
+     <TraceSignal PortIndex="15" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:13"/>
+     <TraceSignal PortIndex="14" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:12"/>
+     <TraceSignal PortIndex="13" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:11"/>
+     <TraceSignal PortIndex="12" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:10"/>
+     <TraceSignal PortIndex="11" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:9"/>
+     <TraceSignal PortIndex="10" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:8"/>
+     <TraceSignal PortIndex="9" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:7"/>
+     <TraceSignal PortIndex="8" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:6"/>
+     <TraceSignal PortIndex="7" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:5"/>
+     <TraceSignal PortIndex="6" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:4"/>
+     <TraceSignal PortIndex="5" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:3"/>
+     <TraceSignal PortIndex="4" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:2"/>
+     <TraceSignal PortIndex="3" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:1"/>
+     <TraceSignal PortIndex="2" Color="" NodeType="2" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:0"/>
+    </TraceSignal>
+    <TraceSignal PortIndex="1" Color="" NodeType="0" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_pwrite_i"/>
+    <TraceSignal PortIndex="0" Color="" NodeType="0" IsHidden="false" Name="astep24_20l_top_I/sw_if/apb_penable_i"/>
+   </TraceSigTreeData>
+   <TriggerUI UserSelectPos="0" UserSelect="0" PreSelect="1" PreSelectType="0"/>
+   <CoreRun Run="true"/>
+   <CoreWndUIData>
+    <ClockFrequency Frequency="-1.0" Unit="ns"/>
+   </CoreWndUIData>
+  </WinUI>
+ </Device>
+</ispTLA>

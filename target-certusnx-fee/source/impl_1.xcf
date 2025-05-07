@@ -3,35 +3,94 @@
 <ispXCF version="R2024.1">
 	<Comment></Comment>
 	<Chain>
-		<Comm>JTAG</Comm>
+		<Comm>JTAG2SPI</Comm>
 		<Device>
 			<SelectedProg value="TRUE"/>
 			<Pos>1</Pos>
 			<Vendor>Lattice</Vendor>
 			<Family>LFCPNX</Family>
 			<Name>LFCPNX-100</Name>
-			<IDCode>0x010f4043</IDCode>
 			<Package>All</Package>
-			<PON>LFCPNX-100</PON>
 			<Bypass>
 				<InstrLen>8</InstrLen>
 				<InstrVal>11111111</InstrVal>
 				<BScanLen>1</BScanLen>
 				<BScanVal>0</BScanVal>
 			</Bypass>
-			<File>../../impl_1/certusnx-devboard_impl_1.bit</File>
-			<FileTime>08/23/24 15:01:04</FileTime>
-			<MemoryType>Static Random Access Memory (SRAM)</MemoryType>
-			<Operation>Fast Configuration</Operation>
+			<File>../../impl_1/certusnx-fee_impl_1.bit</File>
+			<FileTime>05/05/25 17:17:44</FileTime>
+			<JedecChecksum>0x3F91</JedecChecksum>
+			<MemoryType>External SPI Flash Memory (SPI FLASH)</MemoryType>
+			<Operation>Erase,Program,Verify</Operation>
 			<Option>
 				<SVFVendor>JTAG STANDARD</SVFVendor>
-				<IOState>HighZ</IOState>
-				<PreloadLength>362</PreloadLength>
-				<IOVectorData>0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</IOVectorData>
-				<TCKFrequency>1.000000 MHz</TCKFrequency>
 				<SVFProcessor>SVF Processor</SVFProcessor>
+				<Usercode>0xDEADBEEF</Usercode>
 				<AccessMode>Direct Programming</AccessMode>
 			</Option>
+			<FPGALoader>
+			<CPLDDevice>
+				<Device>
+					<Pos>1</Pos>
+					<Vendor>Lattice</Vendor>
+					<Family>LFCPNX</Family>
+					<Name>LFCPNX-100</Name>
+					<IDCode>0x010f4043</IDCode>
+					<Package>All</Package>
+					<PON>LFCPNX-100</PON>
+					<Bypass>
+						<InstrLen>8</InstrLen>
+						<InstrVal>11111111</InstrVal>
+						<BScanLen>1</BScanLen>
+						<BScanVal>0</BScanVal>
+					</Bypass>
+					<MemoryType>Static Random Access Memory (SRAM)</MemoryType>
+					<Operation>Refresh Verify ID</Operation>
+					<Option>
+						<SVFVendor>JTAG STANDARD</SVFVendor>
+						<IOState>HighZ</IOState>
+						<PreloadLength>362</PreloadLength>
+						<IOVectorData>0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</IOVectorData>
+						<SVFProcessor>SVF Processor</SVFProcessor>
+						<AccessMode>Direct Programming</AccessMode>
+					</Option>
+				</Device>
+			</CPLDDevice>
+			<FlashDevice>
+				<Device>
+					<Pos>1</Pos>
+					<Vendor>WinBond</Vendor>
+					<Family>SPI Serial Flash</Family>
+					<Name>W25Q128JW</Name>
+					<IDCode>0x17</IDCode>
+					<Package>8-pin SOIC</Package>
+					<Operation>Erase,Program,Verify</Operation>
+					<File>../../impl_1/certusnx-fee_impl_1.bit</File>
+					<AddressBase>0x00000000</AddressBase>
+					<EndAddress>0x001F0000</EndAddress>
+					<DeviceSize>128</DeviceSize>
+					<DataSize>2057719</DataSize>
+					<NumberOfDevices>1</NumberOfDevices>
+					<ReInitialize value="FALSE"/>
+				</Device>
+			</FlashDevice>
+			<FPGADevice>
+				<Device>
+					<Pos>1</Pos>
+					<Name></Name>
+					<File>C:/Project/COMPAIR/compair-fw/target-certusnx-fee/impl_1/certusnx-fee_impl_1.bit</File>
+					<LocalChainList>
+						<LocalDevice index="-99"
+							name="Unknown"
+							file="C:/Project/COMPAIR/compair-fw/target-certusnx-fee/impl_1/certusnx-fee_impl_1.bit"/>
+					</LocalChainList>
+					<Option>
+						<SVFVendor>JTAG STANDARD</SVFVendor>
+						<SVFProcessor>SVF Processor</SVFProcessor>
+					</Option>
+				</Device>
+			</FPGADevice>
+			</FPGALoader>
 		</Device>
 	</Chain>
 	<ProjectOptions>
@@ -40,12 +99,13 @@
 		<OperationOverride>No Override</OperationOverride>
 		<StartTAP>TLR</StartTAP>
 		<EndTAP>TLR</EndTAP>
+		<DisableCheckBoard value="TRUE"/>
 		<VerifyUsercode value="FALSE"/>
-		<TCKDelay>1</TCKDelay>
+		<TCKDelay>3</TCKDelay>
 	</ProjectOptions>
 	<CableOptions>
 		<CableName>USB2</CableName>
-		<PortAdd>FTUSB-0</PortAdd>
-		<USBID>DUAL RS232-HS A Location 0000 Serial DUAL RS232-HS A</USBID>
+		<PortAdd>FTUSB-1</PortAdd>
+		<USBID>Dual RS232-HS A Location 0001 Serial A</USBID>
 	</CableOptions>
 </ispXCF>
