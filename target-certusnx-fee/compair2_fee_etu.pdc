@@ -234,7 +234,7 @@ ldc_set_location -site {U6} [get_ports dcdc_d3p3_sync_mode]
 #ldc_set_location -site {H4} [get_ports dcdc_a1p8_sync_mode]
 #ldc_set_location -site {N3} [get_ports dcdc_5p0_clk]
 #ldc_set_location -site {J13} [get_ports internal_watchdog_int]
-#ldc_set_location -site {D19} [get_ports internal_power_on_nreset]
+ldc_set_location -site {D19} [get_ports rstn]
 #ldc_set_location -site {K6} [get_ports internal_pps_clk]
 ldc_set_location -site {M22} [get_ports sysclk_100]
 #INPUTS

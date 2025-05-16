@@ -18,7 +18,7 @@ module astep24_20l_top(
 
     output wire [2:0]   ext_adc_spi_csn,
     input  wire		ext_adc_spi_miso,
-    output wire		ext_dac_spi_csn,
+    //output wire		ext_dac_spi_csn,
     output wire		ext_spi_clk,
     output wire		ext_spi_mosi,
     
@@ -1266,7 +1266,7 @@ module astep24_20l_top(
         .clk_spi(spi_hk_ckdivider_divided_clk),
         .clk_spi_resn(spi_hk_ckdivider_divided_resn),
 
-        .select_adc(hk_ctrl_select_adc),
+        .select_adc({hk_ctrl_select_adc2 , hk_ctrl_select_adc1 , hk_ctrl_select_adc0}),
 
         .ext_adc_miso_m_axis_tdata(hk_adc_miso_fifo_s_axis_tdata),
         .ext_adc_miso_m_axis_tready(hk_adc_miso_fifo_s_axis_tready),

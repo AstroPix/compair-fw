@@ -11,8 +11,8 @@ module housekeeping_main(
     input  wire			clk_core_resn,
     input  wire			clk_spi,
     input  wire			clk_spi_resn,
-    input  wire                 select_adc,
-    output wire [7:0]		ext_adc_miso_m_axis_tdata,
+    input  wire [2:0]   select_adc,
+    output wire [7:0]	ext_adc_miso_m_axis_tdata,
     input  wire			ext_adc_miso_m_axis_tready,
     output wire			ext_adc_miso_m_axis_tvalid,
     output wire [31:0]		ext_adc_miso_read_size,
@@ -76,7 +76,7 @@ module housekeeping_main(
 
     // Module Instance
     wire miso_fifo_ready;
-    wire spi_io_m_axis_tready = miso_fifo_ready || !select_adc;
+    wire spi_io_m_axis_tready = miso_fifo_ready || !(select_adc == 3'b100 || select_adc == 3'b010 || select_adc == 3'b011);
     spi_axis_if_v1 #(.QSPI(0),.MSB_FIRST(0),.CLOCK_OUT_CG(1)) spi_io(
         .clk(clk_spi),
         .resn(clk_spi_resn),
@@ -95,7 +95,7 @@ module housekeeping_main(
             
 
     // Module Instance
-    wire miso_valid = spi_io_m_axis_tvalid & select_adc;// Slave out bytes are only valid if adc is selected
+    wire miso_valid = spi_io_m_axis_tvalid & (select_adc == 3'b100 || select_adc == 3'b010 || select_adc == 3'b011);// Slave out bytes are only valid if adc is selected
     fifo_axis_common #(.AWIDTH(5),.USE_TID(0),.USE_TDEST(0),.TLAST(0))  miso_fifo(
 
         

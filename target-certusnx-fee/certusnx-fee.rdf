@@ -2,7 +2,7 @@
 <RadiantProject version="4.2" radiant="2024.1.1.259.1" title="certusnx-fee" device="LFCPNX-100-7BBG484A" performance_grade="7_High-Performance_1.0V" family_int="jd5d00" device_int="jd5d80" package_int="BBG484" operation_int="AUTO" speed_int="10" default_implementation="impl_1">
     <Options/>
     <Implementation title="impl_1" dir="impl_1" description="impl_1" synthesis="synplify" default_strategy="Strategy1">
-        <Options VERILOG_DIRECTIVES="RFG_FW_ID=32'd2;RFG_FW_BUILD=32'd3" VerilogStandard="System Verilog" def_top="loopback_spi_if">
+        <Options VERILOG_DIRECTIVES="RFG_FW_ID=32'd2;RFG_FW_BUILD=32'd3" VerilogStandard="System Verilog">
             <Option name="include path" value="../rtl/includes"/>
             <Option name="top" value="compair_fpga_top"/>
         </Options>

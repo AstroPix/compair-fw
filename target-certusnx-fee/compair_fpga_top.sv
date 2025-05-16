@@ -203,7 +203,7 @@ module compair_fpga_top(
 
         .ext_adc_spi_csn(ext_spi_adc_csn),
         .ext_adc_spi_miso(ext_spi_adc_miso),
-        .ext_dac_spi_csn(),
+        //.ext_dac_spi_csn(),
         .ext_spi_clk(ext_spi_clk),
         .ext_spi_mosi(ext_spi_mosi),
 
