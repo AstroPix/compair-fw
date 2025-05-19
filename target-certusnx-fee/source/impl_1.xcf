@@ -18,7 +18,7 @@
 				<BScanVal>0</BScanVal>
 			</Bypass>
 			<File>../../impl_1/certusnx-fee_impl_1.bit</File>
-			<FileTime>05/15/25 20:08:45</FileTime>
+			<FileTime>05/16/25 16:34:50</FileTime>
 			<JedecChecksum>0x3F91</JedecChecksum>
 			<MemoryType>External SPI Flash Memory (SPI FLASH)</MemoryType>
 			<Operation>Erase,Program,Verify</Operation>
@@ -105,7 +105,6 @@
 	</ProjectOptions>
 	<CableOptions>
 		<CableName>USB2</CableName>
-		<PortAdd>FTUSB-1</PortAdd>
-		<USBID>Dual RS232-HS A Location 0001 Serial A</USBID>
+		<PortAdd>FTUSB-0</PortAdd>
 	</CableOptions>
 </ispXCF>
