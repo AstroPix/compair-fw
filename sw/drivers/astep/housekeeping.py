@@ -1,4 +1,5 @@
 from decimal import Decimal, ROUND_HALF_EVEN
+from deprecated import deprecated
 
 import rfg.io
 import rfg.core
@@ -76,13 +77,22 @@ class Housekeeping():
     async def readADCBytes(self,count:int=1) :
         return await self.rfg.read_hk_adc_miso_fifo_raw(count)
 
-        
-
-    async def selectADC(self,flush:bool = True):
+    async def selectADC(self,select:int,flush:bool = True):
         """This method selects ADC for HK SPI, flushes by default"""
-        await self.rfg.write_hk_ctrl(1,flush)
+        hk_cfg = 0
+        
+        assert select >= 0 and select <= 2, (f'Target ADC must be in range 0-2')
 
+        if select == 0:
+            hk_cfg = hk_reg | (1<<0)
+        elif select == 1:
+            hk_cfg = hk_reg | (1<<1)
+        elif select == 2:
+            hk_cfg = hk_reg | (1<<2)
+        
+        await self.rfg.write_hk_ctrl(hk_cfg,flush)
+
+    @deprecated("No DAC exists on ComPair Frontend Electronics Board v1")
     async def selectDAC(self,flush:bool = True):
         """This method selects DAC for HK SPI, flushes by default"""
         await self.rfg.write_hk_ctrl(0,flush)
-    
