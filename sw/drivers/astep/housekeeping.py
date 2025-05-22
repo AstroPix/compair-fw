@@ -84,11 +84,11 @@ class Housekeeping():
         assert select >= 0 and select <= 2, (f'Target ADC must be in range 0-2')
 
         if select == 0:
-            hk_cfg = hk_reg | (1<<0)
+            hk_cfg = hk_cfg | (1<<0)
         elif select == 1:
-            hk_cfg = hk_reg | (1<<1)
+            hk_cfg = hk_cfg | (1<<1)
         elif select == 2:
-            hk_cfg = hk_reg | (1<<2)
+            hk_cfg = hk_cfg | (1<<2)
         
         await self.rfg.write_hk_ctrl(hk_cfg,flush)
 
