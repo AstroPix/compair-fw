@@ -64,7 +64,7 @@ class Housekeeping():
         await self.configureHKSPIDivider(divider,flush)
 
     async def configureHKSPIDivider(self, divider:int , flush = False):
-        await self.rfg.spi_hk_ckdivider(divider,flush)
+        await self.rfg.write_spi_hk_ckdivider(divider,flush)
 
     async def writeADCDACBytes(self,values : bytearray) :
         return await self.rfg.write_hk_adcdac_mosi_fifo_bytes(values,flush=True)
