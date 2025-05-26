@@ -14,14 +14,14 @@ module astep24_20l_top(
 
     output wire		clk_sample,
     output wire		clk_timestamp,
-    
+
 
     output wire [2:0]   ext_adc_spi_csn,
     input  wire		ext_adc_spi_miso,
     //output wire		ext_dac_spi_csn,
     output wire		ext_spi_clk,
     output wire		ext_spi_mosi,
-    
+
     output wire		layer_0_hold,
     input  wire		layer_0_interruptn,
     output wire		layer_0_resn,
@@ -219,7 +219,7 @@ module astep24_20l_top(
     output wire io_ctrl_gecco_inj_enable
 );
 
-    
+
 
     // Clocking
     //-------------------
@@ -252,7 +252,7 @@ module astep24_20l_top(
     wire [19:0] layers_interruptn_synced;
     genvar li;
     generate
-        for (li = 0 ; li < 20 ; li++) begin 
+        for (li = 0 ; li < 20 ; li++) begin
             async_input_sync #(.RESET_VALUE(1'b1),.DEBOUNCE_DELAY(2)) layer_interrupt_sync (
                 .async_input(layers_interruptn[li]),
                 .clk(clk_core),
@@ -261,20 +261,20 @@ module astep24_20l_top(
             );
         end
     endgenerate
-    
-    
+
+
 
     // SW interface
     //-------------
-    wire [15:0] sw_if_rfg_address; 
+    wire [15:0] sw_if_rfg_address;
     wire [7:0] sw_if_rfg_write_value;
     wire [7:0] sw_if_rfg_read_value;
-    wire sw_if_rfg_write; 
-    wire sw_if_rfg_write_last; 
+    wire sw_if_rfg_write;
+    wire sw_if_rfg_write_last;
     wire sw_if_rfg_read;
-    wire sw_if_rfg_read_valid; 
+    wire sw_if_rfg_read_valid;
 
-    
+
     sw_spi_uart  sw_if (
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
@@ -301,7 +301,7 @@ module astep24_20l_top(
         .uart_got_byte(uart_got_byte),
 
         .rfg_debug_got_byte(rfg_debug_got_byte)
-    
+
     );
 
 
@@ -408,14 +408,14 @@ module astep24_20l_top(
     wire [31:0] layers_readout_read_size;
     wire [7:0]  layers_cfg_nodata_continue;
     wire [31:0] layers_cfg_frame_tag_counter;
-     
+
     wire hk_conversion_trigger_interrupt;
     wire hk_ctrl_select_adc0;
     wire hk_ctrl_select_adc1;
     wire hk_ctrl_select_adc2;
 
     main_rfg  main_rfg_I (
-            
+
         .clk(clk_core),
         .resn(clk_core_resn),
         .rfg_address(sw_if_rfg_address),
@@ -440,7 +440,7 @@ module astep24_20l_top(
         .hk_ctrl_select_adc1(hk_ctrl_select_adc1),
         .hk_ctrl_select_adc2(hk_ctrl_select_adc2),
         .hk_conversion_trigger_match(),
-        
+
         // ADC+DAC -> MOSI
         .hk_adcdac_mosi_fifo_m_axis_tdata(hk_adcdac_mosi_fifo_m_axis_tdata),
         .hk_adcdac_mosi_fifo_m_axis_tvalid(hk_adcdac_mosi_fifo_m_axis_tvalid),
@@ -453,7 +453,7 @@ module astep24_20l_top(
         .hk_adc_miso_fifo_s_axis_tready(hk_adc_miso_fifo_s_axis_tready),
         .hk_adc_miso_fifo_read_size(hk_adc_miso_fifo_read_size),
         .hk_adc_miso_fifo_read_size_write(1'b1),
-        
+
         // SPI Clock Dividers
         .spi_layers_ckdivider_source_clk(clk_core),
         .spi_layers_ckdivider_source_resn(clk_core_resn),
@@ -472,7 +472,7 @@ module astep24_20l_top(
         .layer_0_cfg_ctrl_hold(layer_0_hold),
         .layer_0_cfg_ctrl_cs(layer_0_cfg_ctrl_cs),
         .layer_0_cfg_ctrl_disable_miso(layer_0_cfg_ctrl_disable_miso),
-        
+
         .layer_1_cfg_ctrl(),
         .layer_1_cfg_ctrl_disable_autoread(layer_1_cfg_ctrl_disable_autoread),
         .layer_1_cfg_ctrl_reset(layer_1_reset),
@@ -493,21 +493,21 @@ module astep24_20l_top(
         .layer_3_cfg_ctrl_hold(layer_3_hold),
         .layer_3_cfg_ctrl_cs(layer_3_cfg_ctrl_cs),
         .layer_3_cfg_ctrl_disable_miso(layer_3_cfg_ctrl_disable_miso),
-		
+
 		.layer_4_cfg_ctrl(),
         .layer_4_cfg_ctrl_disable_autoread(layer_4_cfg_ctrl_disable_autoread),
         .layer_4_cfg_ctrl_reset(layer_4_reset),
         .layer_4_cfg_ctrl_hold(layer_4_hold),
         .layer_4_cfg_ctrl_cs(layer_4_cfg_ctrl_cs),
         .layer_4_cfg_ctrl_disable_miso(layer_4_cfg_ctrl_disable_miso),
-		
+
 		.layer_5_cfg_ctrl(),
         .layer_5_cfg_ctrl_disable_autoread(layer_5_cfg_ctrl_disable_autoread),
         .layer_5_cfg_ctrl_reset(layer_5_reset),
         .layer_5_cfg_ctrl_hold(layer_5_hold),
         .layer_5_cfg_ctrl_cs(layer_5_cfg_ctrl_cs),
         .layer_5_cfg_ctrl_disable_miso(layer_5_cfg_ctrl_disable_miso),
-		
+
 		.layer_6_cfg_ctrl(),
         .layer_6_cfg_ctrl_disable_autoread(layer_6_cfg_ctrl_disable_autoread),
         .layer_6_cfg_ctrl_reset(layer_6_reset),
@@ -535,7 +535,7 @@ module astep24_20l_top(
         .layer_9_cfg_ctrl_hold(layer_9_hold),
         .layer_9_cfg_ctrl_cs(layer_9_cfg_ctrl_cs),
         .layer_9_cfg_ctrl_disable_miso(layer_9_cfg_ctrl_disable_miso),
-        
+
 		.layer_10_cfg_ctrl(),
         .layer_10_cfg_ctrl_disable_autoread(layer_10_cfg_ctrl_disable_autoread),
         .layer_10_cfg_ctrl_reset(layer_10_reset),
@@ -549,7 +549,7 @@ module astep24_20l_top(
         .layer_11_cfg_ctrl_hold(layer_11_hold),
         .layer_11_cfg_ctrl_cs(layer_11_cfg_ctrl_cs),
         .layer_11_cfg_ctrl_disable_miso(layer_11_cfg_ctrl_disable_miso),
-        
+
 		.layer_12_cfg_ctrl(),
         .layer_12_cfg_ctrl_disable_autoread(layer_12_cfg_ctrl_disable_autoread),
         .layer_12_cfg_ctrl_reset(layer_12_reset),
@@ -570,119 +570,119 @@ module astep24_20l_top(
         .layer_14_cfg_ctrl_hold(layer_14_hold),
         .layer_14_cfg_ctrl_cs(layer_14_cfg_ctrl_cs),
         .layer_14_cfg_ctrl_disable_miso(layer_14_cfg_ctrl_disable_miso),
-        
+
 		.layer_15_cfg_ctrl(),
         .layer_15_cfg_ctrl_disable_autoread(layer_15_cfg_ctrl_disable_autoread),
         .layer_15_cfg_ctrl_reset(layer_15_reset),
         .layer_15_cfg_ctrl_hold(layer_15_hold),
         .layer_15_cfg_ctrl_cs(layer_15_cfg_ctrl_cs),
         .layer_15_cfg_ctrl_disable_miso(layer_15_cfg_ctrl_disable_miso),
-        
+
 		.layer_16_cfg_ctrl(),
         .layer_16_cfg_ctrl_disable_autoread(layer_16_cfg_ctrl_disable_autoread),
         .layer_16_cfg_ctrl_reset(layer_16_reset),
         .layer_16_cfg_ctrl_hold(layer_16_hold),
         .layer_16_cfg_ctrl_cs(layer_16_cfg_ctrl_cs),
         .layer_16_cfg_ctrl_disable_miso(layer_16_cfg_ctrl_disable_miso),
-        
+
 		.layer_17_cfg_ctrl(),
         .layer_17_cfg_ctrl_disable_autoread(layer_17_cfg_ctrl_disable_autoread),
         .layer_17_cfg_ctrl_reset(layer_17_reset),
         .layer_17_cfg_ctrl_hold(layer_17_hold),
         .layer_17_cfg_ctrl_cs(layer_17_cfg_ctrl_cs),
         .layer_17_cfg_ctrl_disable_miso(layer_17_cfg_ctrl_disable_miso),
-        
+
 		.layer_18_cfg_ctrl(),
         .layer_18_cfg_ctrl_disable_autoread(layer_18_cfg_ctrl_disable_autoread),
         .layer_18_cfg_ctrl_reset(layer_18_reset),
         .layer_18_cfg_ctrl_hold(layer_18_hold),
         .layer_18_cfg_ctrl_cs(layer_18_cfg_ctrl_cs),
         .layer_18_cfg_ctrl_disable_miso(layer_18_cfg_ctrl_disable_miso),
-        
+
 		.layer_19_cfg_ctrl(),
         .layer_19_cfg_ctrl_disable_autoread(layer_19_cfg_ctrl_disable_autoread),
         .layer_19_cfg_ctrl_reset(layer_19_reset),
         .layer_19_cfg_ctrl_hold(layer_19_hold),
         .layer_19_cfg_ctrl_cs(layer_19_cfg_ctrl_cs),
         .layer_19_cfg_ctrl_disable_miso(layer_19_cfg_ctrl_disable_miso),
-        
-        .layer_0_status(),   
+
+        .layer_0_status(),
         .layer_0_status_interruptn(layers_interruptn_synced[0]),
         .layer_0_status_frame_decoding(layer_0_status_frame_decoding),
 
-        .layer_1_status(),   
+        .layer_1_status(),
         .layer_1_status_interruptn(layers_interruptn_synced[1]),
         .layer_1_status_frame_decoding(layer_1_status_frame_decoding),
 
-        .layer_2_status(),   
+        .layer_2_status(),
         .layer_2_status_interruptn(layers_interruptn_synced[2]),
         .layer_2_status_frame_decoding(layer_2_status_frame_decoding),
 
-        .layer_3_status(),   
+        .layer_3_status(),
         .layer_3_status_interruptn(layers_interruptn_synced[3]),
         .layer_3_status_frame_decoding(layer_3_status_frame_decoding),
 
-        .layer_4_status(),   
+        .layer_4_status(),
         .layer_4_status_interruptn(layers_interruptn_synced[4]),
         .layer_4_status_frame_decoding(layer_4_status_frame_decoding),
 
-        .layer_5_status(),   
+        .layer_5_status(),
         .layer_5_status_interruptn(layers_interruptn_synced[5]),
         .layer_5_status_frame_decoding(layer_5_status_frame_decoding),
 
-        .layer_6_status(),   
+        .layer_6_status(),
         .layer_6_status_interruptn(layers_interruptn_synced[6]),
         .layer_6_status_frame_decoding(layer_6_status_frame_decoding),
 
-        .layer_7_status(),   
+        .layer_7_status(),
         .layer_7_status_interruptn(layers_interruptn_synced[7]),
         .layer_7_status_frame_decoding(layer_7_status_frame_decoding),
 
-        .layer_8_status(),   
+        .layer_8_status(),
         .layer_8_status_interruptn(layers_interruptn_synced[8]),
         .layer_8_status_frame_decoding(layer_8_status_frame_decoding),
 
-        .layer_9_status(),   
+        .layer_9_status(),
         .layer_9_status_interruptn(layers_interruptn_synced[9]),
         .layer_9_status_frame_decoding(layer_9_status_frame_decoding),
 
-        .layer_10_status(),   
+        .layer_10_status(),
         .layer_10_status_interruptn(layers_interruptn_synced[10]),
         .layer_10_status_frame_decoding(layer_10_status_frame_decoding),
 
-        .layer_11_status(),   
+        .layer_11_status(),
         .layer_11_status_interruptn(layers_interruptn_synced[11]),
         .layer_11_status_frame_decoding(layer_11_status_frame_decoding),
 
-        .layer_12_status(),   
+        .layer_12_status(),
         .layer_12_status_interruptn(layers_interruptn_synced[12]),
         .layer_12_status_frame_decoding(layer_12_status_frame_decoding),
 
-        .layer_13_status(),   
+        .layer_13_status(),
         .layer_13_status_interruptn(layers_interruptn_synced[13]),
         .layer_13_status_frame_decoding(layer_13_status_frame_decoding),
 
-        .layer_14_status(),   
+        .layer_14_status(),
         .layer_14_status_interruptn(layers_interruptn_synced[14]),
         .layer_14_status_frame_decoding(layer_14_status_frame_decoding),
 
-        .layer_15_status(),   
+        .layer_15_status(),
         .layer_15_status_interruptn(layers_interruptn_synced[15]),
         .layer_15_status_frame_decoding(layer_15_status_frame_decoding),
 
-        .layer_16_status(),   
+        .layer_16_status(),
         .layer_16_status_interruptn(layers_interruptn_synced[16]),
         .layer_16_status_frame_decoding(layer_16_status_frame_decoding),
 
-        .layer_17_status(),   
+        .layer_17_status(),
         .layer_17_status_interruptn(layers_interruptn_synced[17]),
         .layer_17_status_frame_decoding(layer_17_status_frame_decoding),
 
-        .layer_18_status(),   
+        .layer_18_status(),
         .layer_18_status_interruptn(layers_interruptn_synced[18]),
         .layer_18_status_frame_decoding(layer_18_status_frame_decoding),
 
-        .layer_19_status(),   
+        .layer_19_status(),
         .layer_19_status_interruptn(layers_interruptn_synced[19]),
         .layer_19_status_frame_decoding(layer_19_status_frame_decoding),
 
@@ -727,7 +727,7 @@ module astep24_20l_top(
         .layer_17_stat_idle_counter_enable(layer_17_stat_idle_counter_enable),
         .layer_18_stat_idle_counter_enable(layer_18_stat_idle_counter_enable),
         .layer_19_stat_idle_counter_enable(layer_19_stat_idle_counter_enable),
-  
+
         .layer_0_mosi_m_axis_tdata(layer_0_mosi_tdata),
         .layer_0_mosi_m_axis_tvalid(layer_0_mosi_tvalid),
         .layer_0_mosi_m_axis_tready(layer_0_mosi_tready),
@@ -748,126 +748,126 @@ module astep24_20l_top(
         .layer_2_mosi_m_axis_tlast(layer_2_mosi_tlast),
         .layer_2_mosi_write_size(layer_2_mosi_write_size),
         .layer_2_mosi_write_size_write(1'b1),
-      
+
         .layer_3_mosi_m_axis_tdata(layer_3_mosi_tdata),
         .layer_3_mosi_m_axis_tvalid(layer_3_mosi_tvalid),
         .layer_3_mosi_m_axis_tready(layer_3_mosi_tready),
         .layer_3_mosi_m_axis_tlast(layer_3_mosi_tlast),
         .layer_3_mosi_write_size(layer_3_mosi_write_size),
         .layer_3_mosi_write_size_write(1'b1),
-      
+
         .layer_4_mosi_m_axis_tdata(layer_4_mosi_tdata),
         .layer_4_mosi_m_axis_tvalid(layer_4_mosi_tvalid),
         .layer_4_mosi_m_axis_tready(layer_4_mosi_tready),
         .layer_4_mosi_m_axis_tlast(layer_4_mosi_tlast),
         .layer_4_mosi_write_size(layer_4_mosi_write_size),
         .layer_4_mosi_write_size_write(1'b1),
-      
+
         .layer_5_mosi_m_axis_tdata(layer_5_mosi_tdata),
         .layer_5_mosi_m_axis_tvalid(layer_5_mosi_tvalid),
         .layer_5_mosi_m_axis_tready(layer_5_mosi_tready),
         .layer_5_mosi_m_axis_tlast(layer_5_mosi_tlast),
         .layer_5_mosi_write_size(layer_5_mosi_write_size),
         .layer_5_mosi_write_size_write(1'b1),
-      
+
         .layer_6_mosi_m_axis_tdata(layer_6_mosi_tdata),
         .layer_6_mosi_m_axis_tvalid(layer_6_mosi_tvalid),
         .layer_6_mosi_m_axis_tready(layer_6_mosi_tready),
         .layer_6_mosi_m_axis_tlast(layer_6_mosi_tlast),
         .layer_6_mosi_write_size(layer_6_mosi_write_size),
         .layer_6_mosi_write_size_write(1'b1),
-      
+
         .layer_7_mosi_m_axis_tdata(layer_7_mosi_tdata),
         .layer_7_mosi_m_axis_tvalid(layer_7_mosi_tvalid),
         .layer_7_mosi_m_axis_tready(layer_7_mosi_tready),
         .layer_7_mosi_m_axis_tlast(layer_7_mosi_tlast),
         .layer_7_mosi_write_size(layer_7_mosi_write_size),
         .layer_7_mosi_write_size_write(1'b1),
-      
+
         .layer_8_mosi_m_axis_tdata(layer_8_mosi_tdata),
         .layer_8_mosi_m_axis_tvalid(layer_8_mosi_tvalid),
         .layer_8_mosi_m_axis_tready(layer_8_mosi_tready),
         .layer_8_mosi_m_axis_tlast(layer_8_mosi_tlast),
         .layer_8_mosi_write_size(layer_8_mosi_write_size),
         .layer_8_mosi_write_size_write(1'b1),
-      
+
         .layer_9_mosi_m_axis_tdata(layer_9_mosi_tdata),
         .layer_9_mosi_m_axis_tvalid(layer_9_mosi_tvalid),
         .layer_9_mosi_m_axis_tready(layer_9_mosi_tready),
         .layer_9_mosi_m_axis_tlast(layer_9_mosi_tlast),
         .layer_9_mosi_write_size(layer_9_mosi_write_size),
         .layer_9_mosi_write_size_write(1'b1),
-      
+
         .layer_10_mosi_m_axis_tdata(layer_10_mosi_tdata),
         .layer_10_mosi_m_axis_tvalid(layer_10_mosi_tvalid),
         .layer_10_mosi_m_axis_tready(layer_10_mosi_tready),
         .layer_10_mosi_m_axis_tlast(layer_10_mosi_tlast),
         .layer_10_mosi_write_size(layer_10_mosi_write_size),
         .layer_10_mosi_write_size_write(1'b1),
-      
+
         .layer_11_mosi_m_axis_tdata(layer_11_mosi_tdata),
         .layer_11_mosi_m_axis_tvalid(layer_11_mosi_tvalid),
         .layer_11_mosi_m_axis_tready(layer_11_mosi_tready),
         .layer_11_mosi_m_axis_tlast(layer_11_mosi_tlast),
         .layer_11_mosi_write_size(layer_11_mosi_write_size),
         .layer_11_mosi_write_size_write(1'b1),
-      
+
         .layer_12_mosi_m_axis_tdata(layer_12_mosi_tdata),
         .layer_12_mosi_m_axis_tvalid(layer_12_mosi_tvalid),
         .layer_12_mosi_m_axis_tready(layer_12_mosi_tready),
         .layer_12_mosi_m_axis_tlast(layer_12_mosi_tlast),
         .layer_12_mosi_write_size(layer_12_mosi_write_size),
         .layer_12_mosi_write_size_write(1'b1),
-      
+
         .layer_13_mosi_m_axis_tdata(layer_13_mosi_tdata),
         .layer_13_mosi_m_axis_tvalid(layer_13_mosi_tvalid),
         .layer_13_mosi_m_axis_tready(layer_13_mosi_tready),
         .layer_13_mosi_m_axis_tlast(layer_13_mosi_tlast),
         .layer_13_mosi_write_size(layer_13_mosi_write_size),
         .layer_13_mosi_write_size_write(1'b1),
-      
+
         .layer_14_mosi_m_axis_tdata(layer_14_mosi_tdata),
         .layer_14_mosi_m_axis_tvalid(layer_14_mosi_tvalid),
         .layer_14_mosi_m_axis_tready(layer_14_mosi_tready),
         .layer_14_mosi_m_axis_tlast(layer_14_mosi_tlast),
         .layer_14_mosi_write_size(layer_14_mosi_write_size),
         .layer_14_mosi_write_size_write(1'b1),
-      
+
         .layer_15_mosi_m_axis_tdata(layer_15_mosi_tdata),
         .layer_15_mosi_m_axis_tvalid(layer_15_mosi_tvalid),
         .layer_15_mosi_m_axis_tready(layer_15_mosi_tready),
         .layer_15_mosi_m_axis_tlast(layer_15_mosi_tlast),
         .layer_15_mosi_write_size(layer_15_mosi_write_size),
         .layer_15_mosi_write_size_write(1'b1),
-      
+
         .layer_16_mosi_m_axis_tdata(layer_16_mosi_tdata),
         .layer_16_mosi_m_axis_tvalid(layer_16_mosi_tvalid),
         .layer_16_mosi_m_axis_tready(layer_16_mosi_tready),
         .layer_16_mosi_m_axis_tlast(layer_16_mosi_tlast),
         .layer_16_mosi_write_size(layer_16_mosi_write_size),
         .layer_16_mosi_write_size_write(1'b1),
-      
+
         .layer_17_mosi_m_axis_tdata(layer_17_mosi_tdata),
         .layer_17_mosi_m_axis_tvalid(layer_17_mosi_tvalid),
         .layer_17_mosi_m_axis_tready(layer_17_mosi_tready),
         .layer_17_mosi_m_axis_tlast(layer_17_mosi_tlast),
         .layer_17_mosi_write_size(layer_17_mosi_write_size),
         .layer_17_mosi_write_size_write(1'b1),
-      
+
         .layer_18_mosi_m_axis_tdata(layer_18_mosi_tdata),
         .layer_18_mosi_m_axis_tvalid(layer_18_mosi_tvalid),
         .layer_18_mosi_m_axis_tready(layer_18_mosi_tready),
         .layer_18_mosi_m_axis_tlast(layer_18_mosi_tlast),
         .layer_18_mosi_write_size(layer_18_mosi_write_size),
         .layer_18_mosi_write_size_write(1'b1),
-      
+
         .layer_19_mosi_m_axis_tdata(layer_19_mosi_tdata),
         .layer_19_mosi_m_axis_tvalid(layer_19_mosi_tvalid),
         .layer_19_mosi_m_axis_tready(layer_19_mosi_tready),
         .layer_19_mosi_m_axis_tlast(layer_19_mosi_tlast),
         .layer_19_mosi_write_size(layer_19_mosi_write_size),
         .layer_19_mosi_write_size_write(1'b1),
-      
+
         .layers_cfg_frame_tag_counter_ctrl(),
         .layers_cfg_frame_tag_counter_ctrl_force_count(layers_cfg_frame_tag_counter_ctrl_force_count),
         .layers_cfg_frame_tag_counter_ctrl_enable(layers_cfg_frame_tag_counter_ctrl_enable),
@@ -889,7 +889,7 @@ module astep24_20l_top(
         .layers_sr_out_ld0(layers_sr_out_ld0),
         .layers_sr_out_ld1(layers_sr_out_ld1),
         .layers_sr_out_ld2(layers_sr_out_ld2),
-     
+
         .layers_inj_ctrl(),
         .layers_inj_ctrl_reset              (injection_generator_inj_ctrl_reset),
         .layers_inj_ctrl_suspend            (injection_generator_inj_ctrl_suspend),
@@ -898,7 +898,7 @@ module astep24_20l_top(
         .layers_inj_ctrl_write              (injection_generator_inj_ctrl_write),
         .layers_inj_ctrl_done               (injection_generator_inj_ctrl_done),
         .layers_inj_ctrl_running            (injection_generator_inj_ctrl_running),
-        
+
         .layers_inj_waddr                   (injection_generator_inj_waddr),
         .layers_inj_wdata                   (injection_generator_inj_wdata),
 
@@ -1241,9 +1241,9 @@ module astep24_20l_top(
     sync_async_patgen  injection_generator (
         .clk                (clk_core),
         .rst               (injection_generator_inj_ctrl_reset),
-        
+
         .out                (layers_inj),
-        
+
         .rfg_write          (injection_generator_inj_ctrl_write),
         .rfg_write_address  (injection_generator_inj_waddr),
         .rfg_write_data     (injection_generator_inj_wdata),
@@ -1272,12 +1272,12 @@ module astep24_20l_top(
         .ext_adc_miso_m_axis_tready(hk_adc_miso_fifo_s_axis_tready),
         .ext_adc_miso_m_axis_tvalid(hk_adc_miso_fifo_s_axis_tvalid),
         .ext_adc_miso_read_size(hk_adc_miso_fifo_read_size),
-       
+
         .ext_adcdac_mosi_s_axis_tdata(hk_adcdac_mosi_fifo_m_axis_tdata),
         .ext_adcdac_mosi_s_axis_tlast(hk_adcdac_mosi_fifo_m_axis_tlast),
         .ext_adcdac_mosi_s_axis_tready(hk_adcdac_mosi_fifo_m_axis_tready),
         .ext_adcdac_mosi_s_axis_tvalid(hk_adcdac_mosi_fifo_m_axis_tvalid),
-       
+
         .ext_spi_clk(ext_spi_clk_internal),
         .ext_spi_csn(ext_spi_csn_internal),
         .ext_spi_miso(ext_adc_spi_miso),
@@ -1285,7 +1285,7 @@ module astep24_20l_top(
 
 
     );
-    
+
     // SPI IO
     //-----------------
 
@@ -1304,21 +1304,15 @@ module astep24_20l_top(
 
     //-- MOSI and CLK is shared
     //-- CSN is selected based on RFG control
-    
-    assign ext_spi_clk = ext_spi_clk_internal; //hk_ctrl_select_adc0 ? !ext_spi_clk_internal : ext_spi_clk_internal;
-    //assign ext_dac_spi_csn = !hk_ctrl_select_adc ? ext_spi_csn_internal : 1;
-    assign ext_adc_spi_csn[2] = !hk_ctrl_select_adc2? ext_spi_csn_internal : 1;
-    assign ext_adc_spi_csn[1] = !hk_ctrl_select_adc1? ext_spi_csn_internal : 1;
-    assign ext_adc_spi_csn[0] = !hk_ctrl_select_adc0? ext_spi_csn_internal : 1;
-    
-    //assign ext_spi_clk = 0;
-    //assign ext_dac_spi_csn =  1;
-    //assign ext_adc_spi_csn =  1;
-    
+
+    assign ext_spi_clk = ext_spi_clk_internal;
+    assign ext_adc_spi_csn[2] = !hk_ctrl_select_adc2;
+    assign ext_adc_spi_csn[1] = !hk_ctrl_select_adc1;
+    assign ext_adc_spi_csn[0] = !hk_ctrl_select_adc0;
+
+
     `ifdef SIMULATION
-    GSR GSR_INST ( .GSR_N(1'b1), .CLK(1'b0));
+    GSR_CORE GSR_INST ( .GSR_N(1'b1), .CLK(1'b0));
     `endif
 
 endmodule
-
-        

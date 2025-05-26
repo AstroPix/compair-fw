@@ -8,32 +8,32 @@
 /*******************************************************************************
     Wrapper Module generated per user settings.
 *******************************************************************************/
-(* ORIG_MODULE_NAME="uart", LATTICE_IP_GENERATED="1" *) module uart (rxd_i, 
-        txd_o, 
-        clk_i, 
-        rst_n_i, 
-        int_o, 
-        apb_penable_i, 
-        apb_psel_i, 
-        apb_pwrite_i, 
-        apb_paddr_i, 
-        apb_pwdata_i, 
-        apb_pready_o, 
-        apb_pslverr_o, 
+(* ORIG_MODULE_NAME="uart", LATTICE_IP_GENERATED="1" *) module uart (rxd_i,
+        txd_o,
+        clk_i,
+        rst_n_i,
+        int_o,
+        apb_penable_i,
+        apb_psel_i,
+        apb_pwrite_i,
+        apb_paddr_i,
+        apb_pwdata_i,
+        apb_pready_o,
+        apb_pslverr_o,
         apb_prdata_o) ;
-    input rxd_i ; 
-    output txd_o ; 
-    input clk_i ; 
-    input rst_n_i ; 
-    output int_o ; 
-    input apb_penable_i ; 
-    input apb_psel_i ; 
-    input apb_pwrite_i ; 
-    input [5:0] apb_paddr_i ; 
-    input [31:0] apb_pwdata_i ; 
-    output apb_pready_o ; 
-    output apb_pslverr_o ; 
-    output [31:0] apb_prdata_o ; 
+    input rxd_i ;
+    output txd_o ;
+    input clk_i ;
+    input rst_n_i ;
+    output int_o ;
+    input apb_penable_i ;
+    input apb_psel_i ;
+    input apb_pwrite_i ;
+    input [5:0] apb_paddr_i ;
+    input [31:0] apb_pwdata_i ;
+    output apb_pready_o ;
+    output apb_pslverr_o ;
+    output [31:0] apb_prdata_o ;
     uart_ipgen_lscc_uart_16550 #(.APB_ENABLE(1),
             .SYS_CLOCK_FREQ(30.0),
             .SERIAL_DATA_WIDTH(8),
@@ -52,39 +52,39 @@
             .THRE_IE(0),
             .RLS_IE(0),
             .MS_IE(0),
-            .RDA_ITL(1)) lscc_uart_16550_inst (.rts_n_o(), 
-                .dtr_n_o(), 
-                .dsr_n_i(1'b0), 
-                .dcd_n_i(1'b1), 
-                .cts_n_i(1'b0), 
-                .ri_n_i(1'b1), 
-                .rxd_i(rxd_i), 
-                .txd_o(txd_o), 
-                .clk_i(clk_i), 
-                .rst_n_i(rst_n_i), 
-                .lmmi_request_i(1'b0), 
-                .lmmi_wr_rdn_i(1'b0), 
-                .lmmi_offset_i(4'b0000), 
-                .lmmi_wdata_i(8'b00000000), 
-                .lmmi_ready_o(), 
-                .lmmi_rdata_o(), 
-                .lmmi_rdata_valid_o(), 
-                .int_o(int_o), 
-                .apb_penable_i(apb_penable_i), 
-                .apb_psel_i(apb_psel_i), 
-                .apb_pwrite_i(apb_pwrite_i), 
-                .apb_paddr_i(apb_paddr_i[5:0]), 
-                .apb_pwdata_i(apb_pwdata_i[31:0]), 
-                .apb_pready_o(apb_pready_o), 
-                .apb_pslverr_o(apb_pslverr_o), 
-                .apb_prdata_o(apb_prdata_o[31:0])) ; 
+            .RDA_ITL(1)) lscc_uart_16550_inst (.rts_n_o(),
+                .dtr_n_o(),
+                .dsr_n_i(1'b0),
+                .dcd_n_i(1'b1),
+                .cts_n_i(1'b0),
+                .ri_n_i(1'b1),
+                .rxd_i(rxd_i),
+                .txd_o(txd_o),
+                .clk_i(clk_i),
+                .rst_n_i(rst_n_i),
+                .lmmi_request_i(1'b0),
+                .lmmi_wr_rdn_i(1'b0),
+                .lmmi_offset_i(4'b0000),
+                .lmmi_wdata_i(8'b00000000),
+                .lmmi_ready_o(),
+                .lmmi_rdata_o(),
+                .lmmi_rdata_valid_o(),
+                .int_o(int_o),
+                .apb_penable_i(apb_penable_i),
+                .apb_psel_i(apb_psel_i),
+                .apb_pwrite_i(apb_pwrite_i),
+                .apb_paddr_i(apb_paddr_i[5:0]),
+                .apb_pwdata_i(apb_pwdata_i[31:0]),
+                .apb_pready_o(apb_pready_o),
+                .apb_pslverr_o(apb_pslverr_o),
+                .apb_prdata_o(apb_prdata_o[31:0])) ;
 endmodule
 
 
 
 `pragma protect begin_protected
 
-`pragma protect version=1
+`pragma protect version = 1
 `pragma protect author="Lattice Semiconductor Corporation"
 `pragma protect author_info="Lattice Semiconductor Corporation"
 `pragma protect encrypt_agent="Radiant encrypt_hdl"
@@ -4330,4 +4330,3 @@ Iey2x8NJuqcQCUJDBbcEl9QqydS4B/qgAap1n6Kh/REZbMCxFTvbRfmksDBafykg
 Dw7ZAQmIuhWcGW1Crxuv8g==
 
 `pragma protect end_protected
-
