@@ -1,0 +1,129 @@
+<Project Date="2025-05-05" ModBy="Inserter" Name="C:/Project/COMPAIR/compair-fw/target-certusnx-fee/certusnxfee.rvl">
+    <Core Name="compair_fpga_top_LA0">
+        <Setting>
+            <Capture NumTrigsCap="1" SamplesPerTrig="128"/>
+            <Event EventCnt="0" CntEnableRun="0"/>
+            <TrigSetting AND_ALL="0" PostTrgSamples="" PreTrgSamples="" TURadix="0"/>
+        </Setting>
+        <Dataset Name="Base">
+            <Trace>
+                <Sig Name="astep24_20l_top_I/sw_if/apb_penable_i"/>
+                <Sig Name="astep24_20l_top_I/sw_if/apb_pwrite_i"/>
+                <Bus Radix="0" Name="astep24_20l_top_I/sw_if/apb_pwdata_i">
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:0"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:1"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:2"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:3"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:4"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:5"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:6"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:7"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:8"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:9"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:10"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:11"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:12"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:13"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:14"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:15"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:16"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:17"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:18"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:19"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:20"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:21"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:22"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:23"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:24"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:25"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:26"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:27"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:28"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:29"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:30"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_pwdata_i:31"/>
+                </Bus>
+                <Bus Radix="0" Name="astep24_20l_top_I/sw_if/apb_prdata_o">
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:0"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:1"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:2"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:3"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:4"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:5"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:6"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:7"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:8"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:9"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:10"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:11"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:12"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:13"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:14"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:15"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:16"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:17"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:18"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:19"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:20"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:21"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:22"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:23"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:24"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:25"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:26"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:27"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:28"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:29"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:30"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_prdata_o:31"/>
+                </Bus>
+                <Bus Radix="0" Name="astep24_20l_top_I/sw_if/apb_paddr_i">
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_paddr_i:0"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_paddr_i:1"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_paddr_i:2"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_paddr_i:3"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_paddr_i:4"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/apb_paddr_i:5"/>
+                </Bus>
+                <Bus Radix="0" Name="astep24_20l_top_I/sw_if/rfg_read_value">
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_read_value:0"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_read_value:1"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_read_value:2"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_read_value:3"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_read_value:4"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_read_value:5"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_read_value:6"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_read_value:7"/>
+                </Bus>
+                <Sig Name="astep24_20l_top_I/sw_if/rfg_read_valid"/>
+                <Sig Name="astep24_20l_top_I/sw_if/rfg_read"/>
+                <Bus Radix="0" Name="astep24_20l_top_I/sw_if/rfg_address">
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:0"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:1"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:2"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:3"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:4"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:5"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:6"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:7"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:8"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:9"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:10"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:11"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:12"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:13"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:14"/>
+                    <Sig Name="astep24_20l_top_I/sw_if/rfg_address:15"/>
+                </Bus>
+                <Sig Name="ftdi_tx"/>
+                <Sig Name="ftdi_rx"/>
+            </Trace>
+            <Trigger>
+                <TU Radix="0" ID="1" Operator="6" Index="0" Value="1" Name="TU1"/>
+                <TU Radix="0" ID="2" Operator="0" Index="2" Value="1" Name="TU2"/>
+                <TU Radix="0" ID="3" Operator="7" Index="1" Value="0" Name="TU3"/>
+                <TE ID="1" Index="0" Name="TE1" Enable="1" Expression="TU1"/>
+            </Trigger>
+        </Dataset>
+    </Core>
+</Project>

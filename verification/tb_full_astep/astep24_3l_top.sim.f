@@ -1,5 +1,5 @@
 
--sv 
+#-sv
 -64bit
 -access +rw
 -define SIMULATION

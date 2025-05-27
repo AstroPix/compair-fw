@@ -4,6 +4,8 @@ module compair_fpga_top(
         input   wire            rstn,
         input   wire            ftdi_tx, // TX of FTDI UART
         output  wire            ftdi_rx, // RX of FTDI UART
+		output  wire        dcdc_5p0_sync_mode,
+		output          dcdc_d3p3_sync_mode,
 	
 	output wire             row0_hold,
 	output wire             row0_row3_reset,
@@ -175,7 +177,11 @@ module compair_fpga_top(
     wire row10_resn, row11_resn, row12_resn, row13_resn, row14_resn;
     wire row15_resn, row16_resn, row17_resn, row18_resn, row19_resn;
 
-
+    assign dcdc_5p0_sync_mode =  ftdi_rx;
+    assign dcdc_d3p3_sync_mode = ftdi_tx;
+	
+	
+	
     assign row0_row3_reset = row0_resn || row1_resn || row2_resn || row3_resn;
     assign row4_row7_reset = row4_resn || row5_resn || row6_resn || row7_resn;
     assign row8_row11_reset = row8_resn || row9_resn || row10_resn || row11_resn;
@@ -197,7 +203,7 @@ module compair_fpga_top(
 
         .ext_adc_spi_csn(ext_spi_adc_csn),
         .ext_adc_spi_miso(ext_spi_adc_miso),
-        .ext_dac_spi_csn(),
+        //.ext_dac_spi_csn(),
         .ext_spi_clk(ext_spi_clk),
         .ext_spi_mosi(ext_spi_mosi),
 

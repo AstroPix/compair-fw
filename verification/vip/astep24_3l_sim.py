@@ -1,6 +1,7 @@
 
-import sys 
-import os 
+import sys
+import os
+import logging
 
 
 import  rfg.discovery
@@ -16,7 +17,13 @@ from   drivers.gecco.injectionboard import InjectionBoard
 from cocotb.triggers import Timer,RisingEdge
 
 
-class SimBoard(BoardDriver): 
+logger = logging.getLogger(__name__)
+def debug():
+    logger.setLevel(logging.DEBUG)
+def info():
+    logger.setLevel(logging.INFO)
+
+class SimBoard(BoardDriver):
 
     def __init__(self,rfg):
         BoardDriver.__init__(self,rfg)
@@ -37,14 +44,16 @@ class SimBoard(BoardDriver):
         return 60000000
 
 
-async def getDriver(dut):
+async def getDriver(dut,spi = True):
 
-    if os.getenv("ASTEP_HOST_UART",False) is not False:
-        return getUARTDriver(dut)
+    if spi is False:
+        return await getUARTDriver(dut)
     else:
         return await getSPIDriver(dut)
 
 async def getUARTDriver(dut):
+
+    logger.info("Using UART Driver")
 
     ## Load RF and Setup UARTIO
     firmwareRF = rfg.discovery.loadOneFSPRFGOrFail()
@@ -62,13 +71,15 @@ async def getUARTDriver(dut):
     boardDriver = SimBoard(firmwareRF)
     await boardDriver.open()
 
-    
+
 
 
     return boardDriver
 
-    
+
 async def getSPIDriver(dut):
+
+    logger.info("Using SPI Driver")
 
     ## Load RF and Setup UARTIO
     firmwareRF = rfg.discovery.loadOneFSPRFGOrFail()

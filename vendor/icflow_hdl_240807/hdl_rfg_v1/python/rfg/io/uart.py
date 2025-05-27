@@ -25,7 +25,8 @@ class UARTIO(rfg.core.RFGIO):
     serialPort : serial.Serial | None = None 
 
     port : str | None = None 
-    baud : int = 921600
+    #baud : int = 921600
+    baud : int = 115200
     timeout : int = 3
 
     def listPorts(self) -> list[ListPortInfo] : 
@@ -103,4 +104,4 @@ class UARTIO(rfg.core.RFGIO):
         
 
 def exit_close(io : UARTIO):
-    io.close()
+    asyncio.run(io.close())
