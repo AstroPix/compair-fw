@@ -19,7 +19,7 @@ import rfg.discovery
 
 ## Firmware Support Register File Definition will be loaded by the discovery method
 ## This is one way to do things, we could also make a release from firmware with the RFG Python part and copy it locally as a module
-#sys.path.append(os.environ["BASE"]+"/fw/astep24-3l/common/")
+sys.path.append(os.environ["BASE"]+"/fw/astep24-3l/common/")
 
 ################
 ## Constructors to get a Board driver with RFG loaded for each config
@@ -54,14 +54,13 @@ def getCMODDriver():
 def getGeccoNODriver():
     return getGeccoDriver()
 
-def getGeccoUARTDriver(portPath : str | None = None,baud = 921600):
+def getGeccoUARTDriver(portPath : str | None = None, baud=115200):
     return getGeccoDriver().selectUARTIO(portPath,baud)
 
 def getGeccoFTDIDriver():
     return getGeccoDriver().selectFTDIFifoIO()
 
-
-def getCMODUartDriver(portPath : str | None = None,baud = 921600):
+def getCMODUartDriver(portPath : str | None = None, baud=115200):
     return getCMODDriver().selectUARTIO(portPath,baud)
 
 def getCMODSPIDriver():

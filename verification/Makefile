@@ -5,7 +5,7 @@ cocotb: .venv/bin/cocotb-config
 .venv/bin/cocotb-config: .venv/bin/activate
 	@.venv/bin/pip3 install -r requirements.txt
 .venv/bin/activate:
-	@python3 -m venv .venv
+	@python3.12 -m venv .venv
 
 ## Linting
 export BASE=$(PWD)/../

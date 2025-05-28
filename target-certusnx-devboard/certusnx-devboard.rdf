@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RadiantProject version="4.2" radiant="2024.1.0.34.2" title="certusnx-devboard" device="LFCPNX-100-9LFG672C" performance_grade="9_Low-Power_1.0V" family_int="jd5d00" device_int="jd5d80" package_int="LFG672" operation_int="COM" speed_int="6" default_implementation="impl_1">
+<RadiantProject version="4.2" radiant="2024.1.1.259.1" title="certusnx-devboard" device="LFCPNX-100-9LFG672C" performance_grade="9_Low-Power_1.0V" family_int="jd5d00" device_int="jd5d80" package_int="LFG672" operation_int="COM" speed_int="6" default_implementation="impl_1">
     <Options/>
-    <Implementation title="impl_1" dir="impl_1" description="impl_1" synthesis="lse" default_strategy="Strategy1">
-        <Options VerilogStandard="System Verilog" def_top="edge_detect" top="compair_fpga_top"/>
+    <Implementation title="impl_1" dir="impl_1" description="impl_1" synthesis="synplify" default_strategy="Strategy1">
+        <Options VERILOG_DIRECTIVES="RFG_FW_ID=32'd2;RFG_FW_BUILD=32'd3" VerilogStandard="System Verilog">
+            <Option name="include path" value="../rtl/includes"/>
+            <Option name="top" value="compair_fpga_top"/>
+        </Options>
         <Source name="compair_fpga_top.sv" type="Verilog" type_short="Verilog">
-            <Options VerilogStandard="System Verilog" top_module="compair_fpga_top"/>
+            <Options VerilogStandard="System Verilog"/>
         </Source>
         <Source name="uart/uart.ipx" type="IPX_Module" type_short="IPX">
             <Options/>
@@ -69,9 +72,6 @@
         <Source name="../rtl/rfg/protocol/rfg_axis_protocol.sv" type="Verilog" type_short="Verilog">
             <Options VerilogStandard="System Verilog"/>
         </Source>
-        <Source name="../rtl/rfg/protocol/rfg_axis_protocol_srl_fifo.sv" type="Verilog" type_short="Verilog">
-            <Options VerilogStandard="System Verilog"/>
-        </Source>
         <Source name="../rtl/rfg/protocol/rfg_axis_readout_framing.sv" type="Verilog" type_short="Verilog">
             <Options VerilogStandard="System Verilog"/>
         </Source>
@@ -95,6 +95,12 @@
         </Source>
         <Source name="fifo_1clk_1024x32/fifo_1clk_1024x32.ipx" type="IPX_Module" type_short="IPX">
             <Options/>
+        </Source>
+        <Source name="../rtl/housekeeping/housekeeping_main.sv" type="Verilog" type_short="Verilog">
+            <Options VerilogStandard="System Verilog"/>
+        </Source>
+        <Source name="../rtl/layers/loopback_spi_if.sv" type="Verilog" type_short="Verilog">
+            <Options VerilogStandard="System Verilog"/>
         </Source>
         <Source name="certusnxdevboard.rvl" type="Reveal" type_short="Reveal" excluded="TRUE">
             <Options/>

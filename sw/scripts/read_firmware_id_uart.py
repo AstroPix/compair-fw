@@ -1,21 +1,21 @@
 import asyncio
 import drivers.astep.serial
 import drivers.boards
-
 import rfg
-rfg.io.uart.debug()
 
-boardDriver = drivers.boards.getGeccoUARTDriver("/dev/ttyUSB0",115200)
-boardDriver.open()
+async def test_fpga():
 
+    boardDriver = drivers.boards.getGeccoUARTDriver("COM8",baud=921600)
+    print('Open')
+    await boardDriver.open()
+    
+    print('ID')
+    id =      await boardDriver.readFirmwareID()
+    print(f"Firmware ID: {hex(id)}")
+    version = await boardDriver.readFirmwareVersion()
+    print(f"Firmware Version: {str(version)}")
 
-asyncio.run(boardDriver.rfg.write_io_led(0xFF,flush=True))
+    await boardDriver.close()
 
-
-
-pass 
-id =      asyncio.run(boardDriver.readFirmwareID())
-version = asyncio.run(boardDriver.readFirmwareVersion())
-
-print(f"Firmware ID: {hex(id)}")
-print(f"Firmware Version: {str(version)}")
+if __name__ == "__main__":
+    asyncio.run(test_fpga())
