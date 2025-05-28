@@ -20,13 +20,15 @@ async def callHK(lsbFirst=True):
     Option for writing as LSB or MSB
     """
     ## Open UART Driver for CMOD
-    driver = drivers.boards.getCMODUartDriver("COM6")
+    driver = drivers.boards.getCMODUartDriver("COM11")
     
     await driver.open() 
     
     # Select appropriate 
-    await driver.houseKeeping.selectADC(1)
-    await driver.houseKeeping.configureHKSPIFrequency(500000, True)
+    await driver.houseKeeping.selectADC(0)
+    #await driver.houseKeeping.selectADC(2)
+
+    #await driver.houseKeeping.configureHKSPIFrequency(500000, True)
     
     ## Loop over ADC Settings
     for chan in range(0,8):
@@ -38,6 +40,7 @@ async def callHK(lsbFirst=True):
 
         print(f"{hex(byte1)}")
         await driver.houseKeeping.writeADCDACBytes([byte1,0x00])
+        await driver.houseKeeping.selectADC(3)
         adcBytesCount = await driver.houseKeeping.getADCBytesCount()
         adcBytes = await driver.houseKeeping.readADCBytes(adcBytesCount) 
         print(f"Got ADC bytes {binascii.hexlify(adcBytes)}")

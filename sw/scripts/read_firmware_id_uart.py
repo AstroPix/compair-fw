@@ -5,7 +5,7 @@ import rfg
 
 async def test_fpga():
 
-    boardDriver = drivers.boards.getGeccoUARTDriver("COM8",baud=921600)
+    boardDriver = drivers.boards.getGeccoUARTDriver("COM11",baud=115200)
     print('Open')
     await boardDriver.open()
     
