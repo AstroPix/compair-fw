@@ -61,7 +61,7 @@ class Asic():
         ## Added 09/23 Richard
         self.rfg = rfg
         self.row = row  ## Row ID used to send the bytes to the right firmware interface
-        self.rfgSRRegisterName = "LAYERS_SR_OUT"
+        self.rfgSRRegisterName = srRegisterName
 
 
     @property
@@ -284,12 +284,11 @@ class Asic():
         
         # Get Chain settings
         try:
-            self.num_chips_yml = dict_from_yml[self.chip].get('chain')['length']
-            self.num_chips_yml = self.num_chips
-            logger.info("%s%d  Configuration file with %d chips found!", self.chipname, self.chipversion, self.num_chips_yml)
+            self._num_chips = dict_from_yml[self.chip].get('chain')['length']
+            logger.info("%s%d  Configuration file with %d chips found!", self.chipname, self.chipversion, self._num_chips)
         except (KeyError, TypeError):
             logger.debug("%s%d DaisyChain Length config not found!", self.chipname, self.chipversion)
-            logger.debug("Use %s%d DaisyChain Length %i from chipsPerRow run parameter", self.chipname, self.chipversion, self.num_chips)
+            logger.debug("Use %s%d DaisyChain Length %i from chipsPerRow run parameter", self.chipname, self.chipversion, self._num_chips)
         
  
         # Get chip geometry
@@ -303,7 +302,7 @@ class Asic():
             #sys.exit(1)
 
         # Get chip configs
-        for chip_number in range(self.num_chips_yml):
+        for chip_number in range(self._num_chips):
             try:
                 self.asic_config[f'config_{chip_number}'] = dict_from_yml.get(self.chip)[f'config_{chip_number}']
                 logger.info("Chain chip_%d config found!", chip_number)
@@ -320,7 +319,7 @@ class Asic():
         """
         bitvector = BitArray()
 
-        for chip in range(self.num_chips-1, -1, -1): #configure far end of daisy chain first
+        for chip in range(self._num_chips-1, -1, -1): #configure far end of daisy chain first
             chipBitvector = BitArray()
             for key in self.asic_config[f'config_{chip}']:
                 for values in self.asic_config[f'config_{chip}'][key].values():
@@ -351,8 +350,8 @@ class Asic():
         """
         bitvector = BitArray()
 
-        if targetChip==-1 and self.num_chips > 1:
-            for chip in range(self.num_chips-1, -1, -1):
+        if targetChip==-1 and self._num_chips > 1:
+            for chip in range(self._num_chips-1, -1, -1):
                 chipBitvector = BitArray()
                 for key in self.asic_config[f'config_{chip}']:
                     for values in self.asic_config[f'config_{chip}'][key].values():
@@ -506,8 +505,8 @@ class Asic():
         await self.rfg.flush()
 
 
-    async def writeSPIRoutingFrame(self):
-        await getattr(self.rfg, f"write_layer_{self.row}_mosi_bytes")([SPI_HEADER_ROUTING] + [0x00]*self._num_chips*4,True)
+    async def writeSPIRoutingFrame(self, firstChipID: int = 0x00):
+        await getattr(self.rfg, f"write_layer_{self.row}_mosi_bytes")([SPI_HEADER_ROUTING | firstChipID] + [0x00]*self._num_chips*4, True)
 
     def createSPIConfigFramev2(self, load: bool = True, n_load: int = 10, broadcast: bool = False, targetChip: int = 0)  -> bytearray:
         """
@@ -550,7 +549,7 @@ class Asic():
             data.extend([SPI_SR_LOAD] * n_load)
 
         # Append 4 Empty bytes per chip in the chip, to ensure the config frame is pushed completely through the chain
-        data.extend([SPI_EMPTY_BYTE] * ((self.num_chips-1) *4))
+        data.extend([SPI_EMPTY_BYTE] * ((self._num_chips-1) *4))
 
 
         logger.debug("Length: %d\n Data (%db): %s\n", len(data), len(value), value)
