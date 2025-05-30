@@ -89,12 +89,5 @@ if __name__ == "__main__":
     elif len(args.yaml) < len(args.chipsPerRow):
         raise ValueError("You need to provide one yaml configuration file for every chipsPerRow argument.")
 
-    #Make sure analog/inject arguments make sense
-    if args.analog is not None and (len(args.analog)!=3 or args.analog[0]<0 or args.analog[0]>2 or args.analog[1]<0 or args.analog[1]>3 or args.analog[2]<0):
-        raise ValueError("Incorrect analog argument layer={0[0]},chip={0[1]},column={0[2]}".format(args.analog))
-    if args.inject is not None and (len(args.inject)!=4 or args.inject[0]<0 or args.inject[0]>2 or args.inject[1]<0 or args.inject[1]>3 or args.inject[2]<0 or args.inject[3]<0):
-        raise ValueError("Incorrect analog argument layer={0[0]},chip={0[1]},row={0[2]},column={0[3]}".format(args.inject))
-
-
     asyncio.run(main(args))
 
