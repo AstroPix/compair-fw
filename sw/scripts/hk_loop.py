@@ -1,12 +1,17 @@
+import sys
+import os
+os.environ['BASE'] = os.path.abspath(".")
+print(sys.path)
+sys.path.insert(1, os.path.abspath("sw"))
+sys.path.insert(1, os.path.abspath("vendor/icflow_hdl_240807/hdl_rfg_v1/python"))
+sys.path.insert(1, os.path.abspath("rtl/top"))
 
 import asyncio 
 
 ## Load Board
 ##############
 import drivers.boards
-import drivers.astropix.asic
 
-import time
 import binascii
 
 async def callHK(lsbFirst=True):
