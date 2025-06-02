@@ -14,7 +14,7 @@ import drivers.boards
 
 import binascii
 
-async def callHK(lsbFirst=True):
+async def callHK():
     """
     Calls housekeeping from TI ADC128S102 ADC. Loops over each of the 8 input channels.
     Input is two bytes:
@@ -25,34 +25,27 @@ async def callHK(lsbFirst=True):
     Option for writing as LSB or MSB
     """
     ## Open UART Driver for CMOD
-    driver = drivers.boards.getCMODUartDriver("COM11")
+    driver = drivers.boards.getCMODUartDriver("COM15")
     
     await driver.open() 
     
     # Select appropriate 
-    await driver.houseKeeping.selectADC(0)
-    #await driver.houseKeeping.selectADC(2)
 
     #await driver.houseKeeping.configureHKSPIFrequency(500000, True)
     
     ## Loop over ADC Settings
-    for chan in range(0,8):
-        bits = format(chan,'08b') #fix the formatting 
-        if lsbFirst == True:
-            byte1 = int(bits[::-1],2) #this is a hex string is this ok?
-        else:
-            byte1 = int(bits,2) #this is a hex string is this ok?
-
-        print(f"{hex(byte1)}")
-        await driver.houseKeeping.writeADCDACBytes([byte1,0x00])
-        await driver.houseKeeping.selectADC(3)
-        adcBytesCount = await driver.houseKeeping.getADCBytesCount()
-        adcBytes = await driver.houseKeeping.readADCBytes(adcBytesCount) 
-        print(f"Got ADC bytes {binascii.hexlify(adcBytes)}")
-        
-        #sleep between read/writes (seconds)
-        task = asyncio.create_task(asyncio.sleep(1)) 
-        await task
+    for adc_num in [1,2,3]:
+        for chan in range(0,8):
+            await driver.houseKeeping.selectADC(0)
+            await driver.houseKeeping.writeADCDACBytes(bytes([chan<<3,0])) # Roll chan left 3 bits per ADC128S102 datasheet
+            await driver.houseKeeping.selectADC(adc_num)
+            adcBytesCount = await driver.houseKeeping.getADCBytesCount()
+            adcBytes = await driver.houseKeeping.readADCBytes(adcBytesCount) 
+            print(f"ADC, {adc_num}, CH, {chan}, Dec, {int.from_bytes(adcBytes)}")
+            
+            #sleep between read/writes (seconds)
+            task = asyncio.create_task(asyncio.sleep(1)) 
+            await task
     
     await driver.close()
 
