@@ -11,10 +11,11 @@ module astep24_20l_top(
     input  wire		cold_resn,
     input  wire		warm_resn,
     output wire		io_aresn,
-
+	output wire     watchdog,
+	
     output wire		clk_sample,
     output wire		clk_timestamp,
-
+	
 
     output wire [2:0]   ext_adc_spi_csn,
     input  wire		ext_adc_spi_miso,
@@ -223,6 +224,27 @@ module astep24_20l_top(
     output wire clk_core_dbg,
     output wire pll_locked_dbg
 );
+
+    // Watchdog
+    //-------------------    
+	reg watchdog;
+    localparam int WATCHDOG_COUNT_MAX = 60_000_000/4;
+    logic [$clog2(WATCHDOG_COUNT_MAX)-1:0] watchdog_count;
+    always @(posedge clk_core) begin
+        if (!warm_resn) begin 
+            watchdog_count <= 0;
+            watchdog  <= 'b0;
+        end
+        else if (watchdog_count == WATCHDOG_COUNT_MAX-1) begin
+            watchdog_count <= 0;
+            watchdog  <= ~watchdog;
+        end
+        else begin
+            watchdog_count <= watchdog_count + 1;
+        end
+    end
+
+
 
 
     assign clk_uart_dbg = clk_uart;

@@ -4,6 +4,7 @@ module compair_fpga_top(
         input   wire            rstn,
         input   wire            ftdi_tx, // TX of FTDI UART
         output  wire            ftdi_rx, // RX of FTDI UART	
+        output wire watchdog,
         output wire dcdc_d3p3_sync_mode,
         output wire dcdc_d1p8_sync_mode,
         output wire dcdc_d1p0_sync_mode,
@@ -187,7 +188,7 @@ module compair_fpga_top(
     assign dcdc_d3p3_sync_mode =  ftdi_rx;
     assign dcdc_d1p8_sync_mode = ftdi_tx;
 	assign dcdc_d1p0_sync_mode = clk_core_dbg;
-    assign dcdc_a1p8_sync_mode = pll_locked_dbg;
+    assign dcdc_a1p8_sync_mode = watchdog;
     assign dcdc_a1p2_sync_mode = clk_uart_dbg;
 	
 
@@ -208,12 +209,13 @@ module compair_fpga_top(
         
         .warm_resn(rstn), // Warm reset either from IO or a local button
         .cold_resn(1'b1),
-
+        
         .io_aresn(/* This output signals a strong reset situation where we might want to put some IO in High-Z, not used for now */),
-
+        
+        .watchdog(watchdog),
+        
         .ext_adc_spi_csn(ext_spi_adc_csn),
         .ext_adc_spi_miso(ext_spi_adc_miso),
-        //.ext_dac_spi_csn(),
         .ext_spi_clk(ext_spi_clk),
         .ext_spi_mosi(ext_spi_mosi),
 
