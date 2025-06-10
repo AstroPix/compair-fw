@@ -9,7 +9,7 @@
 			<Pos>1</Pos>
 			<Vendor>Lattice</Vendor>
 			<Family>LFCPNX</Family>
-			<Name>LFCPNX-100</Name>
+			<Name>LFCPNX-100AUTODIE</Name>
 			<Package>All</Package>
 			<Bypass>
 				<InstrLen>8</InstrLen>
@@ -17,14 +17,13 @@
 				<BScanLen>1</BScanLen>
 				<BScanVal>0</BScanVal>
 			</Bypass>
-			<File>../../impl_1/certusnx-fee_impl_1.bit</File>
-			<FileTime>06/05/25 15:34:00</FileTime>
+			<File>../impl_1/certusnx-fee_impl_1.bit</File>
+			<FileTime>06/04/25 09:55:57</FileTime>
 			<JedecChecksum>N/A</JedecChecksum>
 			<MemoryType>External SPI Flash Memory (SPI FLASH)</MemoryType>
 			<Operation>Erase,Program,Verify</Operation>
 			<Option>
 				<SVFVendor>JTAG STANDARD</SVFVendor>
-				<SVFProcessor>SVF Processor</SVFProcessor>
 				<Usercode>0xDEADBEEF</Usercode>
 				<AccessMode>Direct Programming</AccessMode>
 			</Option>
@@ -34,10 +33,10 @@
 					<Pos>1</Pos>
 					<Vendor>Lattice</Vendor>
 					<Family>LFCPNX</Family>
-					<Name>LFCPNX-100</Name>
+					<Name>LFCPNX-100AUTODIE</Name>
 					<IDCode>0x010f4043</IDCode>
 					<Package>All</Package>
-					<PON>LFCPNX-100</PON>
+					<PON>LFCPNX-100AUTODIE</PON>
 					<Bypass>
 						<InstrLen>8</InstrLen>
 						<InstrVal>11111111</InstrVal>
@@ -51,7 +50,6 @@
 						<IOState>HighZ</IOState>
 						<PreloadLength>362</PreloadLength>
 						<IOVectorData>0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</IOVectorData>
-						<SVFProcessor>SVF Processor</SVFProcessor>
 						<AccessMode>Direct Programming</AccessMode>
 					</Option>
 				</Device>
@@ -65,7 +63,7 @@
 					<IDCode>0x17</IDCode>
 					<Package>8-pin SOIC</Package>
 					<Operation>Erase,Program,Verify</Operation>
-					<File>../../impl_1/certusnx-fee_impl_1.bit</File>
+					<File>../impl_1/certusnx-fee_impl_1.bit</File>
 					<AddressBase>0x00000000</AddressBase>
 					<EndAddress>0x001F0000</EndAddress>
 					<DeviceSize>128</DeviceSize>
@@ -86,7 +84,6 @@
 					</LocalChainList>
 					<Option>
 						<SVFVendor>JTAG STANDARD</SVFVendor>
-						<SVFProcessor>SVF Processor</SVFProcessor>
 					</Option>
 				</Device>
 			</FPGADevice>
@@ -105,7 +102,7 @@
 	</ProjectOptions>
 	<CableOptions>
 		<CableName>USB2</CableName>
-		<PortAdd>FTUSB-1</PortAdd>
-		<USBID>Compair2 FEE ETU B Location 0222 Serial 01B</USBID>
+		<PortAdd>FTUSB-0</PortAdd>
+		<USBID>Dual RS232-HS A Location 0211 Serial A</USBID>
 	</CableOptions>
 </ispXCF>
