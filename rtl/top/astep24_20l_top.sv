@@ -11,10 +11,11 @@ module astep24_20l_top(
     input  wire		cold_resn,
     input  wire		warm_resn,
     output wire		io_aresn,
-
+	output wire     watchdog,
+	
     output wire		clk_sample,
     output wire		clk_timestamp,
-
+	
 
     output wire [2:0]   ext_adc_spi_csn,
     input  wire		ext_adc_spi_miso,
@@ -216,11 +217,39 @@ module astep24_20l_top(
     output wire io_ctrl_sample_clock_enable,
     output wire io_ctrl_timestamp_clock_enable,
     output wire io_ctrl_gecco_sample_clock_se,
-    output wire io_ctrl_gecco_inj_enable
+    output wire io_ctrl_gecco_inj_enable,
+    
+    // Clock debug
+    output wire clk_uart_dbg,
+    output wire clk_core_dbg,
+    output wire pll_locked_dbg
 );
 
+    // Watchdog
+    //-------------------    
+	reg watchdog;
+    localparam int WATCHDOG_COUNT_MAX = 60_000_000/4;
+    logic [$clog2(WATCHDOG_COUNT_MAX)-1:0] watchdog_count;
+    always @(posedge clk_core) begin
+        if (!warm_resn) begin 
+            watchdog_count <= 0;
+            watchdog  <= 'b0;
+        end
+        else if (watchdog_count == WATCHDOG_COUNT_MAX-1) begin
+            watchdog_count <= 0;
+            watchdog  <= ~watchdog;
+        end
+        else begin
+            watchdog_count <= watchdog_count + 1;
+        end
+    end
 
 
+
+
+    assign clk_uart_dbg = clk_uart;
+    //assign clk_core_dbg = clk_core;
+    assign pll_locked_dbg = pll_locked;
     // Clocking
     //-------------------
     wire clk_100; // size=1
@@ -229,10 +258,12 @@ module astep24_20l_top(
     wire clk_uart_resn; // size=1
     wire clk_core; // size=1
     wire clk_core_resn; // size=1
+    wire pll_locked; // size=1
     astep24_20l_top_clocking  clocking_reset_I (
         .sysclk_in(sysclk),
         .cold_resn_in(cold_resn),
         .io_aresn(io_aresn),
+        .pll_locked(pll_locked),
         .warm_resn_in(warm_resn),
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),

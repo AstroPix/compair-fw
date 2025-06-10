@@ -2,7 +2,7 @@
 
 module spi_axis_if_v1 #(
     parameter QSPI = 0,
-    parameter MSB_FIRST = 0,
+    parameter MSB_FIRST = 1,
     parameter CLOCK_OUT_CG = 1'b0 ) (
 
     // System clock

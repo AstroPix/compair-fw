@@ -11,7 +11,7 @@ module astep24_20l_top_clocking (
     input  wire				warm_resn_in,
     input  wire				cold_resn_in,
     output wire				io_aresn,
-
+    output wire             pll_locked,
     // Core clock -> Primary PLL
     output wire				clk_core,
     output wire				clk_core_resn,
