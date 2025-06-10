@@ -10,12 +10,12 @@ import asyncio
 import drivers.boards
 
 async def test_fpga():
-
-    boardDriver = drivers.boards.getGeccoUARTDriver("COM11",baud=115200)
-    print('Open')
+    x = 115200
+    boardDriver = drivers.boards.getGeccoUARTDriver("COM17",baud=115200)
+    #print('Open')
     await boardDriver.open()
     
-    print('ID')
+    #print('ID')
     id =      await boardDriver.readFirmwareID()
     print(f"Firmware ID: {hex(id)}")
     version = await boardDriver.readFirmwareVersion()
@@ -24,4 +24,6 @@ async def test_fpga():
     await boardDriver.close()
 
 if __name__ == "__main__":
-    asyncio.run(test_fpga())
+    for count in range(30):
+        #print(count)
+        asyncio.run(test_fpga())
