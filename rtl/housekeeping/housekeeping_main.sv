@@ -87,7 +87,7 @@ module housekeeping_main(
 
     wire miso_fifo_ready;
 
-    spi_axis_if_adc #(.QSPI(0),.MSB_FIRST(1),.CLOCK_OUT_CG(1)) spi_io(
+    spi_axis_if_v1 #(.QSPI(0),.MSB_FIRST(1),.CLOCK_OUT_CG(1)) spi_io(
         .clk(clk_spi),
         .resn(clk_spi_resn),
         .enable(1'd0),
