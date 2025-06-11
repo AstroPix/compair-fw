@@ -44,12 +44,12 @@ hk_converter_list = [
     [4e-9,	    "bias_imon",    "A", lambda x:(x * hk_imon_scale_hvbias ) ]
 
 ],[   
-    [25,	    "THERM_A1",     "C", lambda x:(-1)],   
-    [25,	    "THERM_A2",     "C", lambda x:(-1)],   
-    [25,	    "w1_testpoint",   "V", lambda x:(3.3/4095 * x)],    
+    [25,	    "THERM_A1",     "C", lambda x:(x*3.3/4095)],   
+    [25,	    "THERM_A2",     "C", lambda x:(x*3.3/4095)],   
+    [25,	    "w1_testpoint",   "V", lambda x:(x*3.3/4095)],    
     [25,	    "tmon_fee_top_left",        "C", lambda x:(5/44 * (-13501 + 5 * math.sqrt(9111265 - 1760000*x*3.3/4095)))],    
     [25,	    "tmon_fee_bottom_left",        "C", lambda x:(5/44 * (-13501 + 5 * math.sqrt(9111265 - 1760000*x*3.3/4095)))],
-    [25,	    "THERM_A3",     "C", lambda x:(-1)],   
-    [25,	    "THERM_A4",     "C", lambda x:(-1)],   
-    [25,	    "THERM_A5",     "C", lambda x:(-1)]   
+    [25,	    "THERM_A3",     "C", lambda x:(x*3.3/4095)],   
+    [25,	    "THERM_A4",     "C", lambda x:(x*3.3/4095)],   
+    [25,	    "THERM_A5",     "C", lambda x:(x*3.3/4095)]   
 ]

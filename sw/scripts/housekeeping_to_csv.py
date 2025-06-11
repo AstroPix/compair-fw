@@ -13,6 +13,9 @@ import drivers.boards
 import drivers.compair.housekeeping_equations as hk_eqns
 import csv
 from datetime import datetime
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 num_adcs     = 3
 num_channels = 8
@@ -37,35 +40,51 @@ start_time = datetime.now()
 values_filename   = start_time.strftime('hk_values_%Y%m%d_%H%M%S.csv')
 codes_filename   = start_time.strftime('hk_codes_%Y%m%d_%H%M%S.csv')
 
+async def read_adc_code(adc_num,chan,driver):
+    #await driver.houseKeeping.selectADC(0)
+    await driver.houseKeeping.writeADCDACBytes(bytes([chan<<3,0]))
+    await driver.houseKeeping.selectADC(adc_num)
+    adcBytesCount = await driver.houseKeeping.getADCBytesCount()
+    if adcBytesCount != 2:
+        logging.warning(f"ERROR: byte count = {hex(adcBytesCount)}")
+    adcBytes = await driver.houseKeeping.readADCBytes(adcBytesCount) 
+    return int.from_bytes(adcBytes)
 
+channel_list = [0, 0, 1, 2, 3, 4, 5, 6, 7, 0]
 async def get_hk_row(driver):
     readout_codes = [0] * N
     readout_values = [0.00] * N
     hk_idx = 0
     for adc_num in [1,2,3]:
-        for chan in range(8):
-            for retry in range(3):
-                await driver.houseKeeping.selectADC(0)
-                await driver.houseKeeping.writeADCDACBytes(bytes([chan<<3,0])) # Roll chan left 3 bits per ADC128S102 datasheet
-                await driver.houseKeeping.selectADC(adc_num)
-                time.sleep(0.01)
-                #print("{0:b}".format(chan<<3))
-                adcBytesCount = await driver.houseKeeping.getADCBytesCount()
-                
-                if adcBytesCount != 2:
-                        print(f"ERROR: byte count = {hex(adcBytesCount)}")
-                time.sleep(0.01)
-                adcBytes = await driver.houseKeeping.readADCBytes(adcBytesCount) 
-                (units, shortname) = hk_eqns.get_info(adc_num-1,chan)
-                adc_code = int.from_bytes(adcBytes)
-                #value = hk_eqns.convert(adc_num-1,chan,adc_code)
-                if retry == 2:
+        adc_code = await read_adc_code(adc_num,0,driver) # prime next read to 0
+        for chan in range(num_channels):
+            if chan  < 8: 
+                adc_code = await read_adc_code(adc_num,(chan+1) % 8,driver) # set next read to chan + 1, start at ch1
+            else:
+                adc_code = await read_adc_code(adc_num,0,driver)
+            readout_codes[hk_idx] = adc_code
+            value = hk_eqns.convert(adc_num-1,chan,adc_code)
+            readout_values[hk_idx] = round(value,3)
+            hk_idx = hk_idx + 1
+            
+    return readout_codes, readout_values
+
+
+async def get_hk_row_tripple(driver):
+    readout_codes = [0] * N
+    readout_values = [0.00] * N
+    hk_idx = 0
+    for adc_num in [1,2,3]:
+        for chan in range(num_channels):
+            for retry in range(6): 
+                adc_code = await read_adc_code(adc_num,chan,driver) # set next read to chan + 1, start at ch1
+                if retry == 5:
                     readout_codes[hk_idx] = adc_code
                     value = hk_eqns.convert(adc_num-1,chan,adc_code)
                     readout_values[hk_idx] = round(value,3)
                     hk_idx = hk_idx + 1
+            
     return readout_codes, readout_values
-
 async def do_housekeeping():
     driver = drivers.boards.getCMODUartDriver("COM17",baud=115200) #115200 
     await driver.open() 
@@ -74,13 +93,15 @@ async def do_housekeeping():
         writer.writerow(header.split(","))
         for line_number in range(1000):
             now = datetime.now().isoformat()
-            (readout_codes, readout_values) =  await get_hk_row(driver)
+            print(now)
+            (readout_codes, readout_values) =  await get_hk_row_tripple(driver)
             row = now + "," + ",".join([str(x) for x in readout_values])
             print(row)
             writer.writerow(row.split(","))
-            csvfile.flush()
-            time.sleep(1)
+            if (line_number % 10): # only sometimes flush write queue
+                csvfile.flush()
         driver.close()
+        csvfile.flush()
 # for i in range(N):
 #     header += [f"{readout_names[]}"]
 asyncio.run(do_housekeeping())

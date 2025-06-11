@@ -9,6 +9,9 @@ sys.path.insert(1, os.path.abspath("rtl/top"))
 import asyncio 
 import time
 
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 ## Load Board
 ##############
 import drivers.boards
@@ -60,18 +63,23 @@ async def callHK():
         for adc_num in [1,2,3]:
             for chan in range(8):
                 for retry in range(3):
+                    logger.info(f"Set ADC 0")
                     await driver.houseKeeping.selectADC(0)
-                    time.sleep(0.01)
+                    #time.sleep(0.01)
+                    logger.info(f"Load adc channel number {adc_num}")
                     await driver.houseKeeping.writeADCDACBytes(bytes([chan<<3,0])) # Roll chan left 3 bits per ADC128S102 datasheet
-                    time.sleep(0.01)
+                    #time.sleep(0.01)
+                    logger.info(f"Trigger read on adc # {adc_num}")
                     await driver.houseKeeping.selectADC(adc_num)
-                    time.sleep(0.01)
+                   # time.sleep(0.01)
                     #print("{0:b}".format(chan<<3))
+                    logger.info(f"Check how many bytes")
                     adcBytesCount = await driver.houseKeeping.getADCBytesCount()
                     
                     if adcBytesCount != 2:
                             print(f"ERROR: byte count = {hex(adcBytesCount)}")
                     time.sleep(0.01)
+                    logger.info(f"Read {adcBytesCount} Bytes")
                     adcBytes = await driver.houseKeeping.readADCBytes(adcBytesCount) 
                     (units, shortname) = hk_eqns.get_info(adc_num-1,chan)
                     adc_code = int.from_bytes(adcBytes)
