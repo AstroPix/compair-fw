@@ -2,7 +2,7 @@
 
 module spi_axis_if_adc #(
     parameter QSPI = 0,
-    parameter MSB_FIRST = 0,
+    parameter MSB_FIRST = 1'b1,
     parameter CLOCK_OUT_CG = 1'b0 ) (
 
     // System clock
