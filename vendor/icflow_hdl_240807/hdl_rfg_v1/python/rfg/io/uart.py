@@ -39,6 +39,7 @@ class UARTIO(rfg.core.RFGIO):
             self.serialPort = serial.Serial(port = self.port,baudrate=self.baud,timeout=self.timeout)
             logger.debug(f"Flushing serial input buffer on port {self.port}")
             self.serialPort.reset_input_buffer()
+            self.serialPort.reset_output_buffer()
             atexit.register(exit_close,self)
             logger.info(f"Opened Serial port {self.port} with baud {self.baud} bps")
             #self.serialPort.open()
