@@ -17,16 +17,17 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-num_adcs     = 3
-num_channels = 8
-N            = num_adcs * num_channels
+COM_PORT_SETTING = "COM6"
+NUM_ADCS     = 3
+NUM_CHANNELS = 8
+N            = NUM_ADCS * NUM_CHANNELS
 
 # 1) Build a filename with a timestamp so each run gets its own file:
-readout_names = [""] * num_adcs * num_channels
-readout_units = [""] * num_adcs * num_channels
+readout_names = [""] * NUM_ADCS * NUM_CHANNELS
+readout_units = [""] * NUM_ADCS * NUM_CHANNELS
 hk_idx = 0
 for adc_num in [1,2,3]:
-    for chan in range(num_channels):
+    for chan in range(NUM_CHANNELS):
         (units, shortname) = hk_eqns.get_info(adc_num-1,chan)
         readout_names[hk_idx] = shortname
         readout_units[hk_idx] = units
@@ -57,7 +58,7 @@ async def get_hk_row(driver):
     hk_idx = 0
     for adc_num in [1,2,3]:
         adc_code = await read_adc_code(adc_num,0,driver) # prime next read to 0
-        for chan in range(num_channels):
+        for chan in range(NUM_CHANNELS):
             if chan  < 8: 
                 adc_code = await read_adc_code(adc_num,(chan+1) % 8,driver) # set next read to chan + 1, start at ch1
             else:
@@ -75,7 +76,7 @@ async def get_hk_row_tripple(driver):
     readout_values = [0.00] * N
     hk_idx = 0
     for adc_num in [1,2,3]:
-        for chan in range(num_channels):
+        for chan in range(NUM_CHANNELS):
             for retry in range(6): 
                 adc_code = await read_adc_code(adc_num,chan,driver) # set next read to chan + 1, start at ch1
                 if retry == 5:
@@ -86,7 +87,7 @@ async def get_hk_row_tripple(driver):
             
     return readout_codes, readout_values
 async def do_housekeeping():
-    driver = drivers.boards.getCMODUartDriver("COM17",baud=115200) #115200 
+    driver = drivers.boards.getCMODUartDriver(COM_PORT_SETTING,baud=115200) #115200 
     await driver.open() 
     with open(values_filename, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
@@ -122,8 +123,8 @@ asyncio.run(do_housekeeping())
 # async def callHK():
 #     driver = drivers.boards.getCMODUartDriver("COM17",baud=115200) #115200 
 #     await driver.open() 
-#     readout_names = [""] * num_adcs * num_channels
-#     readout_units = [""] * num_adcs * num_channels
+#     readout_names = [""] * NUM_ADCS * NUM_CHANNELS
+#     readout_units = [""] * NUM_ADCS * NUM_CHANNELS
 #     hk_idx = 0
 #     for adc_num in [1,2,3]:
 #         for chan in range(8):
@@ -132,8 +133,8 @@ asyncio.run(do_housekeeping())
 #             readout_units[hk_idx] = units
 #             hk_idx = hk_idx + 1
     
-#     readout_codes = [0] * num_adcs * num_channels
-#     readout_values = [0.00] * num_adcs * num_channels
+#     readout_codes = [0] * NUM_ADCS * NUM_CHANNELS
+#     readout_values = [0.00] * NUM_ADCS * NUM_CHANNELS
 
 #     for top in range(1):
 
