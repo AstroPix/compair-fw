@@ -16,8 +16,9 @@ from datetime import datetime
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-COM_PORT_SETTING = "COM6"
+SAVE_DIRECTORY = "C:/TCData/"
+FILE_PREFIX = "compair2_fee_SNx_test"
+COM_PORT_SETTING = "COM8"
 NUM_ADCS     = 3
 NUM_CHANNELS = 8
 N            = NUM_ADCS * NUM_CHANNELS
@@ -38,8 +39,11 @@ header = "timestamp,"
 header = header + ",".join(readout_names)
 
 start_time = datetime.now()
-values_filename   = start_time.strftime('hk_values_%Y%m%d_%H%M%S.csv')
-codes_filename   = start_time.strftime('hk_codes_%Y%m%d_%H%M%S.csv')
+
+FILE_TIMESTAMP   = start_time.strftime('%Y%m%d_%H%M%S')
+values_filename = os.path.abspath(os.path.join(SAVE_DIRECTORY,FILE_PREFIX + "_HK_VALUES_" + FILE_TIMESTAMP + ".csv"))
+codes_filename = os.path.abspath(os.path.join(SAVE_DIRECTORY,FILE_PREFIX + "_HK_CODES_" +FILE_TIMESTAMP + ".csv"))
+
 
 async def read_adc_code(adc_num,chan,driver):
     #await driver.houseKeeping.selectADC(0)
