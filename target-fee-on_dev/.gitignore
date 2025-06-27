@@ -1,0 +1,14 @@
+# Ingore IP generated output stuff, and work folders
+impl_1
+*.dir
+.recovery
+.setting*
+.ng*
+*.html
+*.pfl
+
+*/testbench
+*/component.xml
+*/rtl
+*/misc
+*.xml

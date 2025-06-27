@@ -1,0 +1,134 @@
+<Project SigType="0" Date="2025-05-05" ModBy="Inserter" Name="C:/Project/COMPAIR/compair-fw/target-certusnx-fee/certusnxfee.rvl">
+    <IP Version="1_6_042617"/>
+    <Design Stage="presyn" DeviceName="LFCPNX-100" DesignEntry="Schematic/Verilog HDL" Synthesis="synplify" JTAG="hard" DeviceFamily="LFCPNX" DesignName="certusnx-fee"/>
+    <Core Insert="1" InsertDataset="0" Reveal_sig="625666308" ID="0" Name="compair_fpga_top_LA0">
+        <Setting>
+            <Clock SampleClk="sysclk_100" EnableClk="" SampleEnable="0" EnableClk_Pri="0"/>
+            <TraceBuffer Implementation="0" BitTimeStamp="9" BufferDepth="256" hasTimeStamp="1" IncTrigSig="0"/>
+            <Capture MinSamplesPerTrig="8" Mode="0"/>
+            <Event MaxEventCnt="8" CntEnable="0"/>
+            <TrigOut TrigOutNetType="1" TrigOutNet="reveal_debug_compair_fpga_top_LA0_net" MinPulseWidth="0" EnableTrigOut="0" Polarity="0"/>
+            <DistRAM Disable="0"/>
+        </Setting>
+        <Dataset Name="Base">
+            <Trace>
+                <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_penable_i"/>
+                <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwrite_i"/>
+                <Bus Name="astep24_20l_top_I/sw_if/apb_pwdata_i">
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:0"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:1"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:2"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:3"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:4"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:5"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:6"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:7"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:8"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:9"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:10"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:11"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:12"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:13"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:14"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:15"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:16"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:17"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:18"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:19"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:20"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:21"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:22"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:23"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:24"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:25"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:26"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:27"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:28"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:29"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:30"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_pwdata_i:31"/>
+                </Bus>
+                <Bus Name="astep24_20l_top_I/sw_if/apb_prdata_o">
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:0"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:1"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:2"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:3"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:4"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:5"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:6"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:7"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:8"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:9"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:10"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:11"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:12"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:13"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:14"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:15"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:16"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:17"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:18"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:19"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:20"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:21"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:22"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:23"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:24"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:25"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:26"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:27"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:28"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:29"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:30"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_prdata_o:31"/>
+                </Bus>
+                <Bus Name="astep24_20l_top_I/sw_if/apb_paddr_i">
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_paddr_i:0"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_paddr_i:1"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_paddr_i:2"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_paddr_i:3"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_paddr_i:4"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/apb_paddr_i:5"/>
+                </Bus>
+                <Bus Name="astep24_20l_top_I/sw_if/rfg_read_value">
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read_value:0"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read_value:1"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read_value:2"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read_value:3"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read_value:4"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read_value:5"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read_value:6"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read_value:7"/>
+                </Bus>
+                <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read_valid"/>
+                <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_read"/>
+                <Bus Name="astep24_20l_top_I/sw_if/rfg_address">
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:0"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:1"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:2"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:3"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:4"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:5"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:6"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:7"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:8"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:9"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:10"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:11"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:12"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:13"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:14"/>
+                    <Sig Type="SIG" Name="astep24_20l_top_I/sw_if/rfg_address:15"/>
+                </Bus>
+                <Sig Type="SIG" Name="ftdi_tx"/>
+                <Sig Type="SIG" Name="ftdi_rx"/>
+            </Trace>
+            <Trigger>
+                <TU Sig="ftdi_tx," Serialbits="0" ID="1" Type="0"/>
+                <TU Sig="astep24_20l_top_I/sw_if/apb_pwrite_i," Serialbits="0" ID="2" Type="0"/>
+                <TU Sig="ftdi_rx," Serialbits="0" ID="3" Type="0"/>
+                <TE MaxSequence="2" Resource="0" ID="1" MaxEvnCnt="1"/>
+            </Trigger>
+        </Dataset>
+    </Core>
+</Project>

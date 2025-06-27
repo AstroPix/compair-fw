@@ -18,10 +18,10 @@ class RFGIO:
     This class provides a basic interface to send RFG bytes to a specific IO interface
     """
 
-    def open(self):
+    async def open(self):
         pass
 
-    def close(self):
+    async def close(self):
         pass
 
     async def writeBytes(self,bytes : bytearray):
@@ -108,6 +108,8 @@ class AbstractRFG:
                         bytes.append(header)
                         
                         # Register address, if > 255, add two bytes
+                        #print("cmd reg value is ")
+                        print("cmd reg value is 0x{0:02x}".format(cmd.register.value))
                         if cmd.register.value > 255:
                             bytes.append(cmd.register.value.to_bytes(byteorder="little",length=2)[0])
                             bytes.append(cmd.register.value.to_bytes(byteorder="little",length=2)[1])
@@ -133,6 +135,8 @@ class AbstractRFG:
                     bytes.append(header)
                     
                     # Register address, if > 255, add two bytes
+                    print("cmd reg value is 0x{0:02x}".format(cmd.register.value))
+                    #print(f"{cmd.register.value}") print("my num is 0x{0:02x}{1:02x}".format(res[0],res[1]))
                     if cmd.register.value > 255:
                         bytes.append(cmd.register.value.to_bytes(byteorder="little",length=2)[0])
                         bytes.append(cmd.register.value.to_bytes(byteorder="little",length=2)[1])
@@ -197,7 +201,7 @@ class AbstractRFG:
 
         ## Now Read
         resBytes =  await self.io.readBytes(count)
-        #print("Read bytes: "+str(resBytes))
+        print("Read bytes: "+str(resBytes))
 
         ## Send bytes to queue if necessary
         if targetQueue is not None: 

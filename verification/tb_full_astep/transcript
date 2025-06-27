@@ -1,0 +1,23 @@
+# do sim_build/runsim.do
+# QuestaSim-64 vmap 2023.2_1 Lib Mapping Utility 2023.05 May 12 2023
+# vmap -c 
+# ** Warning: vmap will not overwrite local modelsim.ini.
+# QuestaSim-64 vmap 2023.2_1 Lib Mapping Utility 2023.05 May 12 2023
+# vmap work sim_build/work 
+# Modifying modelsim.ini
+# ** Warning: (vish-174) An embedded newline exists within a string in the argument file ('/mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/astep24_3l_top.sim.f'): '-sv -64bit
+# -access +rw
+# -define SIMULATION
+# +define+RFG_FW_ID=32'h0000ff00
+# +define+RFG_FW_BUILD=32'h0000ffAB
+# '
+# ** UI-Msg (Error): (vish-3296) Unknown option '-sv'.
+# Use the -help option for complete vsim usage.
+# ** UI-Msg (Error): (vish-3296) Unknown option '-64bit'.
+# Use the -help option for complete vsim usage.
+# ** UI-Msg (Error): (vish-3296) Unknown option '-access'.
+# Use the -help option for complete vsim usage.
+# ** UI-Msg (Error): (vish-3296) Unknown option '-define'.
+# Use the -help option for complete vsim usage.
+# ** Error: Error loading design
+# Executing ONERROR command at macro ./sim_build/runsim.do line 9
