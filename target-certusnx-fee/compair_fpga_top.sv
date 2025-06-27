@@ -1,11 +1,11 @@
 module compair_fpga_top(
 
 	input   wire            sysclk_100, // Clock on N25, JP15 is removed, or output J23 is 1 or hi-z
-        input   wire            rstn,
-        input   wire            ftdi_tx, // TX of FTDI UART
-        output  wire            ftdi_rx, // RX of FTDI UART
-		output  wire        dcdc_5p0_sync_mode,
-		output          dcdc_d3p3_sync_mode,
+    input   wire            rstn,
+    input   wire            ftdi_tx, // TX of FTDI UART
+    output  wire            ftdi_rx, // RX of FTDI UART
+	output  wire            dcdc_5p0_sync_mode,
+	output                  dcdc_d3p3_sync_mode,
 	
 	output wire             row0_hold,
 	output wire             row0_row3_reset,
