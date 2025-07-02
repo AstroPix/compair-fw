@@ -6,6 +6,14 @@ module compair_fpga_top(
     output  wire            ftdi_rx, // RX of FTDI UART
 	output  wire            dcdc_5p0_sync_mode,
 	output                  dcdc_d3p3_sync_mode,
+
+    input   wire            mehb_gps_pps,
+    input   wire            meb_spi_clk,
+    input   wire            meb_spi_miso,
+    input   wire            meb_hold,         // meb full
+    output  wire            meb_spi_mosi,
+    output  wire            fee_hit,          // meb int, trig_out
+    output  wire            fee_busy,
 	
 	output wire             row0_hold,
 	output wire             row0_row3_reset,
@@ -52,7 +60,7 @@ module compair_fpga_top(
 	output wire             row5_spi_mosi,
 	
 	output wire             row6_hold,
-        input  wire             row6_int,
+    input  wire             row6_int,
 	output wire             row6_spi_clk,
 	output wire             row6_spi_cs,
 	input  wire    [1:0]    row6_spi_miso,
@@ -168,6 +176,7 @@ module compair_fpga_top(
 
 );
 
+ 
 
     // Richard: Uart init done is set after a reset of the uart driver, and one successful read from the ip core happened
     // if the first Red LED is off, it is likely that the communication with the board won't work
@@ -177,9 +186,32 @@ module compair_fpga_top(
     wire row10_resn, row11_resn, row12_resn, row13_resn, row14_resn;
     wire row15_resn, row16_resn, row17_resn, row18_resn, row19_resn;
 
+    wire trig_out_int; 
+    reg trig_out_delayed;
+
     assign dcdc_5p0_sync_mode =  ftdi_rx;
     assign dcdc_d3p3_sync_mode = ftdi_tx;
 	
+    always @(posedge sysclk_100) begin
+      trig_out_delayed <= trig_out_int;
+    end
+
+    always @* begin
+     if (trig_out_int == 0 && trig_out_delayed == 1) begin
+            fee_hit <= 0;
+     end
+        else 
+            begin
+            fee_hit <= 1;
+            end
+        end
+    
+
+   assign trig_out_int = row0_int || row1_int || row2_int || row3_int 
+                || row3_int || row5_int || row6_int || row7_int 
+                || row7_int || row9_int || row10_int || row11_int 
+                || row11_int || row13_int || row14_int || row15_int 
+                || row15_int || row17_int || row18_int || row19_int;
 	
 	
     assign row0_row3_reset = row0_resn || row1_resn || row2_resn || row3_resn;
