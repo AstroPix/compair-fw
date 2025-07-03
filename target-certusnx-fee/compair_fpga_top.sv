@@ -192,27 +192,27 @@ module compair_fpga_top(
 
 );
 
-    wire clk_sample;
-    assign row0_ts_clk = clk_sample;
-    assign row1_ts_clk = clk_sample;
-    assign row2_ts_clk = clk_sample;
-    assign row3_ts_clk = clk_sample;
-    assign row4_ts_clk = clk_sample;
-    assign row5_ts_clk = clk_sample;
-    assign row6_ts_clk = clk_sample;
-    assign row7_ts_clk = clk_sample;
-    assign row8_ts_clk = clk_sample;
-    assign row9_ts_clk = clk_sample;
-    assign row10_ts_clk = clk_sample;
-    assign row11_ts_clk = clk_sample;
-    assign row12_ts_clk = clk_sample;
-    assign row13_ts_clk = clk_sample;
-    assign row14_ts_clk = clk_sample;
-    assign row15_ts_clk = clk_sample;
-    assign row16_ts_clk = clk_sample;
-    assign row17_ts_clk = clk_sample;
-    assign row18_ts_clk = clk_sample;
-    assign row19_ts_clk = clk_sample;
+    wire clk_timestamp;
+    assign row0_ts_clk = clk_timestamp;
+    assign row1_ts_clk = clk_timestamp;
+    assign row2_ts_clk = clk_timestamp;
+    assign row3_ts_clk = clk_timestamp;
+    assign row4_ts_clk = clk_timestamp;
+    assign row5_ts_clk = clk_timestamp;
+    assign row6_ts_clk = clk_timestamp;
+    assign row7_ts_clk = clk_timestamp;
+    assign row8_ts_clk = clk_timestamp;
+    assign row9_ts_clk = clk_timestamp;
+    assign row10_ts_clk = clk_timestamp;
+    assign row11_ts_clk = clk_timestamp;
+    assign row12_ts_clk = clk_timestamp;
+    assign row13_ts_clk = clk_timestamp;
+    assign row14_ts_clk = clk_timestamp;
+    assign row15_ts_clk = clk_timestamp;
+    assign row16_ts_clk = clk_timestamp;
+    assign row17_ts_clk = clk_timestamp;
+    assign row18_ts_clk = clk_timestamp;
+    assign row19_ts_clk = clk_timestamp;
     // Richard: Uart init done is set after a reset of the uart driver, and one successful read from the ip core happened
     // if the first Red LED is off, it is likely that the communication with the board won't work
     wire uart_init_done;
@@ -231,8 +231,7 @@ module compair_fpga_top(
 	assign dcdc_d1p0_sync_mode = clk_core_dbg;
     assign dcdc_a1p8_sync_mode = watchdog;
     assign dcdc_a1p2_sync_mode = clk_uart_dbg;
-	
-    
+	    
 
 	
     assign row0_row3_reset = row0_resn || row1_resn || row2_resn || row3_resn;
