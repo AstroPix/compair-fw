@@ -176,6 +176,11 @@ module compair_fpga_top(
         output wire row18_ts_clk,
         output wire row19_ts_clk,
 
+        output wire row0_row3_inject,
+        output wire row4_row7_inject,
+        output wire row8_row11_inject,
+        output wire row12_row15_inject,
+        output wire row16_row19_inject,
 	//output wire             inj,
 
 	
@@ -213,6 +218,13 @@ module compair_fpga_top(
     assign row17_ts_clk = clk_timestamp;
     assign row18_ts_clk = clk_timestamp;
     assign row19_ts_clk = clk_timestamp;
+
+    wire inj;
+    assign row0_row3_inject   = inj;
+    assign row4_row7_inject   = inj;
+    assign row8_row11_inject  = inj;
+    assign row12_row15_inject = inj;
+    assign row16_row19_inject = inj;
     // Richard: Uart init done is set after a reset of the uart driver, and one successful read from the ip core happened
     // if the first Red LED is off, it is likely that the communication with the board won't work
     wire uart_init_done;
