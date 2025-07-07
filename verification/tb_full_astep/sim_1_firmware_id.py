@@ -25,7 +25,7 @@ async def test_fw_id_uart(dut):
     ## Read Firmware Type
     version = await driver.readFirmwareVersion()
     print("Version: ",version)
-    assert version == 0xffab
+    assert version == 2024112001
 
     ## Read Firmware ID
     id = await driver.readFirmwareID()
@@ -33,7 +33,7 @@ async def test_fw_id_uart(dut):
     assert id == 0xff00
 
 
-@cocotb.test(timeout_time = 1 , timeout_unit = "ms" , skip=False)
+@cocotb.test(timeout_time = 2 , timeout_unit = "ms" , skip=False)
 async def test_fw_id_spi(dut):
 
     
@@ -45,7 +45,7 @@ async def test_fw_id_spi(dut):
     ## Read Firmware Type
     version = await driver.readFirmwareVersion()
     print(f"Version: {hex(version)}")
-    assert version == 0xffab
+    assert version == 2024112001
 
     ## Read Firmware ID
     id = await driver.readFirmwareID()

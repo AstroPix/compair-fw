@@ -1,0 +1,49 @@
+<Project Date="2025-06-05" ModBy="Inserter" Name="/home/aschoenw/adam_dev/target-certusnx-fee/certusnxfee.rvl" SigType="0">
+    <IP Version="1_6_042617"/>
+    <Design DesignEntry="Schematic/Verilog HDL" DesignName="certusnx-fee" DeviceFamily="LFCPNX" DeviceName="LFCPNX-100" JTAG="hard" Stage="postpar" Synthesis="synplify"/>
+    <Core ID="0" Insert="1" InsertDataset="0" Name="compair_fpga_top_LA0" Reveal_sig="629864641">
+        <Setting>
+            <Clock EnableClk="" EnableClk_Pri="0" SampleClk="clk_core" SampleEnable="0"/>
+            <TraceBuffer BitTimeStamp="0" BufferDepth="256" Implementation="0" IncTrigSig="1" hasTimeStamp="0"/>
+            <Capture MinSamplesPerTrig="8" Mode="0"/>
+            <Event CntEnable="0" MaxEventCnt="8"/>
+            <TrigOut EnableTrigOut="0" MinPulseWidth="0" Polarity="0" TrigOutNet="reveal_debug_compair_fpga_top_LA0_net" TrigOutNetType="1"/>
+            <DistRAM Disable="0"/>
+        </Setting>
+        <Dataset Name="Base">
+            <Trace>
+                <Sig LogicName="astep24_20l_top_I/hk_adc_miso_fifo_read_size[7]" Name="astep24_20l_top_I.hk_adc_miso_fifo_read_size[7]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/hk_adc_miso_fifo_read_size[6]" Name="astep24_20l_top_I.hk_adc_miso_fifo_read_size[6]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/sw_if/transmitting" Name="astep24_20l_top_I.sw_if.transmitting" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/hk_adc_miso_fifo_read_size[5]" Name="astep24_20l_top_I.hk_adc_miso_fifo_read_size[5]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/hk_adc_miso_fifo_read_size[4]" Name="astep24_20l_top_I.hk_adc_miso_fifo_read_size[4]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/hk_adc_miso_fifo_read_size[3]" Name="astep24_20l_top_I.hk_adc_miso_fifo_read_size[3]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/hk_adc_miso_fifo_read_size[2]" Name="astep24_20l_top_I.hk_adc_miso_fifo_read_size[2]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/hk_adc_miso_fifo_read_size[1]" Name="astep24_20l_top_I.hk_adc_miso_fifo_read_size[1]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/hk_adc_miso_fifo_read_size[0]" Name="astep24_20l_top_I.hk_adc_miso_fifo_read_size[0]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/miso_fifo/cache_fifo_rd_data_count[2]" Name="astep24_20l_top_I.housekeeping.miso_fifo.cache_fifo_rd_data_count[2]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/sw_if/uart_lattice_axis_driver_inst/axis_master_stalled" Name="astep24_20l_top_I.sw_if.uart_lattice_axis_driver_inst.axis_master_stalled" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/sw_if/uart_lattice_axis_driver_inst/thr_empty_1_sqmuxa" Name="astep24_20l_top_I.sw_if.uart_lattice_axis_driver_inst.thr_empty_1_sqmuxa" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/sw_if/uart_lattice_axis_driver_inst/thr_empty" Name="astep24_20l_top_I.sw_if.uart_lattice_axis_driver_inst.thr_empty" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/miso_fifo/cache_fifo_rd_data_count[1]" Name="astep24_20l_top_I.housekeeping.miso_fifo.cache_fifo_rd_data_count[1]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/miso_fifo/cache_fifo_rd_data_count[0]" Name="astep24_20l_top_I.housekeeping.miso_fifo.cache_fifo_rd_data_count[0]" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/miso_fifo/cache_fifo_almost_full" Name="astep24_20l_top_I.housekeeping.miso_fifo.cache_fifo_almost_full" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/miso_fifo/fifo_read_data_valid" Name="astep24_20l_top_I.housekeeping.miso_fifo.fifo_read_data_valid" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/miso_fifo/fifo_read" Name="astep24_20l_top_I.housekeeping.miso_fifo.fifo_read" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/miso_fifo/fifo_read51" Name="astep24_20l_top_I.housekeeping.miso_fifo.fifo_read51" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/miso_fifo/fifo_almost_empty" Name="astep24_20l_top_I.housekeeping.miso_fifo.fifo_almost_empty" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/miso_fifo/empty" Name="astep24_20l_top_I.housekeeping.miso_fifo.empty" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/full" Name="astep24_20l_top_I.housekeeping.full" Type="SIG"/>
+                <Sig LogicName="astep24_20l_top_I/housekeeping/cache_fifo_empty" Name="astep24_20l_top_I.housekeeping.cache_fifo_empty" Type="SIG"/>
+                <Sig LogicName="" Name="ftdi_tx_c" Type="SIG"/>
+                <Sig LogicName="" Name="ftdi_rx_c" Type="SIG"/>
+            </Trace>
+            <Trigger>
+                <TU ID="1" LogicName="ftdi_tx_c," Serialbits="0" Sig="ftdi_tx_c," Type="0"/>
+                <TU ID="2" LogicName="ftdi_rx_c," Serialbits="0" Sig="ftdi_rx_c," Type="0"/>
+                <TE ID="1" MaxEvnCnt="1" MaxSequence="2" Resource="0"/>
+                <TE ID="2" MaxEvnCnt="1" MaxSequence="2" Resource="0"/>
+            </Trigger>
+        </Dataset>
+    </Core>
+</Project>

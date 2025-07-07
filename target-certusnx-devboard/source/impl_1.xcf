@@ -20,7 +20,7 @@
 				<BScanVal>0</BScanVal>
 			</Bypass>
 			<File>../../impl_1/certusnx-devboard_impl_1.bit</File>
-			<FileTime>08/23/24 13:43:15</FileTime>
+			<FileTime>08/23/24 15:01:04</FileTime>
 			<MemoryType>Static Random Access Memory (SRAM)</MemoryType>
 			<Operation>Fast Configuration</Operation>
 			<Option>

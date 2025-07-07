@@ -180,7 +180,7 @@ namespace eval icflow::rfg {
         lappend ioLines "// --------------------"
         lappend ioLines "input  wire                clk"
         lappend ioLines "input  wire                resn"
-        lappend ioLines "input  wire  \[7:0\]         rfg_address"
+        lappend ioLines "input  wire  \[15:0\]         rfg_address"
         lappend ioLines "input  wire  \[7:0\]         rfg_write_value"
         lappend ioLines "input  wire                rfg_write"
         lappend ioLines "input  wire                rfg_write_last"
@@ -404,7 +404,7 @@ namespace eval icflow::rfg {
 
                         if {[icflow::args::contains $params -clock_divider]} {
 
-                            icflow::generate::writeLine $o "{1'b1,8'h[format %x [dict get $register address]]}: begin" -indent
+                            icflow::generate::writeLine $o "{1'b1,16'h[format %x [dict get $register address]]}: begin" -indent
                                 icflow::generate::writeLine $o "${name}_reg <= rfg_write_value;"
                             icflow::generate::writeLine $o "end" -outdent
 
@@ -415,7 +415,7 @@ namespace eval icflow::rfg {
                             #puts "base address [dict get $register address]"
                             for {set i 0} {$i < $byteCount} {incr i} {
                                 set partAddress [expr [dict get $register address] + $i  ]
-                                icflow::generate::writeLine $o "{1'b1,8'h[format %x $partAddress]}: begin" -indent
+                                icflow::generate::writeLine $o "{1'b1,16'h[format %x $partAddress]}: begin" -indent
                                     set lowBit  [expr $i*8]
                                     set highBit [expr $lowBit + [expr $registerSize<8 ? $registerSize - 1 : 7]]
                                     if {$highBit<7} {
@@ -443,7 +443,7 @@ namespace eval icflow::rfg {
                     set parameters  [dict get $register parameters]
 
                     if {[icflow::args::contains $parameters -fifo*master]} {
-                        icflow::generate::writeLine $o "if(rfg_write && rfg_address==8'h[format %x $address]) begin" -indent
+                        icflow::generate::writeLine $o "if(rfg_write && rfg_address==16'h[format %x $address]) begin" -indent
                             
                             icflow::generate::writeLine $o "${name}_m_axis_tvalid <= 1'b1;"
                             icflow::generate::writeLine $o "${name}_m_axis_tdata  <= rfg_write_value;"
@@ -493,12 +493,12 @@ namespace eval icflow::rfg {
                             icflow::generate::writeLine $o "end" -outdent
                         } elseif {[icflow::args::containsNot $params -sw_read_only] && [icflow::args::contains $params -enable]} {
                             ## SW Write allowed and enable -> count on enable and not write
-                            icflow::generate::writeLine $o "if(!(rfg_write && rfg_address==8'h[format %x [dict get $register address]]) && ${name}_enable) begin" -indent
+                            icflow::generate::writeLine $o "if(!(rfg_write && rfg_address==16'h[format %x [dict get $register address]]) && ${name}_enable) begin" -indent
                                 icflow::generate::writeLine $o $countLine
                             icflow::generate::writeLine $o "end" -outdent
                         } elseif {[icflow::args::containsNot $params -sw_read_only]} {
                             ## SW Write enable, just write
-                            icflow::generate::writeLine $o "if(!(rfg_write && rfg_address==8'h[format %x [dict get $register address]])) begin" -indent
+                            icflow::generate::writeLine $o "if(!(rfg_write && rfg_address==16'h[format %x [dict get $register address]])) begin" -indent
                                 icflow::generate::writeLine $o $countLine
                             icflow::generate::writeLine $o "end" -outdent
                         }
@@ -547,7 +547,7 @@ namespace eval icflow::rfg {
             set name    [dict get $register name]
             set address [dict get $register address]
             if {[icflow::args::contains [dict get $register parameters] -fifo*slave]} {
-                icflow::generate::writeLine $o "assign ${name}_s_axis_tready = rfg_read && rfg_address==8'h[format %x $address];"
+                icflow::generate::writeLine $o "assign ${name}_s_axis_tready = rfg_read && rfg_address==16'h[format %x $address];"
             }
         }
         icflow::generate::writeEmptyLines $o 2
@@ -584,7 +584,7 @@ namespace eval icflow::rfg {
                         #    icflow::generate::writeLine $o "end" -outdent
                         #}  else
                         if {[icflow::args::contains $params -fifo*slave]} {
-                            icflow::generate::writeLine $o "{1'b1,8'h[format %x [dict get $register address]]}: begin" -indent
+                            icflow::generate::writeLine $o "{1'b1,16'h[format %x [dict get $register address]]}: begin" -indent
                                 icflow::generate::writeLine $o "rfg_read_value <= ${name}_s_axis_tvalid ? ${name}_s_axis_tdata : 8'hff;"
                                 icflow::generate::writeLine $o "rfg_read_valid <= 1 ;"
                             icflow::generate::writeLine $o "end" -outdent
@@ -595,7 +595,7 @@ namespace eval icflow::rfg {
                             #puts "base address [dict get $register address]"
                             for {set i 0} {$i < $byteCount} {incr i} {
                                 set partAddress [expr [dict get $register address] + $i  ]
-                                icflow::generate::writeLine $o "{1'b1,8'h[format %x $partAddress]}: begin" -indent
+                                icflow::generate::writeLine $o "{1'b1,16'h[format %x $partAddress]}: begin" -indent
                                     set lowBit  [expr $i*8]
                                     set highBit [expr $lowBit +7]
                                     icflow::generate::writeLine $o "rfg_read_value <= ${name}_reg\[$highBit:$lowBit\];"
@@ -734,7 +734,7 @@ namespace eval icflow::rfg {
             foreach register $registers {
                 set name [dict get $register name]
                 set addr [dict get $register address]
-                lappend enumLines "[string toupper $name] = 8'h[format %x $addr]"
+                lappend enumLines "[string toupper $name] = 16'h[format %x $addr]"
             }
             icflow::generate::writeLines $o $enumLines ,
 

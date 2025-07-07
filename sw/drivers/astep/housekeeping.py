@@ -1,4 +1,5 @@
 from decimal import Decimal, ROUND_HALF_EVEN
+from deprecated import deprecated
 
 import rfg.io
 import rfg.core
@@ -20,12 +21,12 @@ class Housekeeping():
         return (await self.readFirmwareVersion()) >= v
 
 
-    def convertBytesToFPGATemperature(self, rawTemperature) -> float: 
+    def convertBytesToFPGATemperature(self, rawTemperature) -> float:
         rawTemperature = (int.from_bytes(rawTemperature,'little')) >> 4
         floatTemperature =  rawTemperature * 503.975 / 4096 - 273.15
         return Decimal(floatTemperature).quantize(Decimal('.01'), rounding=ROUND_HALF_EVEN)
 
-    def convertBytesToVCCInt(self,rawVccit) -> float : 
+    def convertBytesToVCCInt(self,rawVccit) -> float :
         rawVccit = (int.from_bytes(rawVccit,'little')) >> 4
         return Decimal(rawVccit  / 4096 * 3 ).quantize(Decimal('.01'), rounding=ROUND_HALF_EVEN)
 
@@ -38,19 +39,19 @@ class Housekeeping():
         dividedClock = float(refClock) / float(matchRegister)
         return Decimal(dividedClock).quantize(Decimal('.01'), rounding=ROUND_HALF_EVEN)
 
-    async def readFPGATemperature(self, targetQueue: str | None = None ) ->  float: 
+    async def readFPGATemperature(self, targetQueue: str | None = None ) ->  float:
         """Returns FPGA Temperature as Float -> Doc: https://docs.xilinx.com/r/en-US/ug480_7Series_XADC/Analog-Inputs "Temperature Sensor" """
 
         rawTemperature = await self.rfg.read_hk_xadc_temperature(targetQueue = targetQueue) >> 4
         floatTemperature =  rawTemperature * 503.975 / 4096 - 273.15
         return Decimal(floatTemperature).quantize(Decimal('.01'), rounding=ROUND_HALF_EVEN)
-    
-    async def readFPGATemperatureRaw(self, targetQueue: str | None = None ) ->  float: 
+
+    async def readFPGATemperatureRaw(self, targetQueue: str | None = None ) ->  float:
         """Doc: https://docs.xilinx.com/r/en-US/ug480_7Series_XADC/Analog-Inputs "Temperature Sensor" """
         return await self.rfg.read_hk_xadc_temperature(targetQueue = targetQueue) >> 4
-        
 
-    async def readVCCInt(self, targetQueue: str | None = None) ->  float: 
+
+    async def readVCCInt(self, targetQueue: str | None = None) ->  float:
         """ https://docs.xilinx.com/r/en-US/ug480_7Series_XADC/Analog-Inputs "Power Supply Sensor" """
 
         vccint = ( (await self.rfg.read_hk_xadc_vccint(targetQueue = targetQueue)) >> 4 ) / 4096 * 3
@@ -64,7 +65,7 @@ class Housekeeping():
         await self.configureHKSPIDivider(divider,flush)
 
     async def configureHKSPIDivider(self, divider:int , flush = False):
-        await self.rfg.spi_hk_ckdivider(divider,flush)
+        await self.rfg.write_spi_hk_ckdivider(divider,flush)
 
     async def writeADCDACBytes(self,values : bytearray) :
         return await self.rfg.write_hk_adcdac_mosi_fifo_bytes(values,flush=True)
@@ -76,13 +77,22 @@ class Housekeeping():
     async def readADCBytes(self,count:int=1) :
         return await self.rfg.read_hk_adc_miso_fifo_raw(count)
 
-        
+    async def selectADC(self,select:int,flush:bool = True):
+        """This method selects ADC for HK SPI, flushes by default - 0 means deselect all"""
+        hk_cfg = 0
 
-    async def selectADC(self,flush:bool = True):
-        """This method selects ADC for HK SPI, flushes by default"""
-        await self.rfg.write_hk_ctrl(1,flush)
+        assert select >= 0 and select <= 3, (f'Target ADC must be in range 1-3, 0 deselects all')
 
+        if select == 1:
+            hk_cfg = hk_cfg | (1<<0)
+        elif select == 2:
+            hk_cfg = hk_cfg | (1<<1)
+        elif select == 3:
+            hk_cfg = hk_cfg | (1<<2)
+
+        await self.rfg.write_hk_ctrl(hk_cfg,flush)
+
+    @deprecated("No DAC exists on ComPair Frontend Electronics Board v1")
     async def selectDAC(self,flush:bool = True):
         """This method selects DAC for HK SPI, flushes by default"""
         await self.rfg.write_hk_ctrl(0,flush)
-    

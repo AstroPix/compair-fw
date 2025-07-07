@@ -1,5 +1,5 @@
 
--sv 
+#-sv
 -64bit
 -access +rw
 -define SIMULATION
@@ -9,7 +9,7 @@
 +define+RFG_FW_BUILD=32'h0000ffAB
 
 ## Main Verilog
--f ${BASE}/rtl/top/astep24_3l_top.f
+-f ${BASE}/rtl/top/astep24_20l_top.f
 
 
 ## Lattice sim

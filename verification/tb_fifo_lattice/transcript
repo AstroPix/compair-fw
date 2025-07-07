@@ -1,0 +1,41 @@
+# do sim_build/runsim.do
+# QuestaSim-64 vmap 2023.2_1 Lib Mapping Utility 2023.05 May 12 2023
+# vmap -c 
+# ** Warning: vmap will not overwrite local modelsim.ini.
+# QuestaSim-64 vmap 2023.2_1 Lib Mapping Utility 2023.05 May 12 2023
+# vmap work sim_build/work 
+# Modifying modelsim.ini
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:25:30 on Jan 14,2025
+# vlog -work work "+define+COCOTB_SIM" -sv -timescale 1ns/1ps -mfcu "+acc" -L ../xcelium_preparelib/lattice_compiled/lfcpnx /mnt/c/Project/COMPAIR/compair-fw/verification/tb_fifo_lattice/../../rtl/fifo/fifo_axis_common.sv /mnt/c/Project/COMPAIR/compair-fw/verification/tb_fifo_lattice/../../rtl/fifo/mini_fwft_fifo.sv /mnt/c/Project/COMPAIR/compair-fw/verification/tb_fifo_lattice/../../rtl/fifo/fifo_ptr_logic.sv /mnt/c/Project/COMPAIR/compair-fw/verification/tb_fifo_lattice/../ip/fifo_2clk_64x32.v 
+# -- Compiling module fifo_axis_common
+# -- Compiling module mini_fwft_fifo
+# -- Compiling module fifo_ptr_logic
+# -- Compiling module fifo_2clk_64x32
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_dc
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_dc_fwft_fabric
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_dc_main
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_hard_fifo_dc
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_dc_hw_core
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_soft_fifo_dc
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_reset_async
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_soft_mem
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_mem_main
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_mem_core
+# 
+# Top level modules:
+# 	fifo_axis_common
+# End time: 15:25:31 on Jan 14,2025, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim -onfinish exit -pli "/mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so" -L ../xcelium_preparelib/lattice_compiled/lfcpnx work.fifo_axis_common 
+# Start time: 15:25:31 on Jan 14,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vsim-3865) Due to PLI being present, global +acc is being enabled automatically. This will cause your simulation to run very slowly. Please use vsim -no_autoacc to disable this feature. This feature is now deprecated and will be removed from future releases.
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Error (suppressible): /home/rel/ng2024_1p.8/rtf/cae_library/simulation/verilog/lfcpnx/EBR_CORE.v(362): (vopt-7063) Failed to find 'GSR_INST' in hierarchical name 'GSR_INST.GSROUT'.
+#         Region: fifo_axis_common.genblk1.fifo.lscc_fifo_dc_inst.fifo_dc0._FABRIC.u_fifo.EBR.EBR_LIFCL.u_fifo_mem0.mem_main.NON_MIX.ADDR_ROUTE[0].DATA_ROUTE[0].no_init.u_mem0.LIFCL_MEM.pdp16k.PDP16K_MODE_inst.EBR_inst
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=1, Warnings=2.
+# Error loading design
+# End time: 15:25:32 on Jan 14,2025, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 2

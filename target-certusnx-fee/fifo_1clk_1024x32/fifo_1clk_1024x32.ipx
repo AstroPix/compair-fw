@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<RadiantModule architecture="jd5d00" date="2025 06 05 10:59:32" device="LFCPNX-100" device_int="jd5d80" display_module="FIFO" display_vendor="latticesemi.com" family="LFCPNX" gen_platform="Radiant" gen_platform_version="2024.2.1.330.0" generator="ipgen" library="module" module="fifo" name="fifo_1clk_1024x32" operation="Automotive" package="BBG484" package_int="BBG484" partnumber="LFCPNX-100-7BBG484A" source_format="Verilog" speed="7_High-Performance_1.0V" speed_int="10" vendor="latticesemi.com" version="2.5.0">
+ <Package>
+  <File modified="2025 06 05 10:59:32" name="rtl/fifo_1clk_1024x32_bb.v" type="black_box_verilog"/>
+  <File modified="2025 06 05 10:59:32" name="fifo_1clk_1024x32.cfg" type="cfg"/>
+  <File modified="2025 06 05 10:59:32" name="misc/fifo_1clk_1024x32_tmpl.v" type="template_verilog"/>
+  <File modified="2025 06 05 10:59:32" name="misc/fifo_1clk_1024x32_tmpl.vhd" type="template_vhdl"/>
+  <File modified="2025 06 05 10:59:32" name="rtl/fifo_1clk_1024x32.v" type="top_level_verilog"/>
+  <File modified="2025 06 05 10:59:32" name="constraints/fifo_1clk_1024x32.ldc" type="timing_constraints"/>
+  <File modified="2025 06 05 10:59:32" name="testbench/dut_params.v" type="dependency_file"/>
+  <File modified="2025 06 05 10:59:32" name="testbench/dut_inst.v" type="dependency_file"/>
+  <File modified="2025 06 05 10:59:32" name="component.xml" type="IP-XACT_component"/>
+  <File modified="2025 06 05 10:59:32" name="design.xml" type="IP-XACT_design"/>
+  <File modified="2025 01 08 22:47:16" name="testbench/tb_top.v" type="testbench_verilog"/>
+ </Package>
+</RadiantModule>

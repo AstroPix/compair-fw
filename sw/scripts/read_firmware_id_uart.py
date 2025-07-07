@@ -1,21 +1,29 @@
+import sys
+import os
+os.environ['BASE'] = os.path.abspath(".")
+print(sys.path)
+sys.path.insert(1, os.path.abspath("sw"))
+sys.path.insert(1, os.path.abspath("vendor/icflow_hdl_240807/hdl_rfg_v1/python"))
+sys.path.insert(1, os.path.abspath("rtl/top"))
+
 import asyncio
-import drivers.astep.serial
 import drivers.boards
 
-import rfg
-rfg.io.uart.debug()
+async def test_fpga():
+    x = 115200
+    boardDriver = drivers.boards.getGeccoUARTDriver("COM17",baud=115200)
+    #print('Open')
+    await boardDriver.open()
+    
+    #print('ID')
+    id =      await boardDriver.readFirmwareID()
+    print(f"Firmware ID: {hex(id)}")
+    version = await boardDriver.readFirmwareVersion()
+    print(f"Firmware Version: {str(version)}")
 
-boardDriver = drivers.boards.getGeccoUARTDriver("/dev/ttyUSB0",115200)
-boardDriver.open()
+    await boardDriver.close()
 
-
-asyncio.run(boardDriver.rfg.write_io_led(0xFF,flush=True))
-
-
-
-pass 
-id =      asyncio.run(boardDriver.readFirmwareID())
-version = asyncio.run(boardDriver.readFirmwareVersion())
-
-print(f"Firmware ID: {hex(id)}")
-print(f"Firmware Version: {str(version)}")
+if __name__ == "__main__":
+    for count in range(30):
+        #print(count)
+        asyncio.run(test_fpga())

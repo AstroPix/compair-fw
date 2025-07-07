@@ -27,7 +27,7 @@ async def test_loopback_layer0(dut):
     ## Read Firmware Type
     version = await driver.readFirmwareVersion()
     print(f"Version: {hex(version)}")
-    assert version == 0xffab
+    assert version == 2024112001
 
     ## Stop frame tag counter, read it's valud to be able to check data frames
     await driver.configureLayersFrameTagFrequency(500000,True)

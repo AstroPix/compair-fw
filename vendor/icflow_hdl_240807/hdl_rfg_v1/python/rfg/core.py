@@ -18,10 +18,10 @@ class RFGIO:
     This class provides a basic interface to send RFG bytes to a specific IO interface
     """
 
-    def open(self):
+    async def open(self):
         pass
 
-    def close(self):
+    async def close(self):
         pass
 
     async def writeBytes(self,bytes : bytearray):
@@ -101,12 +101,21 @@ class AbstractRFG:
 
                         logger.debug(f"- Write part {i}/{requiredWrites},offset={offset},length={length},values array length={len(values)}")
                         
-
-                        if cmd.addressIncrement:
-                            bytes.append(0x05)
+                        # Header
+                        header = 0x05 if cmd.addressIncrement else 0x01
+                        if cmd.register.value > 255:
+                            header |= (1 << 3)
+                        bytes.append(header)
+                        
+                        # Register address, if > 255, add two bytes
+                        #print("cmd reg value is ")
+                        #print("cmd reg value is 0x{0:02x}".format(cmd.register.value))
+                        if cmd.register.value > 255:
+                            bytes.append(cmd.register.value.to_bytes(byteorder="little",length=2)[0])
+                            bytes.append(cmd.register.value.to_bytes(byteorder="little",length=2)[1])
                         else:
-                            bytes.append(0x01)
-                        bytes.append(cmd.register.value)
+                            bytes.append(cmd.register.value)
+
                         #bytes.append(cmd.length.to_bytes(byteorder="little",length=2)[0])
                         #bytes.append(cmd.length.to_bytes(byteorder="little",length=2)[1])
                         bytes.append(length.to_bytes(byteorder="little",length=2)[0])
@@ -117,11 +126,23 @@ class AbstractRFG:
                             #logger.debug("-> byte %x", bV)
                             bytes.append(bV)
                 else:
-                    if cmd.addressIncrement:
-                        bytes.append(0x06)
+                    # Read case
+
+                    # Header
+                    header = 0x06 if cmd.addressIncrement else 0x02
+                    if cmd.register.value > 255:
+                        header |= (1 << 3)
+                    bytes.append(header)
+                    
+                    # Register address, if > 255, add two bytes
+                    #print("cmd reg value is 0x{0:02x}".format(cmd.register.value))
+                    #print(f"{cmd.register.value}") print("my num is 0x{0:02x}{1:02x}".format(res[0],res[1]))
+                    if cmd.register.value > 255:
+                        bytes.append(cmd.register.value.to_bytes(byteorder="little",length=2)[0])
+                        bytes.append(cmd.register.value.to_bytes(byteorder="little",length=2)[1])
                     else:
-                        bytes.append(0x02)
-                    bytes.append(cmd.register.value)
+                        bytes.append(cmd.register.value)
+
                     bytes.append(cmd.length.to_bytes(byteorder="little",length=2)[0])
                     bytes.append(cmd.length.to_bytes(byteorder="little",length=2)[1])
 

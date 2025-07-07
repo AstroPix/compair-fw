@@ -25,22 +25,26 @@ class UARTIO(rfg.core.RFGIO):
     serialPort : serial.Serial | None = None 
 
     port : str | None = None 
-    baud : int = 921600
+    #baud : int = 921600
+    baud : int = 115200
     timeout : int = 3
 
     def listPorts(self) -> list[ListPortInfo] : 
         list_ports.comports()
 
-    def open(self):
+    async def open(self):
         if self.port == None: 
             logger.error("No COM port path selected")
         else: 
             self.serialPort = serial.Serial(port = self.port,baudrate=self.baud,timeout=self.timeout)
+            logger.debug(f"Flushing serial input buffer on port {self.port}")
+            self.serialPort.reset_input_buffer()
+            self.serialPort.reset_output_buffer()
             atexit.register(exit_close,self)
             logger.info(f"Opened Serial port {self.port} with baud {self.baud} bps")
             #self.serialPort.open()
 
-    def close(self):
+    async def close(self):
         logger.info("Closing Serial Port")
         if self.serialPort != None:
             if self.serialPort.is_open:
@@ -103,4 +107,4 @@ class UARTIO(rfg.core.RFGIO):
         
 
 def exit_close(io : UARTIO):
-    io.close()
+    asyncio.run(io.close())
