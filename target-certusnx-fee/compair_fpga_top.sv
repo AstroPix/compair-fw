@@ -155,6 +155,27 @@ module compair_fpga_top(
 	input  wire    [1:0]    row19_spi_miso,
 	output wire             row19_spi_mosi,
 	
+        output wire row0_ts_clk,
+        output wire row1_ts_clk,
+        output wire row2_ts_clk,
+        output wire row3_ts_clk,
+        output wire row4_ts_clk,
+        output wire row5_ts_clk,
+        output wire row6_ts_clk,
+        output wire row7_ts_clk,
+        output wire row8_ts_clk,
+        output wire row9_ts_clk,
+        output wire row10_ts_clk,
+        output wire row11_ts_clk,
+        output wire row12_ts_clk,
+        output wire row13_ts_clk,
+        output wire row14_ts_clk,
+        output wire row15_ts_clk,
+        output wire row16_ts_clk,
+        output wire row17_ts_clk,
+        output wire row18_ts_clk,
+        output wire row19_ts_clk,
+
 	//output wire             inj,
 
 	
@@ -171,7 +192,27 @@ module compair_fpga_top(
 
 );
 
-
+    wire clk_timestamp;
+    assign row0_ts_clk = clk_timestamp;
+    assign row1_ts_clk = clk_timestamp;
+    assign row2_ts_clk = clk_timestamp;
+    assign row3_ts_clk = clk_timestamp;
+    assign row4_ts_clk = clk_timestamp;
+    assign row5_ts_clk = clk_timestamp;
+    assign row6_ts_clk = clk_timestamp;
+    assign row7_ts_clk = clk_timestamp;
+    assign row8_ts_clk = clk_timestamp;
+    assign row9_ts_clk = clk_timestamp;
+    assign row10_ts_clk = clk_timestamp;
+    assign row11_ts_clk = clk_timestamp;
+    assign row12_ts_clk = clk_timestamp;
+    assign row13_ts_clk = clk_timestamp;
+    assign row14_ts_clk = clk_timestamp;
+    assign row15_ts_clk = clk_timestamp;
+    assign row16_ts_clk = clk_timestamp;
+    assign row17_ts_clk = clk_timestamp;
+    assign row18_ts_clk = clk_timestamp;
+    assign row19_ts_clk = clk_timestamp;
     // Richard: Uart init done is set after a reset of the uart driver, and one successful read from the ip core happened
     // if the first Red LED is off, it is likely that the communication with the board won't work
     wire uart_init_done;
@@ -190,7 +231,7 @@ module compair_fpga_top(
 	assign dcdc_d1p0_sync_mode = clk_core_dbg;
     assign dcdc_a1p8_sync_mode = watchdog;
     assign dcdc_a1p2_sync_mode = clk_uart_dbg;
-	
+	    
 
 	
     assign row0_row3_reset = row0_resn || row1_resn || row2_resn || row3_resn;
@@ -399,7 +440,7 @@ module compair_fpga_top(
         .spi_csn(), // always deselect
         .spi_miso(),       
         .spi_mosi(1'b0),   
-        
+
         .uart_rx(ftdi_tx),
         .uart_tx(ftdi_rx),
         .uart_init_done(uart_init_done),

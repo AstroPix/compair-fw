@@ -1328,7 +1328,24 @@ module astep24_20l_top(
     assign layer_0_spi_csn = !(layer_0_cfg_ctrl_cs || !layer_0_cfg_ctrl_disable_autoread) ;
     assign layer_1_spi_csn = !(layer_1_cfg_ctrl_cs || !layer_1_cfg_ctrl_disable_autoread) ;
     assign layer_2_spi_csn = !(layer_2_cfg_ctrl_cs || !layer_2_cfg_ctrl_disable_autoread) ;
-    assign layers_spi_csn = layer_0_spi_csn & layer_1_spi_csn & layer_2_spi_csn;
+    assign layer_4_spi_csn = !(layer_4_cfg_ctrl_cs || !layer_4_cfg_ctrl_disable_autoread) ;
+    assign layer_5_spi_csn = !(layer_5_cfg_ctrl_cs || !layer_5_cfg_ctrl_disable_autoread) ;
+    assign layer_6_spi_csn = !(layer_6_cfg_ctrl_cs || !layer_6_cfg_ctrl_disable_autoread) ;
+    assign layer_7_spi_csn = !(layer_7_cfg_ctrl_cs || !layer_7_cfg_ctrl_disable_autoread) ;
+    assign layer_8_spi_csn = !(layer_8_cfg_ctrl_cs || !layer_8_cfg_ctrl_disable_autoread) ;
+    assign layer_9_spi_csn = !(layer_9_cfg_ctrl_cs || !layer_9_cfg_ctrl_disable_autoread) ;
+    assign layer_10_spi_csn = !(layer_10_cfg_ctrl_cs || !layer_10_cfg_ctrl_disable_autoread) ;
+    assign layer_11_spi_csn = !(layer_11_cfg_ctrl_cs || !layer_11_cfg_ctrl_disable_autoread) ;
+    assign layer_12_spi_csn = !(layer_12_cfg_ctrl_cs || !layer_12_cfg_ctrl_disable_autoread) ;
+    assign layer_13_spi_csn = !(layer_13_cfg_ctrl_cs || !layer_13_cfg_ctrl_disable_autoread) ;
+    assign layer_14_spi_csn = !(layer_14_cfg_ctrl_cs || !layer_14_cfg_ctrl_disable_autoread) ;
+    assign layer_15_spi_csn = !(layer_15_cfg_ctrl_cs || !layer_15_cfg_ctrl_disable_autoread) ;
+    assign layer_16_spi_csn = !(layer_16_cfg_ctrl_cs || !layer_16_cfg_ctrl_disable_autoread) ;
+    assign layer_17_spi_csn = !(layer_17_cfg_ctrl_cs || !layer_17_cfg_ctrl_disable_autoread) ;
+    assign layer_18_spi_csn = !(layer_18_cfg_ctrl_cs || !layer_18_cfg_ctrl_disable_autoread) ;
+    assign layer_19_spi_csn = !(layer_19_cfg_ctrl_cs || !layer_19_cfg_ctrl_disable_autoread) ;
+
+    assign layers_spi_csn = layer_0_spi_csn & layer_1_spi_csn & layer_2_spi_csn & layer_3_spi_csn & layer_4_spi_csn & layer_5_spi_csn & layer_6_spi_csn & layer_7_spi_csn & layer_8_spi_csn & layer_9_spi_csn & layer_10_spi_csn & layer_11_spi_csn & layer_12_spi_csn & layer_13_spi_csn & layer_14_spi_csn & layer_15_spi_csn & layer_16_spi_csn & layer_17_spi_csn & layer_18_spi_csn & layer_19_spi_csn;
 
     //-- Housekeeping
     //--------------
