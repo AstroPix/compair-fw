@@ -5,7 +5,8 @@ module compair_fpga_top(
     input   wire            ftdi_tx, // TX of FTDI UART
     output  wire            ftdi_rx, // RX of FTDI UART
 	output  wire            dcdc_5p0_sync_mode,
-	output                  dcdc_d3p3_sync_mode,
+	output  wire            dcdc_d3p3_sync_mode,
+	output  wire            watchdog, 
 	
 	output wire             row0_hold,
 	output wire             row0_row3_reset,
@@ -14,6 +15,8 @@ module compair_fpga_top(
 	output wire             row0_spi_cs,
 	input  wire    [1:0]    row0_spi_miso,
 	output wire             row0_spi_mosi,
+	output wire [19:0]      row_ts_clk,
+	output wire [19:0]      row_samp_clk,
 	
 	output wire             row1_hold,
 	input  wire             row1_int,
@@ -21,6 +24,7 @@ module compair_fpga_top(
 	output wire             row1_spi_cs,
 	input  wire    [1:0]    row1_spi_miso,
 	output wire             row1_spi_mosi,
+
 	
 	output wire             row2_hold,
 	input  wire             row2_int,
@@ -28,6 +32,7 @@ module compair_fpga_top(
 	output wire             row2_spi_cs,
 	input  wire    [1:0]    row2_spi_miso,
 	output wire             row2_spi_mosi,
+
 	
 	output wire             row3_hold,
 	input  wire             row3_int,
@@ -35,6 +40,7 @@ module compair_fpga_top(
 	output wire             row3_spi_cs,
 	input  wire    [1:0]    row3_spi_miso,
 	output wire             row3_spi_mosi,
+
 	
 	output wire             row4_hold,
 	output wire             row4_row7_reset,
@@ -43,28 +49,29 @@ module compair_fpga_top(
 	output wire             row4_spi_cs,
 	input  wire    [1:0]    row4_spi_miso,
 	output wire             row4_spi_mosi,
-	
+
 	output wire             row5_hold,
 	input  wire             row5_int,
 	output wire             row5_spi_clk,
 	output wire             row5_spi_cs,
 	input  wire    [1:0]    row5_spi_miso,
 	output wire             row5_spi_mosi,
+
 	
 	output wire             row6_hold,
-        input  wire             row6_int,
+    input  wire             row6_int,
 	output wire             row6_spi_clk,
 	output wire             row6_spi_cs,
 	input  wire    [1:0]    row6_spi_miso,
 	output wire             row6_spi_mosi,
-	
+
 	output wire             row7_hold,
 	input  wire             row7_int,
 	output wire             row7_spi_clk,
 	output wire             row7_spi_cs,
 	input  wire    [1:0]    row7_spi_miso,
 	output wire             row7_spi_mosi,
-	
+
 	output wire             row8_hold,
 	output wire             row8_row11_reset,
 	input  wire             row8_int,
@@ -93,7 +100,7 @@ module compair_fpga_top(
 	output wire             row11_spi_cs,
 	input  wire    [1:0]    row11_spi_miso,
 	output wire             row11_spi_mosi,
-	
+
 	output wire             row12_hold,
 	output wire             row12_row15_reset,
 	input  wire             row12_int,
@@ -101,6 +108,7 @@ module compair_fpga_top(
 	output wire             row12_spi_cs,
 	input  wire    [1:0]    row12_spi_miso,
 	output wire             row12_spi_mosi,
+
 	
 	output wire             row13_hold,
 	input  wire             row13_int,
@@ -108,6 +116,7 @@ module compair_fpga_top(
 	output wire             row13_spi_cs,
 	input  wire    [1:0]    row13_spi_miso,
 	output wire             row13_spi_mosi,
+
 	
 	output wire             row14_hold,
 	input  wire             row14_int,
@@ -115,6 +124,7 @@ module compair_fpga_top(
 	output wire             row14_spi_cs,
 	input  wire    [1:0]    row14_spi_miso,
 	output wire             row14_spi_mosi,
+
 	
 	output wire             row15_hold,
 	input  wire             row15_int,
@@ -122,6 +132,7 @@ module compair_fpga_top(
 	output wire             row15_spi_cs,
 	input  wire    [1:0]    row15_spi_miso,
 	output wire             row15_spi_mosi,
+
 	
 	output wire             row16_hold,
 	output wire             row16_row19_reset,
@@ -130,6 +141,7 @@ module compair_fpga_top(
 	output wire             row16_spi_cs,
 	input  wire    [1:0]    row16_spi_miso,
 	output wire             row16_spi_mosi,
+
 	
 	output wire             row17_hold,
 	input  wire             row17_int,
@@ -137,14 +149,14 @@ module compair_fpga_top(
 	output wire             row17_spi_cs,
 	input  wire    [1:0]    row17_spi_miso,
 	output wire             row17_spi_mosi,
-	
+
 	output wire             row18_hold,
 	input  wire             row18_int,
 	output wire             row18_spi_clk,
 	output wire             row18_spi_cs,
 	input  wire    [1:0]    row18_spi_miso,
 	output wire             row18_spi_mosi,
-	
+
 	output wire             row19_hold,
 	input  wire             row19_int,
 	output wire             row19_spi_clk,
@@ -156,7 +168,7 @@ module compair_fpga_top(
 
 	
 	//Astropix Sample Clk
-        //output wire             sample_clk,
+    //output wire             clk_sample,
         //output wire             sample_clk_se,
 	//output wire             clk_timestamp,
 	
@@ -176,6 +188,7 @@ module compair_fpga_top(
     wire row5_resn, row6_resn, row7_resn, row8_resn, row9_resn;
     wire row10_resn, row11_resn, row12_resn, row13_resn, row14_resn;
     wire row15_resn, row16_resn, row17_resn, row18_resn, row19_resn;
+	wire clk_timestamp, clk_sample;
 
     assign dcdc_5p0_sync_mode =  ftdi_rx;
     assign dcdc_d3p3_sync_mode = ftdi_tx;
@@ -187,6 +200,14 @@ module compair_fpga_top(
     assign row8_row11_reset = row8_resn || row9_resn || row10_resn || row11_resn;
     assign row12_row15_reset = row12_resn || row13_resn || row14_resn || row15_resn;
     assign row16_row19_reset = row16_resn || row17_resn || row18_resn || row19_resn;
+
+    genvar k;
+    generate;
+        for (k=0; k<19; k++) begin
+            assign row_ts_clk[k]= clk_timestamp;
+            assign row_samp_clk[k] = clk_sample;
+        end
+    endgenerate  
 
     // Module Instance
     // verilator lint_off DECLFILENAME 
@@ -200,6 +221,7 @@ module compair_fpga_top(
         .cold_resn(1'b1),
 
         .io_aresn(/* This output signals a strong reset situation where we might want to put some IO in High-Z, not used for now */),
+		.watchdog(watchdog),
 
         .ext_adc_spi_csn(ext_spi_adc_csn),
         .ext_adc_spi_miso(ext_spi_adc_miso),
@@ -208,178 +230,178 @@ module compair_fpga_top(
         .ext_spi_mosi(ext_spi_mosi),
 
 
-        .layer_0_hold(row0_hold),
-        .layer_0_interruptn(row0_int),
-        .layer_0_resn(row0_resn),
-        .layer_0_spi_clk(row0_spi_clk),
-        .layer_0_spi_csn(row0_spi_cs),
-        .layer_0_spi_miso(row0_spi_miso),
-        .layer_0_spi_mosi(row0_spi_mosi),
+        .lane_0_hold(row0_hold),
+        .lane_0_interruptn(row0_int),
+        .lane_0_resn(row0_resn),
+        .lane_0_spi_clk(row0_spi_clk),
+        .lane_0_spi_csn(row0_spi_cs),
+        .lane_0_spi_miso(row0_spi_miso),
+        .lane_0_spi_mosi(row0_spi_mosi),
 
-        .layer_1_hold(row1_hold),
-        .layer_1_interruptn(row1_int),
-        .layer_1_resn(row1_resn),
-        .layer_1_spi_clk(row1_spi_clk),
-        .layer_1_spi_csn(row1_spi_cs),
-        .layer_1_spi_miso(row1_spi_miso),
-        .layer_1_spi_mosi(row1_spi_mosi),
+        .lane_1_hold(row1_hold),
+        .lane_1_interruptn(row1_int),
+        .lane_1_resn(row1_resn),
+        .lane_1_spi_clk(row1_spi_clk),
+        .lane_1_spi_csn(row1_spi_cs),
+        .lane_1_spi_miso(row1_spi_miso),
+        .lane_1_spi_mosi(row1_spi_mosi),
 
-        .layer_2_hold(row2_hold),
-        .layer_2_interruptn(row2_int),
-        .layer_2_resn(row2_resn),
-        .layer_2_spi_clk(row2_spi_clk),
-        .layer_2_spi_csn(row2_spi_cs),
-        .layer_2_spi_miso(row2_spi_miso),
-        .layer_2_spi_mosi(row2_spi_mosi),
+        .lane_2_hold(row2_hold),
+        .lane_2_interruptn(row2_int),
+        .lane_2_resn(row2_resn),
+        .lane_2_spi_clk(row2_spi_clk),
+        .lane_2_spi_csn(row2_spi_cs),
+        .lane_2_spi_miso(row2_spi_miso),
+        .lane_2_spi_mosi(row2_spi_mosi),
     
-        .layer_3_hold(row3_hold),
-        .layer_3_interruptn(row3_int),
-        .layer_3_resn(row3_resn),
-        .layer_3_spi_clk(row3_spi_clk),
-        .layer_3_spi_csn(row3_spi_cs),
-        .layer_3_spi_miso(row3_spi_miso),
-        .layer_3_spi_mosi(row3_spi_mosi),
+        .lane_3_hold(row3_hold),
+        .lane_3_interruptn(row3_int),
+        .lane_3_resn(row3_resn),
+        .lane_3_spi_clk(row3_spi_clk),
+        .lane_3_spi_csn(row3_spi_cs),
+        .lane_3_spi_miso(row3_spi_miso),
+        .lane_3_spi_mosi(row3_spi_mosi),
 
-        .layer_4_hold(row4_hold),
-        .layer_4_interruptn(row4_int),
-        .layer_4_resn(row4_resn),
-        .layer_4_spi_clk(row4_spi_clk),
-        .layer_4_spi_csn(row4_spi_cs),
-        .layer_4_spi_miso(row4_spi_miso),
-        .layer_4_spi_mosi(row4_spi_mosi),
+        .lane_4_hold(row4_hold),
+        .lane_4_interruptn(row4_int),
+        .lane_4_resn(row4_resn),
+        .lane_4_spi_clk(row4_spi_clk),
+        .lane_4_spi_csn(row4_spi_cs),
+        .lane_4_spi_miso(row4_spi_miso),
+        .lane_4_spi_mosi(row4_spi_mosi),
 
-        .layer_5_hold(row5_hold),
-        .layer_5_interruptn(row5_int),
-        .layer_5_resn(row5_resn),
-        .layer_5_spi_clk(row5_spi_clk),
-        .layer_5_spi_csn(row5_spi_cs),
-        .layer_5_spi_miso(row5_spi_miso),
-        .layer_5_spi_mosi(row5_spi_mosi),
+        .lane_5_hold(row5_hold),
+        .lane_5_interruptn(row5_int),
+        .lane_5_resn(row5_resn),
+        .lane_5_spi_clk(row5_spi_clk),
+        .lane_5_spi_csn(row5_spi_cs),
+        .lane_5_spi_miso(row5_spi_miso),
+        .lane_5_spi_mosi(row5_spi_mosi),
 
-        .layer_6_hold(row6_hold),
-        .layer_6_interruptn(row6_int),
-        .layer_6_resn(row6_resn),
-        .layer_6_spi_clk(row6_spi_clk),
-        .layer_6_spi_csn(row6_spi_cs),
-        .layer_6_spi_miso(row6_spi_miso),
-        .layer_6_spi_mosi(row6_spi_mosi),
+        .lane_6_hold(row6_hold),
+        .lane_6_interruptn(row6_int),
+        .lane_6_resn(row6_resn),
+        .lane_6_spi_clk(row6_spi_clk),
+        .lane_6_spi_csn(row6_spi_cs),
+        .lane_6_spi_miso(row6_spi_miso),
+        .lane_6_spi_mosi(row6_spi_mosi),
 
-        .layer_7_hold(row7_hold),
-        .layer_7_interruptn(row7_int),
-        .layer_7_resn(row7_resn),
-        .layer_7_spi_clk(row7_spi_clk),
-        .layer_7_spi_csn(row7_spi_cs),
-        .layer_7_spi_miso(row7_spi_miso),
-        .layer_7_spi_mosi(row7_spi_mosi),
+        .lane_7_hold(row7_hold),
+        .lane_7_interruptn(row7_int),
+        .lane_7_resn(row7_resn),
+        .lane_7_spi_clk(row7_spi_clk),
+        .lane_7_spi_csn(row7_spi_cs),
+        .lane_7_spi_miso(row7_spi_miso),
+        .lane_7_spi_mosi(row7_spi_mosi),
 
-        .layer_8_hold(row8_hold),
-        .layer_8_interruptn(row8_int),
-        .layer_8_resn(row8_resn),
-        .layer_8_spi_clk(row8_spi_clk),
-        .layer_8_spi_csn(row8_spi_cs),
-        .layer_8_spi_miso(row8_spi_miso),
-        .layer_8_spi_mosi(row8_spi_mosi),
+        .lane_8_hold(row8_hold),
+        .lane_8_interruptn(row8_int),
+        .lane_8_resn(row8_resn),
+        .lane_8_spi_clk(row8_spi_clk),
+        .lane_8_spi_csn(row8_spi_cs),
+        .lane_8_spi_miso(row8_spi_miso),
+        .lane_8_spi_mosi(row8_spi_mosi),
 
-        .layer_9_hold(row9_hold),
-        .layer_9_interruptn(row9_int),
-        .layer_9_resn(row9_resn),
-        .layer_9_spi_clk(row9_spi_clk),
-        .layer_9_spi_csn(row9_spi_cs),
-        .layer_9_spi_miso(row9_spi_miso),
-        .layer_9_spi_mosi(row9_spi_mosi),
+        .lane_9_hold(row9_hold),
+        .lane_9_interruptn(row9_int),
+        .lane_9_resn(row9_resn),
+        .lane_9_spi_clk(row9_spi_clk),
+        .lane_9_spi_csn(row9_spi_cs),
+        .lane_9_spi_miso(row9_spi_miso),
+        .lane_9_spi_mosi(row9_spi_mosi),
 
-        .layer_10_hold(row10_hold),
-        .layer_10_interruptn(row10_int),
-        .layer_10_resn(row10_resn),
-        .layer_10_spi_clk(row10_spi_clk),
-        .layer_10_spi_csn(row10_spi_cs),
-        .layer_10_spi_miso(row10_spi_miso),
-        .layer_10_spi_mosi(row10_spi_mosi),
+        .lane_10_hold(row10_hold),
+        .lane_10_interruptn(row10_int),
+        .lane_10_resn(row10_resn),
+        .lane_10_spi_clk(row10_spi_clk),
+        .lane_10_spi_csn(row10_spi_cs),
+        .lane_10_spi_miso(row10_spi_miso),
+        .lane_10_spi_mosi(row10_spi_mosi),
 
-        .layer_11_hold(row11_hold),
-        .layer_11_interruptn(row11_int),
-        .layer_11_resn(row11_resn),
-        .layer_11_spi_clk(row11_spi_clk),
-        .layer_11_spi_csn(row11_spi_cs),
-        .layer_11_spi_miso(row11_spi_miso),
-        .layer_11_spi_mosi(row11_spi_mosi),
+        .lane_11_hold(row11_hold),
+        .lane_11_interruptn(row11_int),
+        .lane_11_resn(row11_resn),
+        .lane_11_spi_clk(row11_spi_clk),
+        .lane_11_spi_csn(row11_spi_cs),
+        .lane_11_spi_miso(row11_spi_miso),
+        .lane_11_spi_mosi(row11_spi_mosi),
 
-        .layer_12_hold(row12_hold),
-        .layer_12_interruptn(row12_int),
-        .layer_12_resn(row12_resn),
-        .layer_12_spi_clk(row12_spi_clk),
-        .layer_12_spi_csn(row12_spi_cs),
-        .layer_12_spi_miso(row12_spi_miso),
-        .layer_12_spi_mosi(row12_spi_mosi),
+        .lane_12_hold(row12_hold),
+        .lane_12_interruptn(row12_int),
+        .lane_12_resn(row12_resn),
+        .lane_12_spi_clk(row12_spi_clk),
+        .lane_12_spi_csn(row12_spi_cs),
+        .lane_12_spi_miso(row12_spi_miso),
+        .lane_12_spi_mosi(row12_spi_mosi),
 
-        .layer_13_hold(row13_hold),
-        .layer_13_interruptn(row13_int),
-        .layer_13_resn(row13_resn),
-        .layer_13_spi_clk(row13_spi_clk),
-        .layer_13_spi_csn(row13_spi_cs),
-        .layer_13_spi_miso(row13_spi_miso),
-        .layer_13_spi_mosi(row13_spi_mosi),
+        .lane_13_hold(row13_hold),
+        .lane_13_interruptn(row13_int),
+        .lane_13_resn(row13_resn),
+        .lane_13_spi_clk(row13_spi_clk),
+        .lane_13_spi_csn(row13_spi_cs),
+        .lane_13_spi_miso(row13_spi_miso),
+        .lane_13_spi_mosi(row13_spi_mosi),
 
-        .layer_14_hold(row14_hold),
-        .layer_14_interruptn(row14_int),
-        .layer_14_resn(row14_resn),
-        .layer_14_spi_clk(row14_spi_clk),
-        .layer_14_spi_csn(row14_spi_cs),
-        .layer_14_spi_miso(row14_spi_miso),
-        .layer_14_spi_mosi(row14_spi_mosi),
+        .lane_14_hold(row14_hold),
+        .lane_14_interruptn(row14_int),
+        .lane_14_resn(row14_resn),
+        .lane_14_spi_clk(row14_spi_clk),
+        .lane_14_spi_csn(row14_spi_cs),
+        .lane_14_spi_miso(row14_spi_miso),
+        .lane_14_spi_mosi(row14_spi_mosi),
 
-        .layer_15_hold(row15_hold),
-        .layer_15_interruptn(row15_int),
-        .layer_15_resn(row15_resn),
-        .layer_15_spi_clk(row15_spi_clk),
-        .layer_15_spi_csn(row15_spi_cs),
-        .layer_15_spi_miso(row15_spi_miso),
-        .layer_15_spi_mosi(row15_spi_mosi),
+        .lane_15_hold(row15_hold),
+        .lane_15_interruptn(row15_int),
+        .lane_15_resn(row15_resn),
+        .lane_15_spi_clk(row15_spi_clk),
+        .lane_15_spi_csn(row15_spi_cs),
+        .lane_15_spi_miso(row15_spi_miso),
+        .lane_15_spi_mosi(row15_spi_mosi),
 
-        .layer_16_hold(row16_hold),
-        .layer_16_interruptn(row16_int),
-        .layer_16_resn(row16_resn),
-        .layer_16_spi_clk(row16_spi_clk),
-        .layer_16_spi_csn(row16_spi_cs),
-        .layer_16_spi_miso(row16_spi_miso),
-        .layer_16_spi_mosi(row16_spi_mosi),
+        .lane_16_hold(row16_hold),
+        .lane_16_interruptn(row16_int),
+        .lane_16_resn(row16_resn),
+        .lane_16_spi_clk(row16_spi_clk),
+        .lane_16_spi_csn(row16_spi_cs),
+        .lane_16_spi_miso(row16_spi_miso),
+        .lane_16_spi_mosi(row16_spi_mosi),
 
-        .layer_17_hold(row17_hold),
-        .layer_17_interruptn(row17_int),
-        .layer_17_resn(row17_resn),
-        .layer_17_spi_clk(row17_spi_clk),
-        .layer_17_spi_csn(row17_spi_cs),
-        .layer_17_spi_miso(row17_spi_miso),
-        .layer_17_spi_mosi(row17_spi_mosi),
+        .lane_17_hold(row17_hold),
+        .lane_17_interruptn(row17_int),
+        .lane_17_resn(row17_resn),
+        .lane_17_spi_clk(row17_spi_clk),
+        .lane_17_spi_csn(row17_spi_cs),
+        .lane_17_spi_miso(row17_spi_miso),
+        .lane_17_spi_mosi(row17_spi_mosi),
 
-        .layer_18_hold(row18_hold),
-        .layer_18_interruptn(row18_int),
-        .layer_18_resn(row18_resn),
-        .layer_18_spi_clk(row18_spi_clk),
-        .layer_18_spi_csn(row18_spi_cs),
-        .layer_18_spi_miso(row18_spi_miso),
-        .layer_18_spi_mosi(row18_spi_mosi),
+        .lane_18_hold(row18_hold),
+        .lane_18_interruptn(row18_int),
+        .lane_18_resn(row18_resn),
+        .lane_18_spi_clk(row18_spi_clk),
+        .lane_18_spi_csn(row18_spi_cs),
+        .lane_18_spi_miso(row18_spi_miso),
+        .lane_18_spi_mosi(row18_spi_mosi),
 
-        .layer_19_hold(row19_hold),
-        .layer_19_interruptn(row19_int),
-        .layer_19_resn(row19_resn),
-        .layer_19_spi_clk(row19_spi_clk),
-        .layer_19_spi_csn(row19_spi_cs),
-        .layer_19_spi_miso(row19_spi_miso),
-        .layer_19_spi_mosi(row19_spi_mosi),
+        .lane_19_hold(row19_hold),
+        .lane_19_interruptn(row19_int),
+        .lane_19_resn(row19_resn),
+        .lane_19_spi_clk(row19_spi_clk),
+        .lane_19_spi_csn(row19_spi_cs),
+        .lane_19_spi_miso(row19_spi_miso),
+        .lane_19_spi_mosi(row19_spi_mosi),
         // Layers Config
-        .layers_inj(inj),    // this is DigInj?
-        .layers_spi_csn(),   // is this no connect
-        .layers_sr_in_rb(),
-        .layers_sr_in_sout0(),
-        .layers_sr_in_sout1(1'b0),
-        .layers_sr_in_sout2(1'b0),
-        .layers_sr_out_sin(),
-        .layers_sr_out_ck1(),
-        .layers_sr_out_ck2(),
-        .layers_sr_out_ld0(),
-        .layers_sr_out_ld1(),
-        .layers_sr_out_ld2(),
+        .lanes_inj(inj),    // this is DigInj?
+        .lanes_spi_csn(),   // is this no connect
+        .lanes_sr_in_rb(),
+        .lanes_sr_in_sout0(),
+        .lanes_sr_in_sout1(1'b0),
+        .lanes_sr_in_sout2(1'b0),
+        .lanes_sr_out_sin(),
+        .lanes_sr_out_ck1(),
+        .lanes_sr_out_ck2(),
+        .lanes_sr_out_ld0(),
+        .lanes_sr_out_ld1(),
+        .lanes_sr_out_ld2(),
 
  
         // SPI Slave interface for HOST
@@ -398,8 +420,8 @@ module compair_fpga_top(
         .gecco_sr_ctrl_sin(),
         .gecco_sr_ctrl_ld(),
 
-        .io_ctrl_sample_clock_enable(),
-        .io_ctrl_timestamp_clock_enable(),
+        //.io_ctrl_sample_clock_enable(),
+        //.io_ctrl_timestamp_clock_enable(),
         .io_ctrl_gecco_sample_clock_se(),
         .io_ctrl_gecco_inj_enable()
     );

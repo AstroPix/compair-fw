@@ -1,0 +1,36 @@
+m255
+K4
+z2
+!s11f vlog 2023.4 2023.10, Oct  9 2023
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Project/COMPAIR/compair-fw/target-certusnx-devboard
+vcompair_fpga_top
+2compair_fpga_top.sv
+DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+!s110 1751061537
+!i10b 1
+!s100 AzKUNiHTJFQ>R5bLO<mE00
+Ia`A<D1@aFal1cVU8BbK6Y1
+S1
+R0
+w1751055307
+8compair_fpga_top.sv
+Fcompair_fpga_top.sv
+!i122 0
+L0 1 149
+VDg1SIo80bB@j0V0VzS_@n1
+OL;L;2023.4;77
+r1
+!s85 0
+31
+!s108 1751061536.000000
+!s107 compair_fpga_top.sv|
+!s90 compair_fpga_top.sv|
+!i113 0
+o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+tCvgOpt 0
