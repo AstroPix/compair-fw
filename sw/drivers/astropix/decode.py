@@ -87,5 +87,5 @@ def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True)
             }
         hit_list.append(hits)
 
-    # Much simpler to convert to df in the return statement vs df.concat
-    return pd.DataFrame(hit_list)
+        # Much simpler to convert to df in the return statement vs df.concat
+        return pd.DataFrame(hit_list)
