@@ -19,7 +19,6 @@ module astep24_20l_top(
 
     output wire [2:0]   ext_adc_spi_csn,
     input  wire		ext_adc_spi_miso,
-    //output wire		ext_dac_spi_csn,
     output wire		ext_spi_clk,
     output wire		ext_spi_mosi,
     
@@ -960,7 +959,7 @@ module astep24_20l_top(
     // Lanes Readout Module
     // - Contains Each Lane Interface with Protocol management, and the Switched buffer
     //-------------------------------
-    lanes_readout_switched #(.LAYER_COUNT(20)) switched_readout(
+    lanes_readout_switched #(.LANE_COUNT(20)) switched_readout(
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
         .clk_io(spi_lanes_ckdivider_divided_clk),

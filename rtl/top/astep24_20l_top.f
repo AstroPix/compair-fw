@@ -33,11 +33,11 @@ ${BASE}/rtl/fifo/mini_fwft_fifo.sv
 ${BASE}/rtl/fifo/fifo_ptr_logic.sv
 
 ## Patgen for injection
-${BASE}/rtl/layers/sync_async_patgen.sv
+${BASE}/rtl/lanes/sync_async_patgen.sv
 
 ## Layer
-${BASE}/rtl/layers/loopback_spi_if.sv
--f ${BASE}/rtl/layers/layers_readout_switched.f
+${BASE}/rtl/lanes/loopback_spi_if.sv
+-f ${BASE}/rtl/lanes/lanes_readout_switched.f
 
 ## Housekeeping
 -f ${BASE}/rtl/housekeeping/housekeeping_main.f

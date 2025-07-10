@@ -6,7 +6,7 @@ Multi Layers parametezied
 
 */
 module lanes_readout_switched #(
-    parameter LAYER_COUNT = 3
+    parameter LANE_COUNT = 3
 ) (
 
     // Clocking
@@ -19,19 +19,19 @@ module lanes_readout_switched #(
 
     // Layers Interface
     //-----------------
-    input  wire [LAYER_COUNT-1:0]       lanes_interruptn,
-    output wire [LAYER_COUNT-1:0]       lanes_spi_clk,
-    output wire [LAYER_COUNT-1:0]       lanes_spi_mosi,
-    input  wire [LAYER_COUNT*2-1:0]     lanes_spi_miso,
-    output wire [LAYER_COUNT-1:0]       lanes_spi_csn,
+    input  wire [LANE_COUNT-1:0]       lanes_interruptn,
+    output wire [LANE_COUNT-1:0]       lanes_spi_clk,
+    output wire [LANE_COUNT-1:0]       lanes_spi_mosi,
+    input  wire [LANE_COUNT*2-1:0]     lanes_spi_miso,
+    output wire [LANE_COUNT-1:0]       lanes_spi_csn,
 
     // MOSI
     //----------------
-    input wire  [(LAYER_COUNT*8)-1:0]   lanes_mosi_s_axis_tdata,
-    input wire  [LAYER_COUNT-1:0]       lanes_mosi_s_axis_tvalid,
-    input wire  [LAYER_COUNT-1:0]       lanes_mosi_s_axis_tlast,
-    output wire [LAYER_COUNT-1:0]       lanes_mosi_s_axis_tready,
-    output wire [(LAYER_COUNT*32)-1:0]  lanes_mosi_write_size,
+    input wire  [(LANE_COUNT*8)-1:0]   lanes_mosi_s_axis_tdata,
+    input wire  [LANE_COUNT-1:0]       lanes_mosi_s_axis_tvalid,
+    input wire  [LANE_COUNT-1:0]       lanes_mosi_s_axis_tlast,
+    output wire [LANE_COUNT-1:0]       lanes_mosi_s_axis_tready,
+    output wire [(LANE_COUNT*32)-1:0]  lanes_mosi_write_size,
 
     // MISO Merged readout
     //-------------
@@ -42,20 +42,20 @@ module lanes_readout_switched #(
 
     // Configurations
     //---------------------
-    input wire  [LAYER_COUNT-1:0]       config_disable_autoread,
+    input wire  [LANE_COUNT-1:0]       config_disable_autoread,
     input wire  [31:0]                  config_frame_tag_counter,
     input wire  [7:0]                   config_nodata_continue,
-    input wire  [LAYER_COUNT-1:0]       config_lanes_reset,
-    input wire  [LAYER_COUNT-1:0]       config_lanes_disable_miso,
+    input wire  [LANE_COUNT-1:0]       config_lanes_reset,
+    input wire  [LANE_COUNT-1:0]       config_lanes_disable_miso,
 
     // Status
     //---------------------
-    output wire [LAYER_COUNT-1:0]        lanes_status_frame_decoding,
+    output wire [LANE_COUNT-1:0]        lanes_status_frame_decoding,
 
     // Statistics
     //----------------------
-    output wire [LAYER_COUNT-1:0]       lanes_stat_count_idle,
-    output wire [LAYER_COUNT-1:0]       lanes_stat_count_frame
+    output wire [LANE_COUNT-1:0]       lanes_stat_count_idle,
+    output wire [LANE_COUNT-1:0]       lanes_stat_count_frame
 
 
 );
@@ -67,23 +67,23 @@ module lanes_readout_switched #(
     //----------------------
 
     // Master outputs from lanes readout
-    wire  [((LAYER_COUNT+1)*8)-1:0]   lanes_miso_m_axis_tdata;
-    wire  [((LAYER_COUNT+1)*8)-1:0]   lanes_miso_m_axis_tdest;
-    wire  [(LAYER_COUNT+1)-1:0]       lanes_miso_m_axis_tvalid;
-    wire  [(LAYER_COUNT+1)-1:0]       lanes_miso_m_axis_tlast;
-    wire  [(LAYER_COUNT+1)-1:0]       lanes_miso_m_axis_tready;
+    wire  [((LANE_COUNT+1)*8)-1:0]   lanes_miso_m_axis_tdata;
+    wire  [((LANE_COUNT+1)*8)-1:0]   lanes_miso_m_axis_tdest;
+    wire  [(LANE_COUNT+1)-1:0]       lanes_miso_m_axis_tvalid;
+    wire  [(LANE_COUNT+1)-1:0]       lanes_miso_m_axis_tlast;
+    wire  [(LANE_COUNT+1)-1:0]       lanes_miso_m_axis_tready;
 
     // The last input port is unused
-    assign lanes_miso_m_axis_tvalid[(LAYER_COUNT+1)-1] = 1'b0;
-    assign lanes_miso_m_axis_tlast[(LAYER_COUNT+1)-1] = 1'b0;
-    assign lanes_miso_m_axis_tdata[(LAYER_COUNT+1)*8-1:(LAYER_COUNT+1)*8-8] = 8'b0;
-    assign lanes_miso_m_axis_tdest[(LAYER_COUNT+1)*8-1:(LAYER_COUNT+1)*8-8] = 8'b0;
+    assign lanes_miso_m_axis_tvalid[(LANE_COUNT+1)-1] = 1'b0;
+    assign lanes_miso_m_axis_tlast[(LANE_COUNT+1)-1] = 1'b0;
+    assign lanes_miso_m_axis_tdata[(LANE_COUNT+1)*8-1:(LANE_COUNT+1)*8-8] = 8'b0;
+    assign lanes_miso_m_axis_tdest[(LANE_COUNT+1)*8-1:(LANE_COUNT+1)*8-8] = 8'b0;
 
     genvar li;
     generate
-        for (li = 0 ; li < LAYER_COUNT ; li++) begin 
+        for (li = 0 ; li < LANE_COUNT ; li++) begin 
             
-            lane_if_a #(.LAYER_ID(li+1)) lane_if_I (
+            lane_if_a #(.LANE_ID(li+1)) lane_if_I (
                 
                 .clk_core(clk_core),
                 .clk_core_resn(clk_core_resn),
@@ -127,11 +127,11 @@ module lanes_readout_switched #(
 
     // Switch
     //---------------
-    wire [(LAYER_COUNT+1)*8-1:0] switch_m_axis_tdata;
-    wire [LAYER_COUNT+1-1:0] switch_m_axis_tlast;
-    wire [LAYER_COUNT+1-1:0] switch_m_axis_tready;
-    wire [LAYER_COUNT+1-1:0] switch_m_axis_tvalid;
-    axis_switch #(.PORTS(LAYER_COUNT+1)) axis_switch_lane_frame_I(
+    wire [(LANE_COUNT+1)*8-1:0] switch_m_axis_tdata;
+    wire [LANE_COUNT+1-1:0] switch_m_axis_tlast;
+    wire [LANE_COUNT+1-1:0] switch_m_axis_tready;
+    wire [LANE_COUNT+1-1:0] switch_m_axis_tvalid;
+    axis_switch #(.PORTS(LANE_COUNT+1)) axis_switch_lane_frame_I(
         .clk(clk_core),
         .resn(clk_core_resn),
 
@@ -147,7 +147,7 @@ module lanes_readout_switched #(
         .s_axis_tready(lanes_miso_m_axis_tready),
         .s_axis_tvalid(lanes_miso_m_axis_tvalid),
         //.s_decode_err(),
-        //.s_req_suppress({LAYER_COUNT{1'b0}})
+        //.s_req_suppress({LANE_COUNT{1'b0}})
         // Unused
         .m_axis_tuser(),
         .m_axis_tid(),

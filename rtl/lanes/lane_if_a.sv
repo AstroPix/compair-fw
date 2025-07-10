@@ -1,6 +1,6 @@
 
 
-module lane_if_a  #(LAYER_ID = 0)(
+module lane_if_a  #(LANE_ID = 0)(
    
     input  wire				clk_core,
     input  wire				clk_core_resn,
@@ -133,7 +133,7 @@ module lane_if_a  #(LAYER_ID = 0)(
         .almost_empty()
     );
             
-    astropix_spi_protocol_av1 #(.LAYER_ID(LAYER_ID)) protocol(
+    astropix_spi_protocol_av1 #(.LANE_ID(LANE_ID)) protocol(
         .clk(clk_core),
         .resn(clk_core_resn),
 
