@@ -1,3 +1,0 @@
-aplic.vhd
-graplic_ahb.vhd
-aplic_encoder.vhd

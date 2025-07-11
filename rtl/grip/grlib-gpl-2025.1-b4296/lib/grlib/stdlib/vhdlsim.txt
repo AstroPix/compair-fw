@@ -1,2 +1,0 @@
-stdio.vhd   vhdlstd=93
-testlib.vhd vhdlstd=93

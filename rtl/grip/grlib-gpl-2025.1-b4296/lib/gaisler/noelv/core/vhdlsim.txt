@@ -1,2 +1,0 @@
-fpsimutilnv.vhd
-kanatalog.vhd

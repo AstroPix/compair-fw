@@ -1,2 +1,0 @@
-jtagtst.vhd
-jtag_rv.vhd

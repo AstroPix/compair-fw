@@ -1,6 +1,0 @@
-dprc_pkg.vhd
-dprc.vhd
-sync_dprc.vhd
-async_dprc.vhd
-d2prc.vhd
-d2prc_edac.vhd

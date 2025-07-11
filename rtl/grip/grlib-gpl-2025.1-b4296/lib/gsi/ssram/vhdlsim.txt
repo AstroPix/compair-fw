@@ -1,3 +1,0 @@
-functions.vhd  vhdlstd=93
-core_burst.vhd vhdlstd=93
-g880e18bt.vhd

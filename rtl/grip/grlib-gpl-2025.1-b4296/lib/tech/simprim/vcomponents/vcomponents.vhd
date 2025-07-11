@@ -1,3 +1,0 @@
-package vcomponents is
-end;
-

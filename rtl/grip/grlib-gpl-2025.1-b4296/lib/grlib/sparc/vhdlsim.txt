@@ -1,2 +1,0 @@
-sparc_disas.vhd vhdlstd=93
-cpu_disas.vhd
