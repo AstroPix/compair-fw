@@ -9,7 +9,7 @@ module astropix_spi_protocol_av1 #(
     parameter ID_WIDTH = 8,
     parameter DEST_WIDTH = 8,
     parameter USER_WIDTH = 1,
-    parameter LAYER_ID = 3'h0,
+    parameter LANE_ID = 3'h0,
     parameter IDLE_BYTE = 8'h3D)(
 
 
@@ -48,7 +48,7 @@ module astropix_spi_protocol_av1 #(
     input  wire                   cfg_disable_autoread,
     input  wire [31:0]            cfg_frame_tag_counter,
     input  wire [7:0]             cfg_nodata_continue, // Number of IDLE bytes to keep readout active after interrupt is high
-    input  wire                   cfg_layer_reset
+    input  wire                   cfg_lane_reset
 );
 
     // Receiving interface
@@ -82,7 +82,7 @@ module astropix_spi_protocol_av1 #(
     enum {WAIT_FRAME,HEADER_LENGTH,HEADER_ID,RECEIVE,FORWARD,TIMESTAMP0,TIMESTAMP1,TIMESTAMP2,TIMESTAMP3} protocol_state;
 
     always @(posedge clk) begin 
-        if (!resn || cfg_layer_reset) begin 
+        if (!resn || cfg_lane_reset) begin 
             s_axis_tready           <= 1'b0;
             
             readout_active          <= 1'b0;
@@ -169,7 +169,7 @@ module astropix_spi_protocol_av1 #(
                     // Send Header ID
                     if (master_byte_valid) begin 
                         protocol_state          <= HEADER_ID;
-                        m_axis_tdata            <= LAYER_ID;
+                        m_axis_tdata            <= LANE_ID;
                     end
                     
 

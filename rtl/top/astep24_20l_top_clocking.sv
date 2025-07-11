@@ -43,6 +43,8 @@ module astep24_20l_top_clocking (
         .pllpd_en_n_i( !shutdown),
         .clkop_o(clk_core ),
         .clkos_o( clk_uart ),
+		.clkos2_o(clk_sample),
+		.clkos3_o(clk_timestamp),
         .lock_o( pll_locked )
     );
             

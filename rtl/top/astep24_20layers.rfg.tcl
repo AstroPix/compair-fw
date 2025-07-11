@@ -15,7 +15,7 @@ proc rrepeat {count lst} {
    
     return [concat $res]
 }
- #[rrepeat 3 {LAYER_${i}_IDLE_COUNTER   -size 16 -sw_read_only -counter -enable}]
+ #[rrepeat 3 {LANE_${i}_IDLE_COUNTER   -size 16 -sw_read_only -counter -enable}]
 icDefineParameter RFG_FW_ID "FW ID for the target"
 if {[catch {set ::RFG_FW_ID}]} {
     set ::RFG_FW_ID 32'h0000ff00
@@ -47,9 +47,9 @@ set baseRegisters [subst {
         "Selects ADC 2"}}}
         {HK_ADCDAC_MOSI_FIFO -fifo_axis_master -with_tlast -doc "FIFO to send bytes to ADC or DAC"}
         {HK_ADC_MISO_FIFO -fifo_axis_slave -read_count  -doc "FIFO with read bytes from ADC"}
-        {SPI_LAYERS_CKDIVIDER -clock_divider spi_layers -reset 8'h4 -async_reset -doc "This clock divider provides the clock for the Layer SPI interfaces"}
+        {SPI_LANES_CKDIVIDER -clock_divider spi_layers -reset 8'h4 -async_reset -doc "This clock divider provides the clock for the Layer SPI interfaces"}
         {SPI_HK_CKDIVIDER     -clock_divider spi_hk     -reset 8'h4 -async_reset -doc "This clock divider provides the clock for the Housekeeping ADC/DAC SPI interfaces"}
-        [rrepeat 20 {LAYER_${i}_CFG_CTRL            -reset 8'b00000111 -bits {
+        [rrepeat 20 {LANE_${i}_CFG_CTRL            -reset 8'b00000111 -bits {
                 {hold -doc "Hold Layer"} 
                 {reset -doc "Active High Layer Reset (Inverted before output to Sensor)"}  
                 {disable_autoread -doc "1: Layer doesn't read frames if the interrupt is low, 0: Layer reads frames upon interrupt trigger"}
@@ -59,22 +59,22 @@ set baseRegisters [subst {
             }  
             -doc "Layer $i control bits"
         }]
-        [rrepeat 20 {LAYER_${i}_STATUS               -sw_read_only  -bits { {interruptn -input} {frame_decoding -input} } -doc "Layer $i status bits"} ]
-        [rrepeat 20 {LAYER_${i}_STAT_FRAME_COUNTER  -size 32  -counter -enable -hw_ignore -doc "Counts the number of data frames"}]
-        [rrepeat 20 {LAYER_${i}_STAT_IDLE_COUNTER   -size 32  -counter -enable -hw_ignore -doc "Counts the number of Idle bytes"}]
-        [rrepeat 20 {LAYER_${i}_MOSI                 -fifo_axis_master -with_tlast -write_count -doc "FIFO to send bytes to Layer $i Astropix"}]
+        [rrepeat 20 {LANE_${i}_STATUS               -sw_read_only  -bits { {interruptn -input} {frame_decoding -input} } -doc "Layer $i status bits"} ]
+        [rrepeat 20 {LANE_${i}_STAT_FRAME_COUNTER  -size 32  -counter -enable -hw_ignore -doc "Counts the number of data frames"}]
+        [rrepeat 20 {LANE_${i}_STAT_IDLE_COUNTER   -size 32  -counter -enable -hw_ignore -doc "Counts the number of Idle bytes"}]
+        [rrepeat 20 {LANE_${i}_MOSI                 -fifo_axis_master -with_tlast -write_count -doc "FIFO to send bytes to Layer $i Astropix"}]
 
-        [rrepeat 20 {LAYER_${i}_LOOPBACK_MISO  -fifo_axis_master -write_count -doc "FIFO to send bytes to Layer $i Astropix throug internal slave loopback"}]
-        [rrepeat 20 {LAYER_${i}_LOOPBACK_MOSI  -fifo_axis_slave -read_count -doc "FIFO to read bytes received by internal slave loopback"}]
+        [rrepeat 20 {LANE_${i}_LOOPBACK_MISO  -fifo_axis_master -write_count -doc "FIFO to send bytes to Layer $i Astropix throug internal slave loopback"}]
+        [rrepeat 20 {LANE_${i}_LOOPBACK_MOSI  -fifo_axis_slave -read_count -doc "FIFO to read bytes received by internal slave loopback"}]
         
-        {LAYERS_CFG_FRAME_TAG_COUNTER_CTRL      -reset 8'h1    -size 8 -bits {
+        {LANES_CFG_FRAME_TAG_COUNTER_CTRL      -reset 8'h1    -size 8 -bits {
                 {enable -doc "If 1, the counter will increment after the trigger counter reached its match value"} 
                 {force_count -doc "If 1, the counter will increment at each core clock cycle. If you flush a write with this value 1 then 0 in two data words, you can increment by 1 manually"} 
             }   -doc "A few bits to control the Frame Tagging Counter"}
-        {LAYERS_CFG_FRAME_TAG_COUNTER_TRIGGER       -size 32 -counter -enable -interrupt  -updown -match_reset 32'd4  -doc "This Interrupt Counter provides the enable signal for the frame tag counter"}
-        {LAYERS_CFG_FRAME_TAG_COUNTER               -size 32 -counter  -enable -doc "Counter to tag frames upon detection (Counter value added to frame output)"}
-        {LAYERS_CFG_NODATA_CONTINUE   -reset 8'd5 -doc "Number of IDLE Bytes until stopping readout"}
-        {LAYERS_SR_OUT 
+        {LANES_CFG_FRAME_TAG_COUNTER_TRIGGER       -size 32 -counter -enable -interrupt  -updown -match_reset 32'd4  -doc "This Interrupt Counter provides the enable signal for the frame tag counter"}
+        {LANES_CFG_FRAME_TAG_COUNTER               -size 32 -counter  -enable -doc "Counter to tag frames upon detection (Counter value added to frame output)"}
+        {LANES_CFG_NODATA_CONTINUE   -reset 8'd5 -doc "Number of IDLE Bytes until stopping readout"}
+        {LANES_SR_OUT 
             -doc "Shift Register Configuration I/O Control register"
             -bits {
                 {CK1 -doc "CK1 I/O for Shift Register Configuration"}
@@ -85,16 +85,16 @@ set baseRegisters [subst {
                 {LD2 -doc "Load signal for Layer 2"} 
             }
         }
-        {LAYERS_SR_IN 
-            -doc "Shift Register Configuration Input control (Readback enable and layers inputs)"
+        {LANES_SR_IN 
+            -doc "Shift Register Configuration Input control (Readback enable and lanes inputs)"
             -bits {
-                {RB -doc "Set to 1 to activate Shift Register Read back from layers"}
+                {RB -doc "Set to 1 to activate Shift Register Read back from Lanes"}
                 {SOUT0 -input}
                 {SOUT1 -input}
                 {SOUT2 -input}
             }
         }
-        {LAYERS_INJ_CTRL -reset 8'b00000110 
+        {LANES_INJ_CTRL -reset 8'b00000110 
             -doc "Control bits for the Injection Pattern Generator" 
             -bits {
                 {reset -doc "Reset for Pattern Generator - must be set to 1 after writing registers for config to be read"}
@@ -106,9 +106,9 @@ set baseRegisters [subst {
                 {running -input -doc "Pattern generator is running generating injection pulses"}
             }
         }
-        {LAYERS_INJ_WADDR -size 4 -doc "Address for register to write in Injection Pattern Generator"  }
-        {LAYERS_INJ_WDATA  -doc "Data for register to write in Injection Pattern Generator" }
-        {LAYERS_READOUT -fifo_axis_slave -read_count -doc "Reads from the readout data fifo"}
+        {LANES_INJ_WADDR -size 4 -doc "Address for register to write in Injection Pattern Generator"  }
+        {LANES_INJ_WDATA  -doc "Data for register to write in Injection Pattern Generator" }
+        {LANES_READOUT -fifo_axis_slave -read_count -doc "Reads from the readout data fifo"}
         {IO_CTRL 
             -doc "Configuration register for I/O multiplexers and gating."
             -reset 8'b00001000 

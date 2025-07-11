@@ -1,6 +1,6 @@
 
 
-module layer_if_a  #(LAYER_ID = 0)(
+module lane_if_a  #(LANE_ID = 0)(
    
     input  wire				clk_core,
     input  wire				clk_core_resn,
@@ -28,7 +28,7 @@ module layer_if_a  #(LAYER_ID = 0)(
     input  wire             cfg_disable_autoread,
     input  wire [31:0]		cfg_frame_tag_counter,
     input  wire [7:0]		cfg_nodata_continue,
-    input  wire             cfg_layer_reset,
+    input  wire             cfg_lane_reset,
     input  wire             cfg_disable_miso,
 
     output wire             status_frame_decoding,
@@ -40,7 +40,7 @@ module layer_if_a  #(LAYER_ID = 0)(
 
     // Connections
     //----------------
-    wire cfg_layer_resetn = !cfg_layer_reset;
+    wire cfg_lane_resetn = !cfg_lane_reset;
 
     wire spi_io_enable; // size=1
     wire mosi_fifo_m_axis_tvalid; // size=1
@@ -95,7 +95,7 @@ module layer_if_a  #(LAYER_ID = 0)(
         .m_axis_tdata(spi_io_m_axis_tdata),
         .m_axis_tready(spi_io_m_axis_tready | cfg_disable_miso),
         .m_axis_tvalid(spi_io_m_axis_tvalid),
-        .resn(clk_spi_resn && cfg_layer_resetn),
+        .resn(clk_spi_resn && cfg_lane_resetn),
         .s_axis_tdata(mosi_fifo_m_axis_tdata),
         .s_axis_tready(mosi_fifo_m_axis_tready),
         .s_axis_tvalid(mosi_fifo_m_axis_tvalid),
@@ -114,7 +114,7 @@ module layer_if_a  #(LAYER_ID = 0)(
         .m_axis_tlast(/* WAIVED: Last not used by SPI Output */),
         .axis_rd_data_count(/* unused */),
         .s_axis_aclk(clk_spi),
-        .s_axis_aresetn(clk_spi_resn && cfg_layer_resetn),
+        .s_axis_aresetn(clk_spi_resn && cfg_lane_resetn),
         .s_axis_tdata(spi_io_m_axis_tdata),
         .s_axis_tready(spi_io_m_axis_tready),
         .s_axis_tvalid(spi_io_m_axis_tvalid & !cfg_disable_miso),
@@ -133,7 +133,7 @@ module layer_if_a  #(LAYER_ID = 0)(
         .almost_empty()
     );
             
-    astropix_spi_protocol_av1 #(.LAYER_ID(LAYER_ID)) protocol(
+    astropix_spi_protocol_av1 #(.LANE_ID(LANE_ID)) protocol(
         .clk(clk_core),
         .resn(clk_core_resn),
 
@@ -155,7 +155,7 @@ module layer_if_a  #(LAYER_ID = 0)(
         .cfg_frame_tag_counter(cfg_frame_tag_counter),
         .cfg_nodata_continue(cfg_nodata_continue),
         .cfg_disable_autoread(cfg_disable_autoread),
-        .cfg_layer_reset(cfg_layer_reset),
+        .cfg_lane_reset(cfg_lane_reset),
         .status_frame_decoding(status_frame_decoding),
         .stat_frame_detected(stat_frame_detected),
         .stat_idle_detected(stat_idle_detected)
