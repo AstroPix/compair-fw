@@ -197,7 +197,10 @@ module compair_fpga_top(
 
 );
 
+    wire clk_timestamp_ungated;
     wire clk_timestamp;
+    wire io_ctrl_timestamp_clock_enable;
+    assign clk_timestamp = io_ctrl_timestamp_clock_enable  & clk_timestamp_ungated;
     assign row0_ts_clk = clk_timestamp;
     assign row1_ts_clk = clk_timestamp;
     assign row2_ts_clk = clk_timestamp;
@@ -225,6 +228,7 @@ module compair_fpga_top(
     assign row8_row11_inject  = inj;
     assign row12_row15_inject = inj;
     assign row16_row19_inject = inj;
+    
     // Richard: Uart init done is set after a reset of the uart driver, and one successful read from the ip core happened
     // if the first Red LED is off, it is likely that the communication with the board won't work
     wire uart_init_done;
@@ -258,7 +262,7 @@ module compair_fpga_top(
     astep24_20l_top  astep24_20l_top_I(
         .sysclk(sysclk_100),
         .clk_sample(clk_sample),
-        .clk_timestamp(clk_timestamp),
+        .clk_timestamp(clk_timestamp_ungated),
         
         .warm_resn(rstn), // Warm reset either from IO or a local button
         .cold_resn(1'b1),
@@ -464,7 +468,7 @@ module compair_fpga_top(
         .gecco_sr_ctrl_ld(),
 
         .io_ctrl_sample_clock_enable(),
-        .io_ctrl_timestamp_clock_enable(),
+        .io_ctrl_timestamp_clock_enable(io_ctrl_timestamp_clock_enable),
         .io_ctrl_gecco_sample_clock_se(),
         .io_ctrl_gecco_inj_enable(),
 

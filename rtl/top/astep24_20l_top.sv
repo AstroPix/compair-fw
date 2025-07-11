@@ -244,12 +244,30 @@ module astep24_20l_top(
         end
     end
 
-
+    // clockdiv 60/12 = 5 5MHZ for timestamp
+    //-------------------    
+	reg clk_timestamp;
+    localparam int TIMESTAMP_COUNT_MAX = 12;
+    logic [$clog2(TIMESTAMP_COUNT_MAX)-1:0] timestamp_count;
+    always @(posedge clk_core) begin
+        if (!warm_resn) begin 
+            timestamp_count <= 0;
+            clk_timestamp  <= 'b0;
+        end
+        else if (timestamp_count == TIMESTAMP_COUNT_MAX-1) begin
+            timestamp_count <= 0;
+            clk_timestamp  <= ~clk_timestamp;
+        end
+        else begin
+            timestamp_count <= timestamp_count + 1;
+        end
+    end
 
 
     assign clk_uart_dbg = clk_uart;
     //assign clk_core_dbg = clk_core;
     assign pll_locked_dbg = pll_locked;
+
     // Clocking
     //-------------------
     wire clk_100; // size=1
@@ -267,8 +285,8 @@ module astep24_20l_top(
         .warm_resn_in(warm_resn),
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
-        .clk_sample(clk_sample),
-        .clk_timestamp(clk_timestamp),
+        .clk_sample(),
+        .clk_timestamp(),
         .clk_uart(clk_uart),
         .clk_uart_resn(clk_uart_resn)
     );
