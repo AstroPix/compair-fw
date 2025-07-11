@@ -102,6 +102,9 @@
         <Source name="../rtl/layers/loopback_spi_if.sv" type="Verilog" type_short="Verilog">
             <Options VerilogStandard="System Verilog"/>
         </Source>
+        <Source name="../rtl/spi/spi_axis_if_adc.sv" type="Verilog" type_short="Verilog">
+            <Options VerilogStandard="System Verilog"/>
+        </Source>
         <Source name="compair2_fee_etu.pdc" type="Physical Constraints File" type_short="PDC">
             <Options/>
         </Source>
