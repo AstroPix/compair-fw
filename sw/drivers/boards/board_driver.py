@@ -16,26 +16,24 @@ class BoardDriver():
         self.rfg = rfg
         self.houseKeeping = drivers.astep.housekeeping.Housekeeping(self,rfg)
         self.asics = []
-        
-        # Synchronisation Utils
-        ########
-
         ## Opened Event -> Set/unset by close/open
         ## Useful to start or stop tasks dependent on open/close state of the driver
         self.openedEvent = asyncio.Event()
 
+    ## FPGA I/O
+    ##################
     def selectUARTIO(self,portPath : str | None = None, baud = 115200):
         """This method is common to all targets now, because all targets have a USB-UART Converter available"""
         if (portPath == None):
             import drivers.astep.serial
             port = drivers.astep.serial.selectFirstLinuxFTDIPort()
             if port:
-                self.rfg.withUARTIO(port.device,baud)
+                self.rfg.withUARTIO(port.device, baud)
                 return self
             else:
                 raise RuntimeError("No Serial Port could be listed")
         else:
-            self.rfg.withUARTIO(portPath,baud)
+            self.rfg.withUARTIO(portPath, baud)
             return self
         
 
@@ -83,94 +81,36 @@ class BoardDriver():
         """Returns the Core Clock frequency to help clock divider configuration - this method is overriden by implementation class (Gecco or Cmod)"""
         pass
 
-    ## Gecco
-    ###############
-    def geccoGetVoltageBoard(self):
-        return self.getVoltageBoard(slot = 4 )
-    def geccoGetInjectionBoard(self):
-        return self.getInjectionBoard(slot = 3 )
-
     ## Loopback Model
-    ################
+    ##################
     def getLoopbackModelForLayer(self,layer):
         return Astropix3LBModel(self,layer)
 
-    ## Chips
-    ################
-    async def setupASICSAuto(self, configFile : str ):
-
-        #assert version >=2 and version < 4 , "Only Astropix 2 and 3 Supported"
-        self.asics.clear()
-        asic = Asic(rfg = self.rfg, row = 0)
-        asic.chipversion = (await self.readFirmwareID()) & 0x0F
-        print(configFile)
+    ## Asic
+    ##################
+    def setupASIC(self, version: int, row: int = 0, chipsPerRow: int=1, configFile: str|None = None):
+        """
+        Load a config yaml file to memory
+        :param version: int, AstroPix chip version
+        :param row: int, number of the current row, default=0
+        :param chipsPerRow: int, number of chips per row (aka daisy chain), default=1
+        :param configFile: srt, path to yaml config file, defaults to None (no configuration applied?)
+        """
+        asic = Asic(rfg = self.rfg, row = row)
+        asic.chipversion = version
+        if configFile is not None: 
+            asic.load_conf_from_yaml(configFile)
+        asic._num_chips = chipsPerRow
         self.asics.append(asic)
 
-        return asic
-
-    def setupASICS(self, version : int , rows: int = 1 , chipsPerRow:int = 1 , configFile : str | None = None):
-        assert version >=2 and version < 4 , "Only Astropix 2 and 3 Supported"
-        if version == 2: 
-            self.geccoGetVoltageBoard().dacvalues =  (8, [0, 0, 1.1, 1, 0, 0, 1, 1.100])
-
-        for i in range(rows):
-            asic = Asic(rfg = self.rfg, row = i)
-            asic.chipversion = version
-            self.asics.append(asic)
-            asic.num_chips = chipsPerRow
-
-            if configFile is not None: 
-                asic.load_conf_from_yaml(configFile)
-
-    def getAsic(self,row = 0 ): 
-        """Returns the Asic Model for the Given Row - Other chips in the Daisy Chain are handeled by the returned 'front' model"""
-        return self.asics[row]
-
-    async def enableSensorClocks(self,flush:bool = False):
-        """Writes the I/O Control register to enable both Timestamp and Sample clock outputs"""
-        await self.ioSetSampleClock(enable=True, flush=flush)
-        await self.ioSetTimestampClock( enable=True, flush=flush)
-
-    async def getIOControlRegister(self):
-        return await self.rfg.read_io_ctrl()
-
-    async def ioSetSampleClock(self,enable:bool,flush:bool = False):
+    ## Ctrl reg
+    ##################
+    async def enableSensorClocks(self, ToT=True, TS=True, flush:bool = False):
         v = await self.rfg.read_io_ctrl()
-        if enable: v|=0x1 
-        else: v &= ~(0x1)
-        await self.rfg.write_io_ctrl(v,flush) 
-    
-    async def ioSetTimestampClock(self,enable:bool,flush:bool = False):
-        v = await self.rfg.read_io_ctrl()
-        if enable: v|=0x2 
+        if ToT:  v|=0x1
+        else:  v &= ~(0x1)
+        if TS: v|=0x2
         else: v &= ~(0x2)
-        await self.rfg.write_io_ctrl(v,flush) 
-    
-    async def ioSetSampleClockSingleEnded(self,enable:bool,flush:bool = False):
-        v = await self.rfg.read_io_ctrl()
-        if enable: v|=0x4 
-        else: v &= ~(0x4)
-        await self.rfg.write_io_ctrl(v,flush) 
-
-    async def ioSetInjectionToGeccoInjBoard(self,enable:bool,flush:bool = False):
-        v = await self.rfg.read_io_ctrl()
-        if enable: v|=0x8 
-        else: v &= ~(0x8)
-        await self.rfg.write_io_ctrl(v,flush) 
-
-
-    async def ioSetFPGAExternalTSClockDifferential(self,enable:bool,flush:bool = False):
-        """If an external clock input is used for the FPGA TS counter, it is differential or not"""
-        v = await self.rfg.read_io_ctrl()
-        if enable: v|=0x10 
-        else: v &= ~(0x10)
-        await self.rfg.write_io_ctrl(v,flush)
-
-    async def ioSetAstropixTSToFPGATS(self,enable:bool,flush:bool = False):
-        """The Astropix TS clock can be sourced from the external FPGA TS clock (it true) or from the internal TS clock (if false)"""
-        v = await self.rfg.read_io_ctrl()
-        if enable: v|=0x20 
-        else: v &= ~(0x20)
         await self.rfg.write_io_ctrl(v,flush) 
 
     ## Layers
@@ -198,17 +138,6 @@ class BoardDriver():
 
     async def configureLayerSPIDivider(self, divider:int , flush = False):
         await self.rfg.write_spi_layers_ckdivider(divider,flush)
-
-
-    async def layerSelectSPI(self, layer , cs : bool, flush = False):
-        """This helper method asserts the shared CSN to 0 by selecting CS on layer 0
-        it's a helper to be used only if the hardware uses a shared Chip Select!!
-        If any Layer is in autoread mode, chip select will be already asserted
-        """
-        layerCfg = await getattr(self.rfg, f"read_layer_{layer}_cfg_ctrl")()
-        layerCfg = (layerCfg | (1 << 3)) if cs else (layerCfg & ~(1 << 3))
-        await getattr(self.rfg, f"write_layer_{layer}_cfg_ctrl")(layerCfg,flush)
-
 
     async def layersSetSPICSN(self, cs = False, flush = False):
         """This helper method asserts the shared CSN to 0 by selecting CS on layer 0
@@ -241,96 +170,80 @@ class BoardDriver():
         layer0Cfg = layer0Cfg & ~(1 << 3)
         await self.rfg.write_layer_0_cfg_ctrl(layer0Cfg,flush)
 
-
-    async def resetLayer(self, layer : int , waitTime : float = 0.5 ):
-        """Sets Layer in Reset then Remove reset after a wait time. The registers are written right now.
+    async def resetLayers(self, waitTime: float = 0.5, flush=True):
+        """Reset all layers because the reset line is shared.
 
         Args:
             waitTime (float):  Reset duration - Default 0.5s
         """
-        await self.setLayerReset(layer = layer, reset = True , flush = True )
+        layer0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
+        layer0Cfg |= (1<<1)
+        await self.rfg.write_layer_0_cfg_ctrl(layer0Cfg,flush)
         await asyncio.sleep(waitTime)
-        await self.setLayerReset(layer = layer, reset = False , flush = True )
+        layer0Cfg &= ~(1<<1)
+        await self.rfg.write_layer_0_cfg_ctrl(layer0Cfg,flush)
 
-    @deprecated("Please use clearer setLayerConfig method")
-    async def setLayerReset(self,layer:int, reset : bool, disable_autoread : bool  = True, modify : bool = False, flush = False):
-        """Asserts/Deasserts the Reset output for the given layer
-
-        Args:
-            disable_autoread (int): By default 1, disables the automatic layer readout upon interruptn=0 condition
-            modify (bool): Reads the Control register first and only change the required bits
-            flush (bool): Write the register right away
-        
-        """
-        regval = 0xff if reset is True else 0x00
-        if modify is True:
-            regval =  await getattr(self.rfg, f"read_layer_{layer}_cfg_ctrl")()
-        
-        if reset is True:
-            regval |= (1<<1)
-        else:
-            regval &= ~(1<<1)
-
-        if disable_autoread is True:
-            regval |= (1<<2)
-        else:
-            regval &= ~(1<<2)
-
-        #if not reset: 
-        #    regval = regval | ( disable_autoread << 2 )
-        await getattr(self.rfg, f"write_layer_{layer}_cfg_ctrl")(regval,flush)
-    
     async def setLayerConfig(self,layer:int, reset : bool, autoread : bool, hold:bool , chipSelect:bool = False,disableMISO:bool = False, flush = False):
         """Modified the layer config with provided bools
-
+            Since Reset and hold are shared and only connected to layer #0 and CSN is shared and or-ed between layers, you better avoid this command unless you know what you are doing
         Args:
-            autoread (bool): Enables or Disables interrupt-based automatic reading
+            layer (int): layer to reset
             reset (bool): Assert/deassert reset I/O to ASIC
+            autoread (bool): Enables or Disables interrupt-based automatic reading
             hold (bool): Assert/deassert hold I/O to ASIC
             chipSelect (bool): Assert/deassert Chip Select for this layer (I/O is inverted in firmware to produce low-active signal)
             disableMISO (bool): Disable SPI MISO bytes reading. Setting this bit to 1 prevents the Firmware from reading bytes
             flush (bool): Write the register right away
-        
         """
         regval =  await getattr(self.rfg, f"read_layer_{layer}_cfg_ctrl")()
-
-        if reset is True:
-            regval |= (1<<1)
-        else:
-            regval &= ~(1<<1)
-
-        if hold is True:
-            regval |= 1 
-        else: 
-            regval &= 0XFE
-        
+        if reset is True: regval |= (1<<1)
+        else: regval &= ~(1<<1)
+        if hold is True: regval |= 1 
+        else:  regval &= 0XFE
         # Autoread is "disable" in config, so True here means False in the register
-        if autoread is False:
-            regval |= (1<<2)
-        else:
-            regval &= ~(1<<2)
-
-        if chipSelect is True:
-            regval |= (1<<3)
-        else:
-            regval &= ~(1<<3)
-
-        if disableMISO is True:
-            regval |= (1<<4)
-        else:
-            regval &= ~(1<<4)
-
+        if autoread is False: regval |= (1<<2)
+        else: regval &= ~(1<<2)
+        if chipSelect is True: regval |= (1<<3)
+        else: regval &= ~(1<<3)
+        if disableMISO is True: regval |= (1<<4)
+        else: regval &= ~(1<<4)
         await getattr(self.rfg, f"write_layer_{layer}_cfg_ctrl")(regval,flush)
 
-    async def holdLayer(self,layer:int,hold:bool = True,flush:bool = False):
-        """Asserts/Deasserts the hold signal for the given layer - This method reads the ctrl register and modifies it"""
-        ctrl = await getattr(self.rfg, f"read_layer_{layer}_cfg_ctrl")()
-        if hold:
-            ctrl |= 1 
-        else: 
-            ctrl &= 0XFE
-        await getattr(self.rfg, f"write_layer_{layer}_cfg_ctrl")(ctrl,flush=flush) 
+    async def holdLayers(self, hold:bool, flush:bool = False):
+        """
+        """
+        ctrl = await getattr(self.rfg, f"read_layer_0_cfg_ctrl")()
+        if hold: ctrl |= 1 
+        else: ctrl &= 0XFE
+        await getattr(self.rfg, f"write_layer_0_cfg_ctrl")(ctrl,flush=flush)
+    
+    async def enableLayersReadout(self, layerlst:list, autoread:bool, flush:bool = False):
+        """
+        Enables readout for a list of layers:
+         - Disable autoread and chipselect for all layers
+         - Disable MISO for all layers
+         - Enable autoread and chipselect for selected layers
+         - Enable MISO for select layers
+         - Lower shared hold
+        :param layerlst: list of layers numbers (int) for which readout will be enabled
+        :param autoread: bool, True for autoread
+        :param flush:
+        """
+        await self.disableLayersReadout(flush=True)
+        if 0 in layerlst: await self.setLayerConfig(layer=0, hold=True, reset=False, autoread=autoread, chipSelect=True, disableMISO=False, flush=True)
+        if 1 in layerlst: await self.setLayerConfig(layer=1, hold=False, reset=False, autoread=autoread, chipSelect=True, disableMISO=False, flush=True)
+        if 2 in layerlst: await self.setLayerConfig(layer=2, hold=False, reset=False, autoread=autoread, chipSelect=True, disableMISO=False, flush=True)
+        await self.holdLayers(hold=False, flush=True)
 
+    async def disableLayersReadout(self, flush:bool = True):
+        """
+        Disable readout for all layers
+         - Raise shared Hold
+         - Disable autoread, chipselect and MISO
+        """
+        await self.setLayerConfig(layer=0, hold=True, reset=False, autoread=False, chipSelect=False, disableMISO=True, flush=flush)
+        await self.setLayerConfig(layer=1, hold=False, reset=False, autoread=False, chipSelect=False, disableMISO=True, flush=flush)
+        await self.setLayerConfig(layer=2, hold=False, reset=False, autoread=False, chipSelect=False, disableMISO=True, flush=flush)
 
     async def writeLayerBytes(self,layer : int , bytes: bytearray,flush:bool = False):
         await getattr(self.rfg, f"write_layer_{layer}_mosi_bytes")(bytes,flush)
@@ -356,6 +269,13 @@ class BoardDriver():
 
     async def getLayerControl(self,layer:int):
         return await getattr(self.rfg, f"read_layer_{layer}_cfg_ctrl")()
+    
+    async def getLayerWrongLength(self, layer:int):
+        return await getattr(self.rfg, f"read_layer_{layer}_stat_wronglength_counter")()
+
+    async def zeroLayerWrongLength(self, layer:int, flush:bool =True):
+        await getattr(self.rfg, f"write_layer_{layer}_stat_wronglength_counter")(0, flush=flush)
+
     
     async def assertLayerNotInReset(self,layer:int):
         ctrlReg = await self.getLayerControl(layer)
