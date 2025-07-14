@@ -12,7 +12,7 @@ import rfg.core
 
 async def test_fpga():
     x = 115200
-    boardDriver = drivers.boards.getGeccoUARTDriver("COM17",baud=115200)
+    boardDriver = drivers.boards.getGeccoUARTDriver("COM10",baud=115200)
     #print('Open')
     await boardDriver.open()
     
@@ -25,7 +25,7 @@ async def test_fpga():
     await boardDriver.close()
 
 async def test_busbar():
-    boardDriver = drivers.boards.getGeccoUARTDriver("COM17",baud=115200)
+    boardDriver = drivers.boards.getGeccoUARTDriver("COM10",baud=115200)
     #print('Open')
     waitTime = 0.1
     await boardDriver.open()
@@ -49,7 +49,7 @@ async def test_busbar():
     #     await boardDriver.setLayerReset(layer = layer, reset = False , flush = True )
     #     await asyncio.sleep(waitTime)
     await boardDriver.layerSelectSPI(12,cs=True,flush = True)
-    boardDriver.setupASICS(version=3,rows=12,chipsPerRow=1,configFile=config_fname)
+    #boardDriver.setupASICS(version=3,rows=12,chipsPerRow=1,configFile=config_fname)
     await boardDriver.setLayerConfig(12,reset=False,autoread=False,hold=False,chipSelect=False,flush=True)
     await asyncio.sleep(waitTime)
     await boardDriver.layerSelectSPI(12,cs=True,flush = True)

@@ -11,7 +11,7 @@ import drivers.boards
 
 async def test_fpga():
     x = 115200
-    boardDriver = drivers.boards.getGeccoUARTDriver("COM17",baud=115200)
+    boardDriver = drivers.boards.getGeccoUARTDriver("COM10",baud=115200)
     #print('Open')
     await boardDriver.open()
     

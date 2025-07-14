@@ -2,7 +2,7 @@ import pandas as pd
 import logging
 logger = logging.getLogger(__name__)
 
-def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True):
+def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
     #Decodes readout
     #Required argument:
     #readout: Bytearray - readout from sensor, not the printed Hex values
@@ -20,7 +20,7 @@ def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True)
     while b<len(readout):
         packet_len = int(readout[b])
         if packet_len>16:
-            logger.debug("Probably didn't find a hit here - go to next byte")
+            #logger.debug("Probably didn't find a hit here - go to next byte")
             b+=1
         else: #got a hit
             list_hits.append(readout[b:b+packet_len+1])
