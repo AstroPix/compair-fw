@@ -29,10 +29,10 @@ export PYTHONPATH := $(shell pwd)/../:$(shell pwd)/../../rtl/top:$(shell pwd)/..
 ifeq ($(SIM),xcelium)
 	EXTRA_ARGS?=-input xcelium.tcl -define SIMULATION +incdir+$(PWD)/../../rtl/includes  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
 else
-	EXTRA_ARGS?=-define SIMULATION  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
+	EXTRA_ARGS?=-define SIMULATION  -L ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
 endif
 
-inspect: export USER_ARGS=-gui
+#inspect: export USER_ARGS=-gui
 inspect: sim
 
 

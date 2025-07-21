@@ -1,4 +1,4 @@
-+define+SIMULATION
++define+SIMULATION 
 +define+RFG_FW_ID=32'h0000ff00
 +define+RFG_FW_BUILD=32'h0000ffAB
 

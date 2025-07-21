@@ -4,7 +4,7 @@ SHELL=/bin/bash
 # Makefile
 
 # defaults
-SIM ?= xcelium
+SIM ?= questa
 TOPLEVEL_LANG ?= verilog
 
 VERILOG_SOURCES += $(PWD)/../../rtl/fifo/fifo_axis_common.sv $(PWD)/../../rtl/fifo/mini_fwft_fifo.sv $(PWD)/../../rtl/fifo/fifo_ptr_logic.sv $(PWD)/../ip/fifo_2clk_64x32.v
@@ -27,12 +27,11 @@ GUI?=0
 ifeq ($(SIM),xcelium)
 	EXTRA_ARGS?=-input xcelium.tcl -define SIMULATION  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx -defparam fifo_axis_common.USE_TID=1 $(USER_ARGS)
 else
-	EXTRA_ARGS?=-define SIMULATION  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
+	EXTRA_ARGS?=-L ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
 endif
 
 
 
-inspect: export USER_ARGS=-gui
 inspect: sim
 
 

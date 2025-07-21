@@ -8,6 +8,14 @@ module compair_fpga_top(
 	output  wire            dcdc_d3p3_sync_mode,
 	output  wire            watchdog, 
 	
+	//input   wire            mehb_gps_pps,
+    //input   wire            meb_spi_clk,
+    //input   wire            meb_spi_miso,
+    //input   wire            meb_hold,         // meb full
+    //output  wire            meb_spi_mosi,
+    output  reg             fee_hit,          // meb int, trig_out
+    output  wire            fee_busy,
+	
 	output wire             row0_hold,
 	output wire             row0_row3_reset,
 	input  wire             row0_int,
@@ -207,7 +215,7 @@ module compair_fpga_top(
      end
         else 
             begin
-            fee_hit <= 1;
+             fee_hit <= 1;
             end
         end
     

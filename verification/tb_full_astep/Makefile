@@ -23,11 +23,11 @@ VERILOG_SOURCES?=
 export VHDL_GPI_INTERFACE=vhpi
 
 ifeq ($(SIM),xcelium)
-	EXTRA_ARGS=-input xcelium.tcl -f $(PWD)/astep24_3l_top.sim.f  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
+	EXTRA_ARGS=-input xcelium.tcl -f $(PWD)/astep24_20l_top.sim.f  -reflib ../xcelium_preparelib/lattice_compiled/lfcpnx $(USER_ARGS)
 endif
 ifeq ($(SIM),questa) 
 	VERILOG_SOURCES=$(BASE)/verification/ip/uart.v
-	VLOG_ARGS=-64 -f $(PWD)/astep24_3l_top.sim_questa.f      $(USER_ARGS)
+	VLOG_ARGS=-64 -f $(PWD)/astep24_20l_top.sim_questa.f      $(USER_ARGS)
 	EXTRA_ARGS=-Ldir $(BASE)/verification/xcelium_preparelib/lattice_compiled_questa/ -L lfcpnx
 	VSIM_ARGS=-no_autoacc
 endif

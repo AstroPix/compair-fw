@@ -6,7 +6,7 @@
 # vmap work sim_build/work 
 # Modifying modelsim.ini
 # QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
-# Start time: 15:25:30 on Jan 14,2025
+# Start time: 12:17:06 on Jul 16,2025
 # vlog -work work "+define+COCOTB_SIM" -sv -timescale 1ns/1ps -mfcu "+acc" -L ../xcelium_preparelib/lattice_compiled/lfcpnx /mnt/c/Project/COMPAIR/compair-fw/verification/tb_fifo_lattice/../../rtl/fifo/fifo_axis_common.sv /mnt/c/Project/COMPAIR/compair-fw/verification/tb_fifo_lattice/../../rtl/fifo/mini_fwft_fifo.sv /mnt/c/Project/COMPAIR/compair-fw/verification/tb_fifo_lattice/../../rtl/fifo/fifo_ptr_logic.sv /mnt/c/Project/COMPAIR/compair-fw/verification/tb_fifo_lattice/../ip/fifo_2clk_64x32.v 
 # -- Compiling module fifo_axis_common
 # -- Compiling module mini_fwft_fifo
@@ -25,10 +25,10 @@
 # 
 # Top level modules:
 # 	fifo_axis_common
-# End time: 15:25:31 on Jan 14,2025, Elapsed time: 0:00:01
+# End time: 12:17:07 on Jul 16,2025, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
-# vsim -onfinish exit -pli "/mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so" -L ../xcelium_preparelib/lattice_compiled/lfcpnx work.fifo_axis_common 
-# Start time: 15:25:31 on Jan 14,2025
+# vsim -onfinish exit -pli "/home/ssheikh/.local/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so" -L ../xcelium_preparelib/lattice_compiled/lfcpnx work.fifo_axis_common 
+# Start time: 12:17:07 on Jul 16,2025
 # ** Note: (vsim-3812) Design is being optimized...
 # ** Warning: (vsim-3865) Due to PLI being present, global +acc is being enabled automatically. This will cause your simulation to run very slowly. Please use vsim -no_autoacc to disable this feature. This feature is now deprecated and will be removed from future releases.
 # ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
@@ -37,5 +37,5 @@
 # Optimization failed
 # ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=1, Warnings=2.
 # Error loading design
-# End time: 15:25:32 on Jan 14,2025, Elapsed time: 0:00:01
+# End time: 12:17:09 on Jul 16,2025, Elapsed time: 0:00:02
 # Errors: 1, Warnings: 2

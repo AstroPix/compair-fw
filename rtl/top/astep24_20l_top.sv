@@ -222,6 +222,7 @@ module astep24_20l_top(
     // Watchdog
     //-------------------    
 	reg watchdog;
+    wire clk_core; // size=1
     localparam int WATCHDOG_COUNT_MAX = 60_000_000/4;
     logic [$clog2(WATCHDOG_COUNT_MAX)-1:0] watchdog_count;
     always @(posedge clk_core) begin
@@ -244,7 +245,7 @@ module astep24_20l_top(
     wire clk_100_resn; // size=1
     wire clk_uart; // size=1
     wire clk_uart_resn; // size=1
-    wire clk_core; // size=1
+    //wire clk_core; // size=1
     wire clk_core_resn; // size=1
 	wire io_ctrl_sample_clock_enable;
     wire io_ctrl_timestamp_clock_enable;
