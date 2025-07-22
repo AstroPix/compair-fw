@@ -1,0 +1,668 @@
+m255
+K4
+z2
+Z0 !s12c _opt1
+Z1 !s99 nomlopt
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+!s12c _opt
+R1
+!s11f vlog 2023.2_1 2023.05, May 12 2023
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z2 d/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if
+T_opt
+!s110 1752611199
+V]Re?[BkfBkmf@AQQ=Aj182
+04 17 4 work trigger_module_if fast 0
+=1-000ae431a4f1-6876b97e-313e5-1a42
+R1
+Z3 !s12b OEM100
+Z4 !s124 OEM100
+o-quiet -auto_acc_if_foreign -work work -L lfcpnx +acc
+Z5 tCvgOpt 0
+n@_opt
+Z6 OL;O;2023.2_1;77
+R2
+T_opt1
+!s110 1752779638
+V3FIBoBHCoi=eNPjSb^31P3
+04 10 4 work spi_axi_tb fast 0
+=3-000ae431a4f1-68794b75-9d05e-bc4
+R1
+R3
+R4
+o-quiet -auto_acc_if_foreign -work work +acc
+R5
+n@_opt1
+R6
+R2
+Xaxi_ifs
+Z7 2../spi/spi_axis_if_v1.sv
+Z8 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z9 !s110 1752606567
+V:j2WfM<XgVL?:?;h2UjUd2
+r1
+!s85 0
+!i10b 1
+!s100 a3XF1D59DzY[_Zb_HVCAK3
+I:j2WfM<XgVL?:?;h2UjUd2
+S1
+R2
+Z10 w1752250661
+Z11 8../includes/axi_ifs.sv
+Z12 F../includes/axi_ifs.sv
+!i122 2
+L0 7 0
+Z13 OL;L;2023.2_1;77
+31
+Z14 !s108 1752606567.000000
+Z15 !s107 ../includes/axi_ifs.sv|../spi/spi_axis_if_v1.sv|
+Z16 !s90 -sv|../spi/spi_axis_if_v1.sv|
+!i113 0
+Z17 o-sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R5
+YAXI_LITE
+R7
+R8
+Z18 DXx4 work 22 spi_axis_if_v1_sv_unit 0 22 QEDSmGhaAGzDXz@EddAd]1
+R9
+Z19 VDg1SIo80bB@j0V0VzS_@n1
+r1
+!s85 0
+!i10b 1
+!s100 5`=HkZli?MSG>Pf2G@<BL1
+IUnZB<36ic<i118lb<4SLY0
+Z20 !s105 spi_axis_if_v1_sv_unit
+S1
+R2
+R10
+R11
+R12
+!i122 2
+L0 144 0
+R13
+31
+R14
+R15
+R16
+!i113 0
+R17
+R5
+n@a@x@i_@l@i@t@e
+vaxi_lite_master_driver
+2/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv
+R8
+!s110 1752779096
+!i10b 1
+!s100 ;KliEDec`^=@hH]koN>Ta0
+IIbbH;]PJ?724ZiR8YOWC<3
+S1
+R2
+w1752778609
+8/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv
+F/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv
+!i122 18
+L0 1 87
+R19
+R13
+r1
+!s85 0
+31
+!s108 1752779096.000000
+!s107 /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv|
+!s90 -reportprogress|300|-work|work|/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv|
+!i113 0
+Z21 o-work work -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R5
+YAXIS
+R7
+R8
+R18
+R9
+R19
+r1
+!s85 0
+!i10b 1
+!s100 Gi[coCklFSHA:OTaR8NU`2
+IFak;D8_5RU7@>zDP3hl=_2
+R20
+S1
+R2
+R10
+R11
+R12
+!i122 2
+L0 11 0
+R13
+31
+R14
+R15
+R16
+!i113 0
+R17
+R5
+n@a@x@i@s
+vfifo_2clk_64x8
+Z22 2/mnt/c/Project/COMPAIR/compair-fw/target-certusnx-devboard/fifo_2clk_64x8/rtl/fifo_2clk_64x8.v
+Z23 !s110 1752607662
+!i10b 1
+!s100 Xe`K5eP`9fafG]b:WA<oc1
+I?;XAl_=eBJ2ORI2bA`f352
+R2
+Z24 w1731953462
+Z25 8/mnt/c/Project/COMPAIR/compair-fw/target-certusnx-devboard/fifo_2clk_64x8/rtl/fifo_2clk_64x8.v
+Z26 F/mnt/c/Project/COMPAIR/compair-fw/target-certusnx-devboard/fifo_2clk_64x8/rtl/fifo_2clk_64x8.v
+!i122 7
+L0 11 72
+R19
+R13
+r1
+!s85 0
+31
+Z27 !s108 1752607662.000000
+Z28 !s107 /mnt/c/Project/COMPAIR/compair-fw/target-certusnx-devboard/fifo_2clk_64x8/rtl/fifo_2clk_64x8.v|
+Z29 !s90 -reportprogress|300|-work|work|-L|mtiAvm|-L|mtiRnm|-L|mtiOvm|-L|mtiUvm|-L|mtiUPF|-L|infact|/mnt/c/Project/COMPAIR/compair-fw/target-certusnx-devboard/fifo_2clk_64x8/rtl/fifo_2clk_64x8.v|
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_fifo_dc
+R22
+R23
+!i10b 1
+!s100 6eFQAED;Jom6S_3ECLlPi1
+IHHS]Hf4@D8_gdLR>bXodg2
+R2
+R24
+R25
+R26
+!i122 7
+L0 138 132
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_fifo_dc_fwft_fabric
+R22
+R23
+!i10b 1
+!s100 702=5fnTc2gm^dd^?KNME1
+IHaDh7:^OX]j3I9YDa_bfZ1
+R2
+R24
+R25
+R26
+!i122 7
+L0 325 99
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_fifo_dc_hw_core
+R22
+R23
+!i10b 1
+!s100 ekb5B7d=mj=XPTQ^7OiM<1
+I<0Xb=A4KZ]Ho=M;AF5@162
+R2
+R24
+R25
+R26
+!i122 7
+L0 3141 671
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_fifo_dc_main
+R22
+R23
+!i10b 1
+!s100 FN>H?DOU0YOnabAYeA6mf2
+IT;TLJ3g>?YaS]88V@KDDa0
+R2
+R24
+R25
+R26
+!i122 7
+L0 479 169
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_fifo_mem_core
+R22
+Z30 !s110 1752607663
+!i10b 1
+!s100 oh37UIQ>zz=Pb?:8NUVQi1
+Idz[Szb]8?][l2OT[PHJWg3
+R2
+R24
+R25
+R26
+!i122 7
+L0 8654 2846
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_fifo_mem_main
+R22
+R30
+!i10b 1
+!s100 YMlA97h@K:^laf?lIkHEo3
+I2@K^Q@UH[ocCW[kYJ;RK11
+R2
+R24
+R25
+R26
+!i122 7
+L0 5334 3259
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_fifo_soft_mem
+R22
+R30
+!i10b 1
+!s100 mlBE@XR>2OB2X1Y?^fh8o3
+I>05J2RS<9[9PU^]NRZgo73
+R2
+R24
+R25
+R26
+!i122 7
+L0 4932 347
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_hard_fifo_dc
+R22
+R23
+!i10b 1
+!s100 eNKB;Cf>K7nL6I0JUEfWi0
+I]>[^S;9?0cm5W=PLH0i910
+R2
+R24
+R25
+R26
+!i122 7
+L0 704 2381
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_reset_async
+R22
+R23
+!i10b 1
+!s100 EVYbGgX]>=RK=h@gBKcgA3
+I[<gi`K31LeK6fA3HaZVEQ3
+R2
+R24
+R25
+R26
+!i122 7
+L0 4849 28
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_2clk_64x8_ipgen_lscc_soft_fifo_dc
+R22
+R23
+!i10b 1
+!s100 A1=PmoXP11k<_>30fMij?1
+I5@^6zA]1U4e93mEYcRL;F3
+R2
+R24
+R25
+R26
+!i122 7
+L0 3867 960
+R19
+R13
+r1
+!s85 0
+31
+R27
+R28
+R29
+!i113 0
+R21
+R5
+vfifo_axis_common
+2../fifo/fifo_axis_common.sv
+R8
+!s110 1752606541
+!i10b 1
+!s100 4hZFz4<K?IzdjHSjOSD5H1
+InAjVXd1?ezY3ZKRd_RYIz3
+S1
+R2
+Z31 w1752250636
+8../fifo/fifo_axis_common.sv
+F../fifo/fifo_axis_common.sv
+!i122 1
+L0 14 276
+R19
+R13
+r1
+!s85 0
+31
+!s108 1752606541.000000
+!s107 ../fifo/fifo_axis_common.sv|
+!s90 -sv|../fifo/fifo_axis_common.sv|
+!i113 0
+R17
+R5
+vfifo_ptr_logic
+2/mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/fifo_ptr_logic.sv
+R8
+!s110 1752606673
+!i10b 1
+!s100 oInB@o51_]mD36W22V>dE2
+Ic_TYn92j9YNJnaOV3Q[E[3
+S1
+R2
+R31
+8/mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/fifo_ptr_logic.sv
+F/mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/fifo_ptr_logic.sv
+!i122 5
+L0 1 107
+R19
+R13
+r1
+!s85 0
+31
+!s108 1752606673.000000
+!s107 /mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/fifo_ptr_logic.sv|
+!s90 -reportprogress|300|-work|work|/mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/fifo_ptr_logic.sv|
+!i113 0
+R21
+R5
+vmini_fwft_fifo
+2/mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/mini_fwft_fifo.sv
+R8
+!s110 1752606665
+!i10b 1
+!s100 YzLQVV7cR]N7>CEB^@>h<0
+If^ajYmX<Ih0V4m]KDTecU1
+S1
+R2
+R31
+8/mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/mini_fwft_fifo.sv
+F/mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/mini_fwft_fifo.sv
+!i122 4
+L0 1 84
+R19
+R13
+r1
+!s85 0
+31
+!s108 1752606665.000000
+!s107 /mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/mini_fwft_fifo.sv|
+!s90 -reportprogress|300|-work|work|/mnt/c/Project/COMPAIR/compair-fw/rtl/fifo/mini_fwft_fifo.sv|
+!i113 0
+R21
+R5
+vspi_axi_dut
+2spi_axi_dut.sv
+R8
+!s110 1752776453
+!i10b 1
+!s100 Z@DM:z3a;;8M^ckhT=8?z2
+I855n1BYBE4TjCAfgH6>Oz3
+S1
+R2
+w1752776428
+8spi_axi_dut.sv
+Fspi_axi_dut.sv
+!i122 9
+L0 1 163
+R19
+R13
+r1
+!s85 0
+31
+!s108 1752776452.000000
+!s107 spi_axi_dut.sv|
+!s90 spi_axi_dut.sv|
+!i113 0
+Z32 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R5
+vspi_axi_tb
+2/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+R8
+!s110 1752779635
+!i10b 1
+!s100 nAYPjN70@P[hDH`TR=ahP2
+IfkNQYj4D72:NTc^Y;TOCG1
+S1
+R2
+w1752779623
+8/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+F/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+!i122 23
+L0 1 160
+R19
+R13
+r1
+!s85 0
+31
+!s108 1752779635.000000
+!s107 /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv|
+!s90 -reportprogress|300|-L|mtiAvm|-L|mtiRnm|-L|mtiOvm|-L|mtiUvm|-L|mtiUPF|-L|infact|/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv|
+!i113 0
+R32
+R5
+vspi_axis_if_v1
+R7
+R8
+R18
+R9
+R19
+r1
+!s85 0
+!i10b 1
+!s100 ^Gm4d[HKjP:nYlng_71Wz0
+InW_]`c_QCVg[ZJaAEfVcm2
+R20
+S1
+R2
+R10
+Z33 8../spi/spi_axis_if_v1.sv
+Z34 F../spi/spi_axis_if_v1.sv
+!i122 2
+L0 3 256
+R13
+31
+R14
+R15
+R16
+!i113 0
+R17
+R5
+Xspi_axis_if_v1_sv_unit
+R7
+R8
+R9
+VQEDSmGhaAGzDXz@EddAd]1
+r1
+!s85 0
+!i10b 1
+!s100 NU:C=g1R<9=Vb4WBk01e_0
+IQEDSmGhaAGzDXz@EddAd]1
+!i103 1
+S1
+R2
+R10
+R33
+R34
+R12
+!i122 2
+L0 4 0
+R13
+31
+R14
+R15
+R16
+!i113 0
+R17
+R5
+vSPI_Master
+2../../../spi-master/Verilog/source/SPI_Master2.v
+R8
+!s110 1752786014
+!i10b 1
+!s100 UeNLbP11d0VbNII9Vn9Uj2
+I6okm^M4^hQ5ie?F]80Z^M3
+S1
+R2
+w1752782781
+8../../../spi-master/Verilog/source/SPI_Master2.v
+F../../../spi-master/Verilog/source/SPI_Master2.v
+!i122 26
+L0 33 207
+R19
+R13
+r1
+!s85 0
+31
+!s108 1752786014.000000
+!s107 ../../../spi-master/Verilog/source/SPI_Master2.v|
+!s90 -sv|../../../spi-master/Verilog/source/SPI_Master2.v|
+!i113 0
+R17
+R5
+n@s@p@i_@master
+vSPI_Slave_TB3
+2../../../spi-slave/Verilog/sim/SPI_Slave_TB3.sv
+R8
+!s110 1752785973
+!i10b 1
+!s100 oUZm5L5knE0N@gl<?d?=?3
+IUlmF:6nlbfkQz6hK]@NlZ3
+S1
+R2
+w1752785970
+8../../../spi-slave/Verilog/sim/SPI_Slave_TB3.sv
+F../../../spi-slave/Verilog/sim/SPI_Slave_TB3.sv
+!i122 25
+L0 5 149
+R19
+R13
+r1
+!s85 0
+31
+!s108 1752785973.000000
+!s107 ../../../spi-slave/Verilog/sim/SPI_Slave_TB3.sv|
+!s90 -sv|../../../spi-slave/Verilog/sim/SPI_Slave_TB3.sv|
+!i113 0
+R17
+R5
+n@s@p@i_@slave_@t@b3
+vtrigger_module_if
+2/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/trigger_module_if.sv
+R8
+!s110 1752611190
+!i10b 1
+!s100 fR4Ej?bPDLHoRoKlQ76F<2
+I[<[>O>WS0a1iPQ4h@gJIc3
+S1
+R2
+w1752611186
+8/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/trigger_module_if.sv
+F/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/trigger_module_if.sv
+!i122 8
+L0 7 120
+R19
+R13
+r1
+!s85 0
+31
+!s108 1752611189.000000
+!s107 /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/trigger_module_if.sv|
+!s90 -reportprogress|300|-work|work|/mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/trigger_module_if.sv|
+!i113 0
+R21
+R5

@@ -1,0 +1,464 @@
+# //  Questa Sim-64
+# //  Version 2023.2_1 linux_x86_64 May 12 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 14:23:05 on Jul 17,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# Loading sv_std.std
+# Loading work.spi_axi_tb(fast)
+# Loading work.spi_axi_dut(fast)
+add wave *
+run -all
+# Received SPI data: xxxxxxxx
+# ** Note: $finish    : spi_axi_tb.sv(126)
+#    Time: 1300 ns  Iteration: 0  Instance: /spi_axi_tb
+# 1
+# Break in Module spi_axi_tb at spi_axi_tb.sv line 126
+quit -sim
+# End time: 14:26:23 on Jul 17,2025, Elapsed time: 0:03:18
+# Errors: 0, Warnings: 1
+vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 14:28:56 on Jul 17,2025
+# ** Note: (vsim-8009) Loading existing optimized design _opt1
+# Loading sv_std.std
+# Loading work.spi_axi_tb(fast)
+# Loading work.spi_axi_dut(fast)
+add wave *
+run 5 us
+# Received SPI data: xxxxxxxx
+# ** Note: $finish    : spi_axi_tb.sv(126)
+#    Time: 1300 ns  Iteration: 0  Instance: /spi_axi_tb
+# 1
+# Break in Module spi_axi_tb at spi_axi_tb.sv line 126
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 14:37:31 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# ** Error: (vlog-13069) /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(113): near "'": syntax error, unexpected '\'', expecting ';'.
+# ** Error: (vlog-13069) /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(114): near "'": syntax error, unexpected '\'', expecting ';'.
+# End time: 14:37:31 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 2, Warnings: 0
+# /home/ssheikh/mgc/questasim/linux_x86_64/vlog failed.
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 14:38:19 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 14:38:19 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+restart -f; run 200 ns
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# Loading sv_std.std
+# Loading work.spi_axi_tb(fast)
+# Loading work.spi_axi_dut(fast)
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_wready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 114
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_awready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 113
+# No Design Loaded!
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 14:39:00 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 14:39:00 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+restart -f; run 200 ns
+# No Design Loaded!
+!vsim
+# vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 14:28:56 on Jul 17,2025
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=2, Warnings=2.
+# Loading sv_std.std
+# Loading work.spi_axi_tb(fast)
+# Loading work.spi_axi_dut(fast)
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_wready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 68
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_awready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 67
+# Error loading design
+# End time: 14:39:08 on Jul 17,2025, Elapsed time: 0:10:12
+# Errors: 4, Warnings: 2
+vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 14:39:52 on Jul 17,2025
+# ** Note: (vsim-8009) Loading existing optimized design _opt1
+# Loading sv_std.std
+# Loading work.spi_axi_tb(fast)
+# Loading work.spi_axi_dut(fast)
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_wready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 68
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_awready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 67
+# Error loading design
+# End time: 14:39:54 on Jul 17,2025, Elapsed time: 0:00:02
+# Errors: 2, Warnings: 0
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 14:39:56 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 14:39:57 on Jul 17,2025, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 14:39:59 on Jul 17,2025
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# Loading sv_std.std
+# Loading work.spi_axi_tb(fast)
+# Loading work.spi_axi_dut(fast)
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_wready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 11
+# Error loading design
+# End time: 14:40:02 on Jul 17,2025, Elapsed time: 0:00:03
+# Errors: 1, Warnings: 1
+vlog -reportprogress 300 -work work /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 14:52:05 on Jul 17,2025
+# vlog -reportprogress 300 -work work /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv 
+# -- Compiling module axi_lite_master_driver
+# ** Error: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(68): LHS in non-blocking assignment may not be an automatic variable
+# End time: 14:52:05 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 14:54:30 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 14:54:30 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -reportprogress 300 -work work /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 14:56:56 on Jul 17,2025
+# vlog -reportprogress 300 -work work /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv 
+# -- Compiling module axi_lite_master_driver
+# 
+# Top level modules:
+# 	axi_lite_master_driver
+# End time: 14:56:56 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 14:57:05 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 14:57:06 on Jul 17,2025, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+restart
+# No Design Loaded!
+!vsim
+# vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 14:57:13 on Jul 17,2025
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Error: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): Module 'axi_lite_master' is not defined.
+#  For instance 'axi_m' at path 'spi_axi_tb'
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=1, Warnings=1.
+# Error loading design
+# End time: 14:57:14 on Jul 17,2025, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 1
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 14:58:13 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 14:58:13 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 14:58:15 on Jul 17,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_AWADDR' not found in module 'axi_lite_master_driver' (3rd connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_AWVALID' not found in module 'axi_lite_master_driver' (4th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_AWREADY' not found in module 'axi_lite_master_driver' (5th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_WDATA' not found in module 'axi_lite_master_driver' (6th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_WSTRB' not found in module 'axi_lite_master_driver' (7th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_WVALID' not found in module 'axi_lite_master_driver' (8th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_WREADY' not found in module 'axi_lite_master_driver' (9th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_BRESP' not found in module 'axi_lite_master_driver' (10th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_BVALID' not found in module 'axi_lite_master_driver' (11th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_BREADY' not found in module 'axi_lite_master_driver' (12th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_ARADDR' not found in module 'axi_lite_master_driver' (13th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_ARVALID' not found in module 'axi_lite_master_driver' (14th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_ARREADY' not found in module 'axi_lite_master_driver' (15th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_RDATA' not found in module 'axi_lite_master_driver' (16th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_RRESP' not found in module 'axi_lite_master_driver' (17th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_RVALID' not found in module 'axi_lite_master_driver' (18th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_RREADY' not found in module 'axi_lite_master_driver' (19th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'wr_en' not found in module 'axi_lite_master_driver' (20th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'wr_addr' not found in module 'axi_lite_master_driver' (21st connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'wr_data' not found in module 'axi_lite_master_driver' (22nd connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'wr_done' not found in module 'axi_lite_master_driver' (23rd connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'rd_en' not found in module 'axi_lite_master_driver' (24th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'rd_addr' not found in module 'axi_lite_master_driver' (25th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'rd_data' not found in module 'axi_lite_master_driver' (26th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'rd_done' not found in module 'axi_lite_master_driver' (27th connection).
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=25, Warnings=1.
+# Error loading design
+# End time: 14:58:16 on Jul 17,2025, Elapsed time: 0:00:01
+# Errors: 25, Warnings: 1
+vlog -reportprogress 300 -work work /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:04:56 on Jul 17,2025
+# vlog -reportprogress 300 -work work /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv 
+# -- Compiling module axi_lite_master_driver
+# 
+# Top level modules:
+# 	axi_lite_master_driver
+# End time: 15:04:56 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 15:04:59 on Jul 17,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_AWADDR' not found in module 'axi_lite_master_driver' (3rd connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_AWVALID' not found in module 'axi_lite_master_driver' (4th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_AWREADY' not found in module 'axi_lite_master_driver' (5th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_WDATA' not found in module 'axi_lite_master_driver' (6th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_WSTRB' not found in module 'axi_lite_master_driver' (7th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_WVALID' not found in module 'axi_lite_master_driver' (8th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_WREADY' not found in module 'axi_lite_master_driver' (9th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_BRESP' not found in module 'axi_lite_master_driver' (10th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_BVALID' not found in module 'axi_lite_master_driver' (11th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_BREADY' not found in module 'axi_lite_master_driver' (12th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_ARADDR' not found in module 'axi_lite_master_driver' (13th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_ARVALID' not found in module 'axi_lite_master_driver' (14th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_ARREADY' not found in module 'axi_lite_master_driver' (15th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_RDATA' not found in module 'axi_lite_master_driver' (16th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_RRESP' not found in module 'axi_lite_master_driver' (17th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_RVALID' not found in module 'axi_lite_master_driver' (18th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'M_AXI_RREADY' not found in module 'axi_lite_master_driver' (19th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'wr_en' not found in module 'axi_lite_master_driver' (20th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'wr_addr' not found in module 'axi_lite_master_driver' (21st connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'wr_data' not found in module 'axi_lite_master_driver' (22nd connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'wr_done' not found in module 'axi_lite_master_driver' (23rd connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'rd_en' not found in module 'axi_lite_master_driver' (24th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'rd_addr' not found in module 'axi_lite_master_driver' (25th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'rd_data' not found in module 'axi_lite_master_driver' (26th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'rd_done' not found in module 'axi_lite_master_driver' (27th connection).
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=25, Warnings=1.
+# Error loading design
+# End time: 15:05:00 on Jul 17,2025, Elapsed time: 0:00:01
+# Errors: 25, Warnings: 1
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:05:17 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 15:05:17 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:07:01 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 15:07:01 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 15:07:04 on Jul 17,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_awaddr' not found in module 'axi_lite_master_driver' (3rd connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_awvalid' not found in module 'axi_lite_master_driver' (4th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_awready' not found in module 'axi_lite_master_driver' (5th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_wdata' not found in module 'axi_lite_master_driver' (6th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_wstrb' not found in module 'axi_lite_master_driver' (7th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_wvalid' not found in module 'axi_lite_master_driver' (8th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_wready' not found in module 'axi_lite_master_driver' (9th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_bresp' not found in module 'axi_lite_master_driver' (10th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_bvalid' not found in module 'axi_lite_master_driver' (11th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_bready' not found in module 'axi_lite_master_driver' (12th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_araddr' not found in module 'axi_lite_master_driver' (13th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_arvalid' not found in module 'axi_lite_master_driver' (14th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_arready' not found in module 'axi_lite_master_driver' (15th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_rdata' not found in module 'axi_lite_master_driver' (16th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_rresp' not found in module 'axi_lite_master_driver' (17th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_rvalid' not found in module 'axi_lite_master_driver' (18th connection).
+# ** Error (suppressible): /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): (vopt-2912) Port 'axi_rready' not found in module 'axi_lite_master_driver' (19th connection).
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=17, Warnings=1.
+# Error loading design
+# End time: 15:07:05 on Jul 17,2025, Elapsed time: 0:00:01
+# Errors: 17, Warnings: 1
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:08:39 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 15:08:39 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim -voptargs=+acc work.spi_axi_tb
+# vsim -voptargs="+acc" work.spi_axi_tb 
+# Start time: 15:08:41 on Jul 17,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# Loading sv_std.std
+# Loading work.spi_axi_tb(fast)
+# Loading work.axi_lite_master_driver(fast)
+# Loading work.spi_axi_dut(fast)
+# ** Warning: (vsim-3015) [PCDPC] - Port size (32) does not match connection size (1) for port 'awaddr'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(9).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 24
+# ** Warning: (vsim-3015) [PCDPC] - Port size (32) does not match connection size (1) for port 'wdata'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(13).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 24
+# ** Warning: (vsim-3015) [PCDPC] - Port size (4) does not match connection size (1) for port 'wstrb'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(14).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 24
+# ** Warning: (vsim-3015) [PCDPC] - Port size (2) does not match connection size (1) for port 'bresp'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(18).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 24
+# ** Warning: (vsim-3015) [PCDPC] - Port size (32) does not match connection size (1) for port 'araddr'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(22).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 24
+# ** Warning: (vsim-3015) [PCDPC] - Port size (32) does not match connection size (1) for port 'rdata'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(26).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 24
+# ** Warning: (vsim-3015) [PCDPC] - Port size (2) does not match connection size (1) for port 'rresp'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(27).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 24
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:10:35 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# ** Error: (vlog-13069) /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(24): near "=": syntax error, unexpected '=', expecting ++ or --.
+# End time: 15:10:36 on Jul 17,2025, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 0
+# /home/ssheikh/mgc/questasim/linux_x86_64/vlog failed.
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:11:47 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 15:11:47 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# Loading sv_std.std
+# Loading work.spi_axi_tb(fast)
+# Loading work.axi_lite_master_driver(fast)
+# Loading work.spi_axi_dut(fast)
+# ** Warning: (vsim-3015) [PCDPC] - Port size (32) does not match connection size (1) for port 'awaddr'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(9).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 25
+# ** Warning: (vsim-3015) [PCDPC] - Port size (32) does not match connection size (1) for port 'wdata'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(13).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 25
+# ** Warning: (vsim-3015) [PCDPC] - Port size (4) does not match connection size (1) for port 'wstrb'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(14).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 25
+# ** Warning: (vsim-3015) [PCDPC] - Port size (2) does not match connection size (1) for port 'bresp'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(18).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 25
+# ** Warning: (vsim-3015) [PCDPC] - Port size (32) does not match connection size (1) for port 'araddr'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(22).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 25
+# ** Warning: (vsim-3015) [PCDPC] - Port size (32) does not match connection size (1) for port 'rdata'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(26).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 25
+# ** Warning: (vsim-3015) [PCDPC] - Port size (2) does not match connection size (1) for port 'rresp'. The port definition is at: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/axi_lite_master_driver.sv(27).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb/axi_m File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 25
+vlog -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:13:55 on Jul 17,2025
+# vlog -reportprogress 300 -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv 
+# -- Compiling module spi_axi_tb
+# 
+# Top level modules:
+# 	spi_axi_tb
+# End time: 15:13:55 on Jul 17,2025, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# Loading sv_std.std
+# Loading work.spi_axi_tb(fast)
+# Loading work.axi_lite_master_driver(fast)
+# Loading work.spi_axi_dut(fast)
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_rready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 134
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_rready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 131
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_arvalid', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 129
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_arvalid', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 125
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_araddr', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 124
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_bready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 117
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_bready', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 115
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_wvalid', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 113
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_awvalid', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 112
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_wstrb', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 109
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_wvalid', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 108
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_wdata', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 107
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_awvalid', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 104
+# ** Error (suppressible): (vsim-3839) Variable '/spi_axi_tb/axi_awaddr', driven via a port connection, is multiply driven. See /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv(25).
+#    Time: 0 ns  Iteration: 0  Instance: /spi_axi_tb File: /mnt/c/Project/COMPAIR/compair-fw/rtl/trigger_if/spi_axi_tb.sv Line: 103
+
+quit -sim
+# End time: 15:14:17 on Jul 17,2025, Elapsed time: 0:05:36
+# Errors: 14, Warnings: 1
+exit
