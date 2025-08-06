@@ -507,7 +507,7 @@ class Asic():
 
 
     async def writeSPIRoutingFrame(self):
-        await getattr(self.rfg, f"write_layer_{self.row}_mosi_bytes")([SPI_HEADER_ROUTING] + [0x00]*self._num_chips*4,True)
+        await getattr(self.rfg, f"write_lane_{self.row}_mosi_bytes")([SPI_HEADER_ROUTING] + [0x00]*self._num_chips*4,True)
 
     def createSPIConfigFramev2(self, load: bool = True, n_load: int = 10, broadcast: bool = False, targetChip: int = 0)  -> bytearray:
         """
@@ -569,14 +569,14 @@ class Asic():
         for chunk in range(0, len(spiBytes), step):
             chunkBytes = spiBytes[chunk:chunk+step]
             logger.info("Writing Chunck %d/%d len=%d",(chunk/step+1),steps,len(chunkBytes))
-            await getattr(self.rfg, f"write_layer_{self.row}_mosi_bytes")(chunkBytes,True)
+            await getattr(self.rfg, f"write_lane_{self.row}_mosi_bytes")(chunkBytes,True)
 
             ## Sleep to give time for the FW to send the bytes, this will be better synchronised in the future
             ## Must be improved
-            while (await getattr(self.rfg, f"read_layer_{self.row}_mosi_write_size")() > 0):
+            while (await getattr(self.rfg, f"read_lane_{self.row}_mosi_write_size")() > 0):
                 pass
             #await asyncio.sleep(0.1)         
-            logger.info("Current MISO Write count=%d",await self.rfg.read_layer_0_mosi_write_size())
+            logger.info("Current MISO Write count=%d",await self.rfg.read_lane_0_mosi_write_size())
 
 
     ## SPI outdated
@@ -593,12 +593,12 @@ class Asic():
         for chunk in range(0, len(spiBytes), step):
             chunkBytes = spiBytes[chunk:chunk+step]
             logger.info("Writing Chunck %d/%d len=%d",(chunk/step+1),steps,len(chunkBytes))
-            await getattr(self.rfg, f"write_layer_{self.row}_mosi_bytes")(chunkBytes,True)
+            await getattr(self.rfg, f"write_lane_{self.row}_mosi_bytes")(chunkBytes,True)
 
             ## Sleep to give time for the FW to send the bytes, this will be better synchronised in the future
             ## Must be improved
             await asyncio.sleep(0.1)         
-            logger.info("Current MISO Write count=%d",await self.rfg.read_layer_0_mosi_write_size())
+            logger.info("Current MISO Write count=%d",await self.rfg.read_lane_0_mosi_write_size())
 
     def createSPIConfigFrame(self, load: bool = True, n_load: int = 10, broadcast: bool = False, targetChip: int = 0)  -> bytearray:
         """
