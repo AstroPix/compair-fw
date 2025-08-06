@@ -6,16 +6,16 @@
 # vmap work sim_build/work 
 # Modifying modelsim.ini
 # QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
-# Start time: 15:55:11 on Jan 29,2025
+# Start time: 12:42:02 on Aug 06,2025
 # vlog -work work "+define+COCOTB_SIM" -sv -timescale 1ns/1ps -mfcu "+acc" /mnt/c/Project/COMPAIR/compair-fw/verification/tb_demo_counter/counter.v 
 # -- Compiling module counter
 # 
 # Top level modules:
 # 	counter
-# End time: 15:55:12 on Jan 29,2025, Elapsed time: 0:00:01
+# End time: 12:42:02 on Aug 06,2025, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vsim -onfinish exit -pli "/mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so" work.counter 
-# Start time: 15:55:12 on Jan 29,2025
+# vsim -onfinish exit -pli "/home/ssheikh/.local/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so" work.counter 
+# Start time: 12:42:02 on Aug 06,2025
 # ** Note: (vsim-3812) Design is being optimized...
 # ** Warning: (vsim-3865) Due to PLI being present, global +acc is being enabled automatically. This will cause your simulation to run very slowly. Please use vsim -no_autoacc to disable this feature. This feature is now deprecated and will be removed from future releases.
 # ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
@@ -36,12 +36,12 @@
 # //
 # Loading sv_std.std
 # Loading work.counter(fast)
-# Loading /mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so
+# Loading /home/ssheikh/.local/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so
 #      -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:108  in set_program_name_in_venv        Using Python virtual environment interpreter at /mnt/c/Project/COMPAIR/compair-fw/verification/.venv/bin/python
 #      -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
 #      0.00ns INFO     cocotb                             Running on ModelSim for Questa-64 version 2023.2 2023.05
 #      0.00ns INFO     cocotb                             Running tests with cocotb v1.9.2 from /mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb
-#      0.00ns INFO     cocotb                             Seeding Python random module with 1738184120
+#      0.00ns INFO     cocotb                             Seeding Python random module with 1754498525
 #      0.00ns INFO     cocotb.regression                  Found test sim_counter.test_clocking_reset
 #      0.00ns INFO     cocotb.regression                  Found test sim_counter.test_clocking_reset2
 #      0.00ns INFO     cocotb.regression                  running test_clocking_reset (1/2)
@@ -51,13 +51,13 @@
 # 402000.00ns INFO     cocotb.regression                  ******************************************************************************************
 #                                                         ** TEST                              STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
 #                                                         ******************************************************************************************
-#                                                         ** sim_counter.test_clocking_reset    PASS      201000.00           0.75     267516.46  **
-#                                                         ** sim_counter.test_clocking_reset2   PASS      201000.00           0.76     263372.34  **
+#                                                         ** sim_counter.test_clocking_reset    PASS      201000.00           0.62     326773.02  **
+#                                                         ** sim_counter.test_clocking_reset2   PASS      201000.00           0.63     319020.40  **
 #                                                         ******************************************************************************************
-#                                                         ** TESTS=2 PASS=2 FAIL=0 SKIP=0                 402000.00           1.72     233146.90  **
+#                                                         ** TESTS=2 PASS=2 FAIL=0 SKIP=0                 402000.00           1.50     268172.33  **
 #                                                         ******************************************************************************************
 #                                                         
 # ** Note: $finish
 #    Time: 402000002 ps  Iteration: 0  Instance: /counter
-# End time: 15:55:21 on Jan 29,2025, Elapsed time: 0:00:09
+# End time: 12:42:06 on Aug 06,2025, Elapsed time: 0:00:04
 # Errors: 0, Warnings: 2

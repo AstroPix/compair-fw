@@ -27,8 +27,8 @@ ifeq ($(SIM),xcelium)
 endif
 ifeq ($(SIM),questa) 
 	VERILOG_SOURCES=$(BASE)/verification/ip/uart.v
-	VLOG_ARGS=-64 -f $(PWD)/astep24_3l_top.sim_questa.f      $(USER_ARGS)
-	EXTRA_ARGS=-Ldir $(BASE)/verification/xcelium_preparelib/lattice_compiled_questa/ -L lfcpnx
+	VLOG_ARGS=-64 -f $(PWD)/astep24_20l_top.sim_questa.f      $(USER_ARGS)
+	EXTRA_ARGS=-Ldir $(BASE)/verification/xcelium_preparelib/lattice_compiled/ -L lfcpnx
 	VSIM_ARGS=-no_autoacc
 endif
 

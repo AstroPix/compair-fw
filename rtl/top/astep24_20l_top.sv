@@ -11,7 +11,7 @@ module astep24_20l_top(
     input  wire		cold_resn,
     input  wire		warm_resn,
     output wire		io_aresn,
-	output wire     watchdog,
+    output reg      watchdog,
 	
     output wire		clk_sample,
     output wire		clk_timestamp,
@@ -219,9 +219,23 @@ module astep24_20l_top(
     output wire io_ctrl_gecco_inj_enable
 );
 
-    // Watchdog
+
+    // Clocking
+    //-------------------
+    wire clk_100; // size=1
+    wire clk_100_resn; // size=1
+    wire clk_uart; // size=1
+    wire clk_uart_resn; // size=1
+    wire clk_core; // size=1
+    wire clk_core_resn; // size=1
+	wire io_ctrl_sample_clock_enable;
+    wire io_ctrl_timestamp_clock_enable;
+	wire clk_sample_int;
+	wire clk_timestamp_int;
+
+        // Watchdog
     //-------------------    
-	reg watchdog;
+//	reg watchdog;
     localparam int WATCHDOG_COUNT_MAX = 60_000_000/4;
     logic [$clog2(WATCHDOG_COUNT_MAX)-1:0] watchdog_count;
     always @(posedge clk_core) begin
@@ -238,18 +252,6 @@ module astep24_20l_top(
         end
     end
 
-    // Clocking
-    //-------------------
-    wire clk_100; // size=1
-    wire clk_100_resn; // size=1
-    wire clk_uart; // size=1
-    wire clk_uart_resn; // size=1
-    wire clk_core; // size=1
-    wire clk_core_resn; // size=1
-	wire io_ctrl_sample_clock_enable;
-    wire io_ctrl_timestamp_clock_enable;
-	wire clk_sample_int;
-	wire clk_timestamp_int;
 	
     astep24_20l_top_clocking  clocking_reset_I (
         .sysclk_in(sysclk),
