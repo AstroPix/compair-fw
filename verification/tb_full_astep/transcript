@@ -2,22 +2,620 @@
 # QuestaSim-64 vmap 2023.2_1 Lib Mapping Utility 2023.05 May 12 2023
 # vmap -c 
 # ** Warning: vmap will not overwrite local modelsim.ini.
+# ** Warning: (vdel-134) Unable to remove locked optimized design "_opt".  Locker is ssheikh@GSLWL0323090046.
+# ** Warning: (vlib-34) Library already exists at "sim_build/work".
+# Errors: 0, Warnings: 1
 # QuestaSim-64 vmap 2023.2_1 Lib Mapping Utility 2023.05 May 12 2023
 # vmap work sim_build/work 
 # Modifying modelsim.ini
-# ** Warning: (vish-174) An embedded newline exists within a string in the argument file ('/mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/astep24_3l_top.sim.f'): '-sv -64bit
-# -access +rw
-# -define SIMULATION
-# +define+RFG_FW_ID=32'h0000ff00
-# +define+RFG_FW_BUILD=32'h0000ffAB
-# '
-# ** UI-Msg (Error): (vish-3296) Unknown option '-sv'.
-# Use the -help option for complete vsim usage.
-# ** UI-Msg (Error): (vish-3296) Unknown option '-64bit'.
-# Use the -help option for complete vsim usage.
-# ** UI-Msg (Error): (vish-3296) Unknown option '-access'.
-# Use the -help option for complete vsim usage.
-# ** UI-Msg (Error): (vish-3296) Unknown option '-define'.
-# Use the -help option for complete vsim usage.
-# ** Error: Error loading design
-# Executing ONERROR command at macro ./sim_build/runsim.do line 9
+# QuestaSim-64 vlog 2023.2_1 Compiler 2023.05 May 12 2023
+# Start time: 15:00:22 on Aug 06,2025
+# vlog -work work "+define+COCOTB_SIM" -sv -64 -f /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/astep24_20l_top.sim_questa.f "+acc" -Ldir /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/xcelium_preparelib/lattice_compiled -L lfcpnx /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v 
+# -- Compiling module astep24_20l_top
+# -- Compiling module astep24_20l_top_clocking
+# -- Compiling module main_rfg
+# -- Compiling package sw_spi_uart_sv_unit
+# -- Compiling package axi_ifs
+# -- Compiling interface AXIS
+# -- Compiling interface AXI_LITE
+# -- Compiling module sw_spi_uart
+# -- Compiling module ftdi_sync_fifo_axis
+# -- Compiling module ftdi_interface_control_fsm
+# -- Compiling module spi_slave_axis_egress
+# -- Compiling module spi_slave_axis_igress
+# -- Compiling package axi_ifs
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/lattice/uart_lattice_axis_driver.sv(2)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(7): (vlog-2275) Existing package 'axi_ifs' at line 7 will be overwritten.
+# -- Compiling interface AXIS
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/lattice/uart_lattice_axis_driver.sv(2)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(11): (vlog-2275) Existing interface 'AXIS' at line 11 will be overwritten.
+# -- Compiling interface AXI_LITE
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/lattice/uart_lattice_axis_driver.sv(2)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(144): (vlog-2275) Existing interface 'AXI_LITE' at line 144 will be overwritten.
+# -- Compiling package uart_lattice_axis_driver_sv_unit
+# -- Compiling package axi_ifs
+# -- Compiling interface AXIS
+# -- Compiling interface AXI_LITE
+# -- Compiling module uart_lattice_axis_driver
+# -- Compiling package axi_ifs
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/rfg_axis_protocol.sv(1)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/../../includes/axi_ifs.sv(7): (vlog-2275) Existing package 'axi_ifs' at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(7) will be overwritten.
+# -- Compiling interface AXIS
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/rfg_axis_protocol.sv(1)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/../../includes/axi_ifs.sv(11): (vlog-2275) Existing interface 'AXIS' at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(11) will be overwritten.
+# -- Compiling interface AXI_LITE
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/rfg_axis_protocol.sv(1)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/../../includes/axi_ifs.sv(144): (vlog-2275) Existing interface 'AXI_LITE' at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(144) will be overwritten.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/rfg_axis_protocol.sv(271): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
+# -- Compiling package rfg_axis_protocol_sv_unit
+# -- Compiling package axi_ifs
+# -- Compiling interface AXIS
+# -- Compiling interface AXI_LITE
+# -- Compiling module rfg_axis_protocol
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/rfg_axis_protocol.sv(271): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
+# -- Compiling module rfg_axis_readout_framing
+# -- Compiling module axis_switch
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/axis_switch/axis_switch.sv(253): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/axis_switch/axis_switch.sv(255): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/axis_switch/axis_switch.sv(256): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/axis_switch/axis_switch.sv(257): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/axis_switch/axis_switch.sv(259): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/axis_switch/axis_switch.sv(260): (vlog-2583) [SVCHK] - Extra checking for conflicts with always_comb and always_latch variables is done at vopt time.
+# -- Compiling module round_robin_arbiter
+# -- Compiling module fifo_axis_common
+# -- Compiling module mini_fwft_fifo
+# -- Compiling module fifo_ptr_logic
+# -- Compiling module sync_async_patgen
+# -- Compiling module loopback_spi_if
+# -- Compiling module layers_readout_switched
+# -- Compiling module layer_if_a
+# -- Compiling package axi_ifs
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/layers/astropix_spi_protocol_av1.sv(1)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(7): (vlog-2275) Existing package 'axi_ifs' at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/../../includes/axi_ifs.sv(7) will be overwritten.
+# -- Compiling interface AXIS
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/layers/astropix_spi_protocol_av1.sv(1)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(11): (vlog-2275) Existing interface 'AXIS' at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/../../includes/axi_ifs.sv(11) will be overwritten.
+# -- Compiling interface AXI_LITE
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/layers/astropix_spi_protocol_av1.sv(1)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(144): (vlog-2275) Existing interface 'AXI_LITE' at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/rfg/protocol/../../includes/axi_ifs.sv(144) will be overwritten.
+# -- Compiling package astropix_spi_protocol_av1_sv_unit
+# -- Compiling package axi_ifs
+# -- Compiling interface AXIS
+# -- Compiling interface AXI_LITE
+# -- Compiling module astropix_spi_protocol_av1
+# -- Compiling package axi_ifs
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/spi/spi_axis_if_v1.sv(1)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(7): (vlog-2275) Existing package 'axi_ifs' at line 7 will be overwritten.
+# -- Compiling interface AXIS
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/spi/spi_axis_if_v1.sv(1)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(11): (vlog-2275) Existing interface 'AXIS' at line 11 will be overwritten.
+# -- Compiling interface AXI_LITE
+# ** Warning: ** while parsing file included at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/spi/spi_axis_if_v1.sv(1)
+# ** at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/includes/../includes/axi_ifs.sv(144): (vlog-2275) Existing interface 'AXI_LITE' at line 144 will be overwritten.
+# -- Compiling package spi_axis_if_v1_sv_unit
+# -- Compiling package axi_ifs
+# -- Compiling interface AXIS
+# -- Compiling interface AXI_LITE
+# -- Compiling module spi_axis_if_v1
+# -- Compiling module housekeeping_main
+# -- Compiling module reset_sync
+# -- Compiling module edge_detect
+# -- Compiling module async_input_sync
+# -- Compiling module async_signal_sync
+# -- Compiling module resets_synchronizer
+# -- Compiling module fifo_2clk_64x32
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_dc
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_dc_fwft_fabric
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_dc_main
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_hard_fifo_dc
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_dc_hw_core
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_soft_fifo_dc
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_reset_async
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_soft_mem
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_mem_main
+# -- Compiling module fifo_2clk_64x32_ipgen_lscc_fifo_mem_core
+# -- Compiling module fifo_2clk_64x8
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_fifo_dc
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_fifo_dc_fwft_fabric
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_fifo_dc_main
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_hard_fifo_dc
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_fifo_dc_hw_core
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_soft_fifo_dc
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_reset_async
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_fifo_soft_mem
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_fifo_mem_main
+# -- Compiling module fifo_2clk_64x8_ipgen_lscc_fifo_mem_core
+# -- Compiling module fifo_1clk_1024x32
+# -- Compiling module fifo_1clk_1024x32_ipgen_lscc_fifo
+# -- Compiling module fifo_1clk_1024x32_ipgen_lscc_fifo_fwft_fabric
+# -- Compiling module fifo_1clk_1024x32_ipgen_lscc_fifo_main
+# -- Compiling module fifo_1clk_1024x32_ipgen_lscc_hard_fifo
+# -- Compiling module fifo_1clk_1024x32_ipgen_lscc_fifo_hw_core
+# -- Compiling module fifo_1clk_1024x32_ipgen_lscc_soft_fifo
+# -- Compiling module clock_pll_1
+# -- Compiling module clock_pll_1_ipgen_lscc_pll
+# -- Compiling module clock_pll_1_ipgen_pll_csr
+# -- Compiling module clock_pll_1_ipgen_lscc_apb2lmmi
+# -- Compiling module uart
+# -- Compiling module uart
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(11): (vlog-2275) Existing module 'uart' at /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//verification/ip/uart.v(11) will be overwritten.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(191): (vlog-2275) Existing <protected> '<protected>'<protected> will be overwritten<protected>.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(191): (vlog-2275) Existing <protected> '<protected>'<protected> will be overwritten<protected>.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(191): (vlog-2275) Existing <protected> '<protected>'<protected> will be overwritten<protected>.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(191): (vlog-2275) Existing <protected> '<protected>'<protected> will be overwritten<protected>.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(191): (vlog-2275) Existing <protected> '<protected>'<protected> will be overwritten<protected>.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(191): (vlog-2275) Existing <protected> '<protected>'<protected> will be overwritten<protected>.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(191): (vlog-2275) Existing <protected> '<protected>'<protected> will be overwritten<protected>.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(191): (vlog-2275) Existing <protected> '<protected>'<protected> will be overwritten<protected>.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../../verification/ip/uart.v(191): (vlog-2275) Existing <protected> '<protected>'<protected> will be overwritten<protected>.
+# 
+# Top level modules:
+# 	astep24_20l_top
+# 	ftdi_sync_fifo_axis
+# 	loopback_spi_if
+# 	edge_detect
+# End time: 15:00:23 on Aug 06,2025, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 30
+# vsim -no_autoacc -onfinish exit -pli "/mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so" -Ldir /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//verification/xcelium_preparelib/lattice_compiled/ -L lfcpnx work.astep24_20l_top 
+# Start time: 15:00:23 on Aug 06,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: (vopt-10587) Some optimizations are turned off because the +acc switch is in effect. This will cause your simulation to run slowly. Please use -access/-debug to maintain needed visibility.
+# ** Note: (vopt-143) Recognized 1 FSM in module "spi_slave_axis_egress(fast)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "rfg_axis_readout_framing(fast)".
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(257): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(257): (vopt-2697) LSB 8 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(258): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(258): (vopt-2697) LSB 8 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(259): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(259): (vopt-2697) LSB 8 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(257): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(257): (vopt-2697) LSB 8 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(258): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(258): (vopt-2697) LSB 8 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(259): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(259): (vopt-2697) LSB 8 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Note: (vopt-143) Recognized 1 FSM in module "uart_lattice_axis_driver(fast)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__1)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__2)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__3)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__4)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__5)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__6)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__7)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__8)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__9)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__10)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__11)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__12)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__13)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__14)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__15)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__16)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__17)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__18)".
+# ** Note: (vopt-143) Recognized 1 FSM in module "astropix_spi_protocol_av1(fast__19)".
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2685) [TFMPC] - Too few port connections for 'main_rfg_I'.  Expected 645, found 424.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'io_led'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_mosi_read_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_mosi_read_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_mosi_s_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_mosi_s_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_mosi_s_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_miso_write_size_write'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_miso_write_size'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_miso_m_axis_tready'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_miso_m_axis_tvalid'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_loopback_miso_m_axis_tdata'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_19_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_18_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_17_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_16_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_15_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_14_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_13_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_12_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_11_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_10_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_9_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_8_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_7_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_6_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_5_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_4_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_3_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_2_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_1_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/top/astep24_20l_top.sv(444): (vopt-2718) [TFMPC] - Missing connection for port 'layer_0_cfg_ctrl_loopback'.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(257): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(258): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(259): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(259): (vopt-2697) MSB 31 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(257): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(257): (vopt-2697) LSB 8 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(258): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(258): (vopt-2697) LSB 8 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(259): (vopt-2697) MSB 15 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Warning: /mnt/c/Project/COMPAIR/compair-fw/verification/tb_full_astep/../..//rtl/fifo/fifo_axis_common.sv(259): (vopt-2697) LSB 8 of part-select into 'cache_fifo_data_out' is out of bounds.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=245.
+# //  Questa Sim-64
+# //  Version 2023.2_1 linux_x86_64 May 12 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.astep24_20l_top(fast)
+# Loading work.astep24_20l_top_clocking(fast)
+# Loading work.clock_pll_1(fast)
+# Loading work.clock_pll_1_ipgen_lscc_pll(fast)
+# Loading lfcpnx.PLL(fast)
+# Loading work.resets_synchronizer(fast)
+# Loading work.reset_sync(fast)
+# Loading work.async_signal_sync(fast)
+# Loading work.async_input_sync(fast)
+# Loading work.sw_spi_uart_sv_unit(fast)
+# Loading work.sw_spi_uart(fast)
+# Loading work.uart(fast)
+# Loading work.uart_lattice_axis_driver_sv_unit(fast)
+# Loading work.uart_lattice_axis_driver(fast)
+# Loading work.fifo_axis_common(fast)
+# Loading work.fifo_2clk_64x32(fast)
+# Loading work.fifo_2clk_64x32_ipgen_lscc_fifo_dc(fast)
+# Loading work.fifo_2clk_64x32_ipgen_lscc_fifo_dc_fwft_fabric(fast)
+# Loading work.fifo_2clk_64x32_ipgen_lscc_fifo_dc_main(fast)
+# Loading work.fifo_2clk_64x32_ipgen_lscc_soft_fifo_dc(fast)
+# Loading work.fifo_2clk_64x32_ipgen_lscc_reset_async(fast)
+# Loading work.fifo_2clk_64x32_ipgen_lscc_fifo_soft_mem(fast)
+# Loading work.fifo_2clk_64x32_ipgen_lscc_fifo_mem_main(fast)
+# Loading work.fifo_2clk_64x32_ipgen_lscc_fifo_mem_core(fast)
+# Loading lfcpnx.PDP16K(fast)
+# Loading work.mini_fwft_fifo(fast)
+# Loading work.fifo_ptr_logic(fast)
+# Loading lfcpnx.GSR(fast)
+# Loading work.spi_slave_axis_igress(fast)
+# Loading work.fifo_axis_common(fast__1)
+# Loading work.mini_fwft_fifo(fast__1)
+# Loading work.rfg_axis_readout_framing(fast)
+# Loading work.spi_slave_axis_egress(fast)
+# Loading work.rfg_axis_protocol_sv_unit(fast)
+# Loading work.rfg_axis_protocol(fast)
+# Loading work.spi_axis_if_v1_sv_unit(fast)
+# Loading work.AXIS(fast__1)
+# Loading work.mini_fwft_fifo(fast__2)
+# Loading work.axis_switch(fast)
+# Loading work.round_robin_arbiter(fast)
+# Loading work.mini_fwft_fifo(fast__3)
+# Loading work.main_rfg(fast)
+# Loading work.layers_readout_switched(fast)
+# Loading work.layer_if_a(fast)
+# Loading work.fifo_axis_common(fast__2)
+# Loading work.fifo_2clk_64x8(fast)
+# Loading work.fifo_2clk_64x8_ipgen_lscc_fifo_dc(fast)
+# Loading work.fifo_2clk_64x8_ipgen_lscc_fifo_dc_fwft_fabric(fast)
+# Loading work.fifo_2clk_64x8_ipgen_lscc_fifo_dc_main(fast)
+# Loading work.fifo_2clk_64x8_ipgen_lscc_soft_fifo_dc(fast)
+# Loading work.fifo_2clk_64x8_ipgen_lscc_reset_async(fast)
+# Loading work.fifo_2clk_64x8_ipgen_lscc_fifo_soft_mem(fast)
+# Loading work.fifo_2clk_64x8_ipgen_lscc_fifo_mem_main(fast)
+# Loading work.fifo_2clk_64x8_ipgen_lscc_fifo_mem_core(fast)
+# Loading lfcpnx.PDP16K(fast__1)
+# Loading work.spi_axis_if_v1(fast)
+# Loading work.astropix_spi_protocol_av1_sv_unit(fast)
+# Loading work.astropix_spi_protocol_av1(fast)
+# Loading work.layer_if_a(fast__1)
+# Loading work.astropix_spi_protocol_av1(fast__1)
+# Loading work.layer_if_a(fast__2)
+# Loading work.astropix_spi_protocol_av1(fast__2)
+# Loading work.layer_if_a(fast__3)
+# Loading work.astropix_spi_protocol_av1(fast__3)
+# Loading work.layer_if_a(fast__4)
+# Loading work.astropix_spi_protocol_av1(fast__4)
+# Loading work.layer_if_a(fast__5)
+# Loading work.astropix_spi_protocol_av1(fast__5)
+# Loading work.layer_if_a(fast__6)
+# Loading work.astropix_spi_protocol_av1(fast__6)
+# Loading work.layer_if_a(fast__7)
+# Loading work.astropix_spi_protocol_av1(fast__7)
+# Loading work.layer_if_a(fast__8)
+# Loading work.astropix_spi_protocol_av1(fast__8)
+# Loading work.layer_if_a(fast__9)
+# Loading work.astropix_spi_protocol_av1(fast__9)
+# Loading work.layer_if_a(fast__10)
+# Loading work.astropix_spi_protocol_av1(fast__10)
+# Loading work.layer_if_a(fast__11)
+# Loading work.astropix_spi_protocol_av1(fast__11)
+# Loading work.layer_if_a(fast__12)
+# Loading work.astropix_spi_protocol_av1(fast__12)
+# Loading work.layer_if_a(fast__13)
+# Loading work.astropix_spi_protocol_av1(fast__13)
+# Loading work.layer_if_a(fast__14)
+# Loading work.astropix_spi_protocol_av1(fast__14)
+# Loading work.layer_if_a(fast__15)
+# Loading work.astropix_spi_protocol_av1(fast__15)
+# Loading work.layer_if_a(fast__16)
+# Loading work.astropix_spi_protocol_av1(fast__16)
+# Loading work.layer_if_a(fast__17)
+# Loading work.astropix_spi_protocol_av1(fast__17)
+# Loading work.layer_if_a(fast__18)
+# Loading work.astropix_spi_protocol_av1(fast__18)
+# Loading work.layer_if_a(fast__19)
+# Loading work.astropix_spi_protocol_av1(fast__19)
+# Loading work.axis_switch(fast__1)
+# Loading work.round_robin_arbiter(fast__1)
+# Loading work.fifo_axis_common(fast__3)
+# Loading work.fifo_1clk_1024x32(fast)
+# Loading work.fifo_1clk_1024x32_ipgen_lscc_fifo(fast)
+# Loading work.fifo_1clk_1024x32_ipgen_lscc_fifo_fwft_fabric(fast)
+# Loading work.fifo_1clk_1024x32_ipgen_lscc_fifo_main(fast)
+# Loading work.fifo_1clk_1024x32_ipgen_lscc_soft_fifo(fast)
+# Loading lfcpnx.GSR(fast__1)
+# Loading work.sync_async_patgen(fast)
+# Loading work.housekeeping_main(fast)
+# Loading work.fifo_axis_common(fast__4)
+# Loading work.spi_axis_if_v1(fast__1)
+# Loading /mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb/libs/libcocotbvpi_modelsim.so
+#      -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:108  in set_program_name_in_venv        Using Python virtual environment interpreter at /mnt/c/Project/COMPAIR/compair-fw/verification/.venv/bin/python
+#      -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+#      0.00ns INFO     cocotb                             Running on ModelSim for Questa-64 version 2023.2 2023.05
+#      0.00ns INFO     cocotb                             Running tests with cocotb v1.9.2 from /mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb
+#      0.00ns INFO     cocotb                             Seeding Python random module with 1754506836
+#      0.00ns INFO     cocotb.regression                  Found test sim_1_firmware_id.test_fw_id_uart
+#      0.00ns INFO     cocotb.regression                  Found test sim_1_firmware_id.test_fw_id_spi
+#      0.00ns INFO     cocotb.regression                  running test_fw_id_uart (1/2)
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_rx     UART source
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_rx     cocotbext-uart version 0.1.2
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_rx     Copyright (c) 2020 Alex Forencich
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_rx     https://github.com/alexforencich/cocotbext-uart
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_rx     UART source configuration:
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_rx       Baud rate: 115200 bps
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_rx       Byte size: 8 bits
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_rx       Stop bits: 1.000000 bits
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_tx     UART sink
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_tx     cocotbext-uart version 0.1.2
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_tx     Copyright (c) 2020 Alex Forencich
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_tx     https://github.com/alexforencich/cocotbext-uart
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_tx     UART sink configuration:
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_tx       Baud rate: 115200 bps
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_tx       Byte size: 8 bits
+#      0.00ns INFO     cocotb.astep24_20l_top.uart_tx       Stop bits: 1.000000 bits
+# WARNING: mc1_w_ctrla=xx000 is not correctly set!
+# 
+# WARNING: mc1_w_ctrla=xx000 is not correctly set!
+# 
+# WARNING: mc1_w_ctrla=xx000 is not correctly set!
+# 
+# WARNING: mc1_w_ctrla=xx000 is not correctly set!
+# 
+# cmd reg value is 0x04
+#  13088.00ns INFO     cocotb.astep24_20l_top.uart_rx     Write byte 0x06
+#  99888.00ns INFO     cocotb.astep24_20l_top.uart_rx     Write byte 0x04
+# 186688.00ns INFO     cocotb.astep24_20l_top.uart_rx     Write byte 0x04
+# 273488.00ns INFO     cocotb.astep24_20l_top.uart_rx     Write byte 0x00
+# 2000000.00ns INFO     cocotb.regression                  test_fw_id_uart failed
+#                                                          Traceback (most recent call last):
+#                                                            File "/mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb/decorators.py", line 268, in f
+#                                                              res = await cocotb.triggers.with_timeout(
+#                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#                                                            File "/mnt/c/Project/COMPAIR/compair-fw/verification/.venv/lib/python3.12/site-packages/cocotb/triggers.py", line 1102, in with_timeout
+#                                                              raise cocotb.result.SimTimeoutError
+#                                                          cocotb.result.SimTimeoutError
+# 2000000.00ns INFO     cocotb.regression                  running test_fw_id_spi (2/2)
+# cmd reg value is 0x04
+# Read bytes: [129, 127, 165, 120]
+# Version: 0x78a57f81
+# cmd reg value is 0x00
+# Read bytes: [0, 255, 0, 0]
+# FW ID: 0xff00
+# 2101288.00ns INFO     cocotb.regression                  test_fw_id_spi passed
+# 2101288.00ns INFO     cocotb.regression                  *******************************************************************************************
+#                                                          ** TEST                               STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+#                                                          *******************************************************************************************
+#                                                          ** sim_1_firmware_id.test_fw_id_uart   FAIL     2000000.00          22.97      87071.98  **
+#                                                          ** sim_1_firmware_id.test_fw_id_spi    PASS      101288.00           1.34      75635.82  **
+#                                                          *******************************************************************************************
+#                                                          ** TESTS=2 PASS=1 FAIL=1 SKIP=0                 2101288.00          25.51      82381.69  **
+#                                                          *******************************************************************************************
+#                                                          
+# ** Note: $finish
+#    Time: 2101287999880 fs  Iteration: 0  Instance: /astep24_20l_top
+# End time: 15:01:01 on Aug 06,2025, Elapsed time: 0:00:38
+# Errors: 0, Warnings: 245
