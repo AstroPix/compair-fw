@@ -17,8 +17,8 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 SAVE_DIRECTORY = "C:/TCData/"
-FILE_PREFIX = "compair2_fee_SNx_test"
-COM_PORT_SETTING = "COM8"
+FILE_PREFIX = "2025.06.20_1723_hk_post-hotOP"
+COM_PORT_SETTING = "COM6"
 NUM_ADCS     = 3
 NUM_CHANNELS = 8
 N            = NUM_ADCS * NUM_CHANNELS
@@ -96,7 +96,7 @@ async def do_housekeeping():
     with open(values_filename, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(header.split(","))
-        for line_number in range(1000):
+        for line_number in range(20000):
             now = datetime.now().isoformat()
             print(now)
             (readout_codes, readout_values) =  await get_hk_row_tripple(driver)
