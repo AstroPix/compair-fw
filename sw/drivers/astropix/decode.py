@@ -20,11 +20,9 @@ def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
     while b<len(readout):
         packet_len = int(readout[b])
         if packet_len>16:
-            #logger.debug("Probably didn't find a hit here - go to next byte")
             b+=1
         else: #got a hit
             list_hits.append(readout[b:b+packet_len+1])
-            #logger.debug(f"found hit {binascii.hexlify(readout[b:b+packet_len+1])}")
             b += packet_len+1
 
     #decode hit contents
@@ -44,7 +42,7 @@ def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
             tot_us      = (tot_total * self.sampleclock_period_ns)/1000.0
             fpga_ts     = int.from_bytes(hit[7:11], 'little')
         except IndexError: #hit cut off at end of stream
-            packet_len, id, payload, location, col = -1, -1, -1, -1, -1
+            packet_len, layer, id, payload, location, col = -1, -1, -1, -1, -1, -1
             timestamp, tot_msb, tot_lsb, tot_total = -1, -1, -1, -1
             tot_us, fpga_ts = -1, -1
         
@@ -89,3 +87,4 @@ def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
 
         # Much simpler to convert to df in the return statement vs df.concat
         return pd.DataFrame(hit_list)
+
