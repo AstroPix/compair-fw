@@ -49,7 +49,7 @@ def dataParse_autoread(data_lst, buffer_lst, bitfile:str = None):
 async def main(args):
     # Welcome to the main (and only) function of this script!
     # Setup FPGA communications
-    boardDriver = drivers.boards.getCMODUartDriver("COM16", baud=115200)
+    boardDriver = drivers.boards.getCMODUartDriver(baud=115200)
     await boardDriver.open()
     print("Opened FPGA, testing...")
     try:
@@ -70,9 +70,10 @@ async def main(args):
     pathdelim = os.path.sep #determine if Mac or Windows separators in path name
     ymlpath = [os.getcwd()+pathdelim + "sw" + pathdelim+"scripts"+pathdelim+"config"+pathdelim+ y +".yml" for y in args.yaml] # Define YAML path variables
     try:
-        #for layer, (nchips, yml) in enumerate(zip(args.chipsPerRow, ymlpath)):
-        #    print("{}: {}, {}".format(layer, nchips, yml))
-        boardDriver.setupASICS(version = 3, rows = 20, chipsPerRow = 20 , configFile = ymlpath[0] )
+        for lane, (nchips, yml) in enumerate(zip(args.chipsPerRow, ymlpath)):
+            print("{}: {}, {}".format(lane, nchips, yml))
+            boardDriver.setupASIC(version=3, lane=lane, chipsPerRow=nchips, configFile = yml)
+        #boardDriver.setupASICS(version = 3, rows = 20, chipsPerRow = 20 , configFile = ymlpath[0] )
     except FileNotFoundError as e :
         print(f'Config File {ymlpath} was not found, pass the name of a config file from the scripts/config folder')
         raise e

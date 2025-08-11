@@ -24,17 +24,15 @@ class BoardDriver():
     ##################
     def selectUARTIO(self,portPath : str | None = None, baud = 115200):
         """This method is common to all targets now, because all targets have a USB-UART Converter available"""
-        if (portPath == None):
-            import drivers.astep.serial
-            port = drivers.astep.serial.selectFirstLinuxFTDIPort()
-            if port:
-                self.rfg.withUARTIO(port.device, baud)
-                return self
-            else:
+        if portPath is None:
+            from drivers.astep.serial import getSerialPort
+            port = drivers.astep.serial.getSerialPort()
+            if port is None:
                 raise RuntimeError("No Serial Port could be listed")
-        else:
-            self.rfg.withUARTIO(portPath, baud)
-            return self
+            else:
+                portPath = port.device
+        self.rfg.withUARTIO(portPath, baud)
+        return self
         
 
     async def open(self):
@@ -88,7 +86,7 @@ class BoardDriver():
 
     ## Asic
     ##################
-    def setupASIC(self, version: int, row: int = 0, chipsPerRow: int=1, configFile: str|None = None):
+    def setupASIC(self, version: int, lane: int = 0, chipsPerRow: int=1, configFile: str|None = None):
         """
         Load a config yaml file to memory
         :param version: int, AstroPix chip version
@@ -96,7 +94,7 @@ class BoardDriver():
         :param chipsPerRow: int, number of chips per row (aka daisy chain), default=1
         :param configFile: srt, path to yaml config file, defaults to None (no configuration applied?)
         """
-        asic = Asic(rfg = self.rfg, row = row)
+        asic = Asic(rfg = self.rfg, row = lane)
         asic.chipversion = version
         if configFile is not None: 
             asic.load_conf_from_yaml(configFile)
