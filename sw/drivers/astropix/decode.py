@@ -29,8 +29,8 @@ def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
     for hit in list_hits:
         # Generates the values from the bitstream
         try:
-            pack_len  = int(hit[0])
-            layer       = int(hit[1])
+            pack_len    = int(hit[0])
+            lane        = int(hit[1])
             id          = int(hit[2]) >> 3
             payload     = int(hit[2]) & 0b111
             location    = int(hit[3])  & 0b111111
@@ -42,7 +42,7 @@ def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
             tot_us      = (tot_total * self.sampleclock_period_ns)/1000.0
             fpga_ts     = int.from_bytes(hit[7:11], 'little')
         except IndexError: #hit cut off at end of stream
-            packet_len, layer, id, payload, location, col = -1, -1, -1, -1, -1, -1
+            packet_len, lane, id, payload, location, col = -1, -1, -1, -1, -1, -1
             timestamp, tot_msb, tot_lsb, tot_total = -1, -1, -1, -1
             tot_us, fpga_ts = -1, -1
         
@@ -50,7 +50,7 @@ def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
         if printer:
             try:
                 print(
-                f"{i} Packet len: {pack_len}\t Layer ID: {layer}\n"
+                f"{i} Packet len: {pack_len}\t Layer ID: {lane}\n"
                 f"ChipId: {id}\tPayload: {payload}\t"
                 f"Location: {location}\tRow/Col: {'Col' if col else 'Row'}\t"
                 f"TS: {timestamp}\t"
@@ -61,7 +61,7 @@ def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
                 print(f"HIT TOO SHORT TO BE DECODED - {binascii.hexlify(hit)}")
             except UnboundLocalError:
                 print(f"Hit could not be decoded - likely missing a header\n\n"
-                f"{i} Packet len: {pack_len}\t Layer ID: {layer}\n"
+                f"{i} Packet len: {pack_len}\t Layer ID: {lane}\n"
                 f"ChipId: {id}\tPayload: {payload}\t"
                 f"Location: {location}\tRow/Col: {'Col' if col else 'Row'}\t"
                 f"TS: {timestamp}\t"
@@ -71,7 +71,7 @@ def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
         # hits are sored in dictionary form
         hits = {
             'readout': i,
-            'layer': layer,
+            'lane': lane,
             'chipID': id,
             'payload': payload,
             'location': location,

@@ -60,87 +60,86 @@ async def main(args):
     print("Set sensor clocks.")
     await boardDriver.enableSensorClocks(flush = True)
     # Setup FPGA timestamps
-    await boardDriver.layersConfigFPGATimestampFrequency(targetFrequencyHz = 1000000, flush = True)
-    await boardDriver.layersConfigFPGATimestamp(enable = True, force = False, source_match_counter = True, source_external = False, flush = True)
+    await boardDriver.lanesConfigFPGATimestampFrequency(targetFrequencyHz = 1000000, flush = True)
+    await boardDriver.lanesConfigFPGATimestamp(enable = True, force = False, source_match_counter = True, source_external = False, flush = True)
     # Setup SPI
-    await boardDriver.configureLayerSPIDivider(120, flush = True)
-    #await boardDriver.rfg.write_layers_cfg_nodata_continue(value=8, flush=True) only used in readout, early modification
+    await boardDriver.configureLaneSPIDivider(120, flush = True)
+    #await boardDriver.rfg.write_lanes_cfg_nodata_continue(value=8, flush=True) only used in readout, early modification
     print("Instanciate ASIC drivers ...")
     # Configure chips in memory
     pathdelim = os.path.sep #determine if Mac or Windows separators in path name
     ymlpath = [os.getcwd()+pathdelim + "sw" + pathdelim+"scripts"+pathdelim+"config"+pathdelim+ y +".yml" for y in args.yaml] # Define YAML path variables
     try:
-        for lane, (nchips, yml) in enumerate(zip(args.chipsPerRow, ymlpath)):
+        for lane, (nchips, yml) in enumerate(zip(args.chipsPerLane, ymlpath)):
             print("{}: {}, {}".format(lane, nchips, yml))
-            boardDriver.setupASIC(version=3, lane=lane, chipsPerRow=nchips, configFile = yml)
-        #boardDriver.setupASICS(version = 3, rows = 20, chipsPerRow = 20 , configFile = ymlpath[0] )
+            boardDriver.setupASIC(version=3, lane=lane, chipsPerLane=nchips, configFile = yml)
     except FileNotFoundError as e :
         print(f'Config File {ymlpath} was not found, pass the name of a config file from the scripts/config folder')
         raise e
     print(f"{len(boardDriver.asics)} ASIC drivers instanciated.")
 
-    layerlst = [16]#range(len(args.yaml)) Set SPI lane(s) here
-    #await boardDriver.disableLayersReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
+    lanelst = [16]#range(len(args.yaml)) Set SPI lane(s) here
+    #await boardDriver.disableLanesReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
     # for i in range(20):
-    #     await boardDriver.setLayerConfig(i, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
-    #await boardDriver.resetLayersFull()#Toggle RST
-    for layer in range(20):
-        await boardDriver.setLayerConfig(layer, reset=True, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    #     await boardDriver.setLaneConfig(i, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    #await boardDriver.resetLanes()#Toggle RST
+    for lane in range(20):
+        await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
     time.sleep(0.5)
-    for layer in range(20):
-        await boardDriver.setLayerConfig(layer,reset=False,autoread=False,hold=False,chipSelect=False,disableMISO=True,flush=True)
+    for lane in range(20):
+        await boardDriver.setLaneConfig(lane,reset=False,autoread=False,hold=False,chipSelect=False,disableMISO=True,flush=True)
     
-    layer=17
+    lane=17
     for i in range(5):
-        for layer in range(20):
-            await boardDriver.setLayerConfig(layer, reset=True, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+        for lane in range(20):
+            await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
         time.sleep(.1)
-        for layer in range(20):
-            await boardDriver.setLayerConfig(layer, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+        for lane in range(20):
+            await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
         time.sleep(.1)
 
     return
     # print("Starting test")
     # for i in range(60):
-    #     await boardDriver.setLayerConfig(16, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    #     await boardDriver.setLaneConfig(16, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
     #     time.sleep(.5)
-    #     await boardDriver.setLayerConfig(16, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    #     await boardDriver.setLaneConfig(16, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
     #     time.sleep(.5)
     # # Set chip IDs
-    for layer in layerlst:
-        await boardDriver.layerSelectSPI(layer, cs=True, flush=True)#Set chipSelect
-        await boardDriver.asics[layer].writeSPIRoutingFrame(5)
-        await boardDriver.layerSelectSPI(layer, cs=False, flush=True)#Unset chipSelect
+    for lane in lanelst:
+        await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
+        await boardDriver.asics[lane].writeSPIRoutingFrame(5)
+        await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
     print("Chip IDs set")
 
     # Configure chips - probably requires a little update of asic.py driver
-    for layer in layerlst:
-        await boardDriver.layerSelectSPI(layer, cs=True, flush=True)
-        await boardDriver.asics[layer].writeConfigSPIv2(broadcast=False, targetChip=0)
-        await boardDriver.layerSelectSPI(layer, cs=False, flush=True)
+    for lane in lanelst:
+        await boardDriver.setLaneCS(lane, cs=True, flush=True)
+        await boardDriver.asics[lane].writeConfigSPI(broadcast=False, targetChip=0)
+        await boardDriver.setLaneCS(lane, cs=False, flush=True)
     print("1 chip configured")
-    # for i in range(args.chipsPerRow[layer]):
-    #     await boardDriver.layerSelectSPI(4, cs=True, flush=True)#Set chipSelect
-    #     for layer in layerlst:
-    #         if i < args.chipsPerRow[layer]:
-    #            payload = boardDriver.asics[layer].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
-    #            await boardDriver.asics[layer].writeSPI(payload)
-    # await boardDriver.layerSelectSPI(4, cs=False, flush=True)#Unset chipSelect
+    # for i in range(args.chipsPerLane[lane]):
+    #     await boardDriver.setLaneCS(4, cs=True, flush=True)#Set chipSelect
+    #     for lane in lanelst:
+    #         if i < args.chipsPerLane[lane]:
+    #            payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
+    #            await boardDriver.asics[lane].writeSPI(payload)
+    # await boardDriver.setLaneCS(4, cs=False, flush=True)#Unset chipSelect
     # print("Chips configured")
 
 
     # Skip buffer flush
 
     # Activate chip readout
-    # for layer in layerlst:
-    #     await boardDriver.setLayerConfig(layer,reset=False,autoread=True,hold=False,chipSelect=True,disableMISO=False,flush=True)
+    # for lane in lanelst:
+    #     await boardDriver.setLaneConfig(lane,reset=False,autoread=True,hold=False,chipSelect=True,disableMISO=False,flush=True)
 
     # Main loop
     dataStream_lst = []
     bufferLength_lst = []
     end_time=time.time()+10 # 4 s run
-    for layer in layerlst:
-        await boardDriver.setLayerConfig(layer,reset=False,autoread=True,hold=False,chipSelect=True,disableMISO=False,flush=True)
+    for lane in lanelst:
+        await boardDriver.setLaneConfig(lane,reset=False,autoread=True,hold=False,chipSelect=True,disableMISO=False,flush=True)
     run = time.time() < end_time
     while run:
         try:
@@ -159,8 +158,8 @@ async def main(args):
             run=False
     
 
-    for layer in layerlst:
-        await boardDriver.setLayerConfig(layer,reset=False,autoread=False,hold=True,chipSelect=False,disableMISO=True,flush=True)
+    for lane in lanelst:
+        await boardDriver.setLaneConfig(lane,reset=False,autoread=False,hold=True,chipSelect=False,disableMISO=True,flush=True)
 
     print(len(bufferLength_lst), max(bufferLength_lst))
     dataStream = dataParse_autoread(dataStream_lst, bufferLength_lst, None)
@@ -178,16 +177,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     args = parser.parse_args()
     args.yaml = ['20chips_allOff']*20
-    args.chipsPerRow = [20]*20
+    args.chipsPerLane = [20]*20
 
     #Layer counting begins at 0.
     #Make sure config arguments make sense
-    if len(args.yaml) > len(args.chipsPerRow):
-        if len(args.chipsPerRow) > 1:
-            print(f"Number of chips per row not provided for every layer - default to {args.chipsPerRow[0]} for all {len(args.yaml)} layers.")
-        args.chipsPerRow = [args.chipsPerRow[0]]*len(args.yaml)
-    elif len(args.yaml) < len(args.chipsPerRow):
-        raise ValueError("You need to provide one yaml configuration file for every chipsPerRow argument.")
+    if len(args.yaml) > len(args.chipsPerLane):
+        if len(args.chipsPerLane) > 1:
+            print(f"Number of chips per lane not provided for every lane - default to {args.chipsPerLane[0]} for all {len(args.yaml)} lanes.")
+        args.chipsPerLane = [args.chipsPerLane[0]]*len(args.yaml)
+    elif len(args.yaml) < len(args.chipsPerLane):
+        raise ValueError("You need to provide one yaml configuration file for every chipsPerLane argument.")
 
     asyncio.run(main(args))
 

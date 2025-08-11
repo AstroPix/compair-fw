@@ -18,65 +18,65 @@ import drivers.astropix.decode
 # Logging stuff
 import logging
 
-async def buffer_flush(boardDriver, layerlst = range(3)):
+async def buffer_flush(boardDriver, lanelst = range(3)):
     """This method flushes data from SPI lanes then from FPGA buffer, and resets counters"""
     logger.info("Flush chips before data collection")
-    await boardDriver.holdLayers(hold=False, flush=True)
-    for layer in layerlst:
+    await boardDriver.holdLanes(hold=False, flush=True)
+    for lane in lanelst:
         interrupt_counter=0
-        interrupt = await boardDriver.getLayerStatus(layer)
+        interrupt = await boardDriver.getLaneStatus(lane)
         while interrupt&1 == 0 and interrupt_counter<20:
             logger.info("interrupt low")
-            await boardDriver.layersSelectSPI(flush=True)
-            await boardDriver.writeLayerBytes(layer = layer, bytes = [0x00] * 128, flush=True)
-            await boardDriver.layersDeselectSPI(flush=True)
+            await boardDriver.setLaneCS(cs=True, flush=True)
+            await boardDriver.writeLaneBytes(lane = lane, bytes = [0x00] * 128, flush=True)
+            await boardDriver.setLaneCS(cs=False, flush=True)
             #time.sleep(.1)
             # Let's not bother emptying the FPGA buffer, at this point it can overflow, and this data is trashed anyways since disableMISO in probably True
             interrupt_counter+=1
-            interrupt = await boardDriver.getLayerStatus(layer)
-            #logger.info(f"layer {layer} int={interrupt} ({interrupt_counter}/20)")
+            interrupt = await boardDriver.getLaneStatus(lane)
+            #logger.info(f"lane {lane} int={interrupt} ({interrupt_counter}/20)")
     # Reassert hold to be safe
-    await boardDriver.holdLayers(hold=True, flush=True)
+    await boardDriver.holdLanes(hold=True, flush=True)
     # Now all interrupts are high, empty FPGA buffer
     logger.info("Flush FPGA buffer before data collection")
     await(boardDriver.readoutReadBytes(4098))
-    await boardDriver.resetLayerStatCounters(layer)
+    await boardDriver.resetLaneStatCounters(lane)
 
-# async def buffer_flush(boardDriver, layerlst = range(3)):
-#     """This method will ensure the layer interrupt is not low and flush buffer, and reset counters"""
+# async def buffer_flush(boardDriver, lanelst = range(3)):
+#     """This method will ensure the lane interrupt is not low and flush buffer, and reset counters"""
 #     # Flush data from sensor
 #     logger.info("Flush chip before data collection")
 #     # Deassert hold
-#     await boardDriver.holdLayers(hold=False, flush=True)
+#     await boardDriver.holdLanes(hold=False, flush=True)
 #     # Flush chips and SPI lines
-#     interruptn = [1 for i in layerlst]
-#     for layer in layerlst:
-#         await boardDriver.writeLayerBytes(layer=layer, bytes=[0x00]*128, flush=True)
-#         interruptn[layer] &= await boardDriver.getLayerStatus(layer)
+#     interruptn = [1 for i in lanelst]
+#     for lane in lanelst:
+#         await boardDriver.writeLaneBytes(lane=lane, bytes=[0x00]*128, flush=True)
+#         interruptn[lane] &= await boardDriver.getLaneStatus(lane)
 #     # Keep flushing until interrupt is high
 #     interupt_counter=0
 #     while 0 in interruptn and interupt_counter<20:
 #         logger.info("interrupt low")
 #         #logger.info(interruptn)
-#         for layer, i in enumerate(interruptn):
+#         for lane, i in enumerate(interruptn):
 #             if i == 0:#if interrupt low
-#                 await boardDriver.writeLayerBytes(layer = layer, bytes = [0x00] * 128, flush=True)
+#                 await boardDriver.writeLaneBytes(lane = lane, bytes = [0x00] * 128, flush=True)
 #         nmbBytes = await boardDriver.readoutGetBufferSize()
 #         if nmbBytes > 0:
 #             await boardDriver.readoutReadBytes(4096)
-#         interruptn = [1 for i in layerlst]
-#         for layer in layerlst:
-#             #interruptn[layer] = await boardDriver.getLayerStatus(layer)
-#             interruptn[layer] &= await boardDriver.getLayerStatus(layer)
+#         interruptn = [1 for i in lanelst]
+#         for lane in lanelst:
+#             #interruptn[lane] = await boardDriver.getLaneStatus(lane)
+#             interruptn[lane] &= await boardDriver.getLaneStatus(lane)
 #         interupt_counter+=1
 #         logger.info(f"Buffer size = {nmbBytes} B")
 #         #time.sleep(1)
 #     # Now all interrupts are high, empty FPGA buffer
 #     await(boardDriver.readoutReadBytes(4098))
 #     # Reassert hold to be safe
-#     await boardDriver.holdLayers(hold=True, flush=True)
+#     await boardDriver.holdLanes(hold=True, flush=True)
 #     logger.info("interrupt recovered, ready to collect data, resetting stat counters")
-#     await boardDriver.resetLayerStatCounters(layer)
+#     await boardDriver.resetLaneStatCounters(lane)
 
 async def get_readout(boardDriver, counts:int = 4096):
     bufferSize = await(boardDriver.readoutGetBufferSize())
@@ -102,9 +102,9 @@ def dataParse_autoread(data_lst, buffer_lst, bitfile:str = None):
     return allData
 
 async def printStatus(boardDriver, time=0., buff=0):
-    status = [await boardDriver.getLayerStatus(layer) for layer in range(3)]
-    ctrl = [await boardDriver.getLayerControl(layer) for layer in range(3)]
-    wrongl = [await boardDriver.getLayerWrongLength(layer) for layer in range(3)]
+    status = [await boardDriver.getLaneStatus(lane) for lane in range(3)]
+    ctrl = [await boardDriver.getLaneControl(lane) for lane in range(3)]
+    wrongl = [await boardDriver.getLaneWrongLength(lane) for lane in range(3)]
     logger.info("[{time:04.2} s] buff={0:04d} status: 0={1[0]:02b}-{2[0]:06b}-{3[0]:04d} 1={1[1]:02b}-{2[1]:06b}-{3[1]:04d} 2={1[2]:02b}-{2[2]:06b}-{3[2]:04d}"\
                 .format(buff, status, ctrl, wrongl, time=time))
 
@@ -122,7 +122,7 @@ def bin2csv(fprefix):
             # logger.info(binascii.hexlify(data))
             i += 1
     if len(datalst) > 0:
-        csvframe = ['readout', 'layer', 'chipID', 'payload', 'location', 'isCol', 'timestamp', 'tot_msb', 'tot_lsb', 'tot_total', 'tot_us', 'fpga_ts']
+        csvframe = ['readout', 'lane', 'chipID', 'payload', 'location', 'isCol', 'timestamp', 'tot_msb', 'tot_lsb', 'tot_total', 'tot_us', 'fpga_ts']
         df = pd.concat(datalst)
         df.columns = csvframe
         df.to_csv(fprefix+".csv")
@@ -147,79 +147,79 @@ async def main(args):
     logger.info("FPGA test successful.")
     await boardDriver.enableSensorClocks(flush = True)
     # Setup FPGA timestamps
-    await boardDriver.layersConfigFPGATimestampFrequency(targetFrequencyHz = 1000000, flush = True)
-    await boardDriver.layersConfigFPGATimestamp(enable = True, force = False, source_match_counter = True, source_external = False, flush = True)
+    await boardDriver.lanesConfigFPGATimestampFrequency(targetFrequencyHz = 1000000, flush = True)
+    await boardDriver.lanesConfigFPGATimestamp(enable = True, force = False, source_match_counter = True, source_external = False, flush = True)
 
     spiDivider = 3
-    await boardDriver.configureLayerSPIDivider(spiDivider, flush = True)
+    await boardDriver.configureLaneSPIDivider(spiDivider, flush = True)
     logger.info("SPI divider set to {}".format(spiDivider))
     await boardDriver.rfg.write_layers_cfg_nodata_continue(value=8, flush=True)
     # Configure chips in memory
     pathdelim = os.path.sep #determine if Mac or Windows separators in path name
     ymlpath = [os.getcwd()+pathdelim+"scripts"+pathdelim+"config"+pathdelim+ y +".yml" for y in args.yaml] # Define YAML path variables
     try:
-        for layer, (nchips, yml) in enumerate(zip(args.chipsPerRow, ymlpath)):
-            boardDriver.setupASIC(version = 3, row = layer, chipsPerRow = nchips , configFile = yml )
+        for lane, (nchips, yml) in enumerate(zip(args.chipsPerLane, ymlpath)):
+            boardDriver.setupASIC(version = 3, row = lane, chipsPerLane = nchips , configFile = yml )
     except FileNotFoundError as e :
         logger.error(f'Config File {ymlpath} was not found, pass the name of a config file from the scripts/config folder')
         raise e
     logger.info(f"{len(boardDriver.asics)} ASIC drivers instanciated.")
 
     # Set general fw config and reset
-    for layer in range(3): await boardDriver.zeroLayerWrongLength(layer, flush=True)
-    layerlst = range(len(args.yaml))
-    await boardDriver.disableLayersReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
-    await boardDriver.resetLayersFull()#Toggle RST
+    for lane in range(3): await boardDriver.zeroLaneWrongLength(lane, flush=True)
+    lanelst = range(len(args.yaml))
+    await boardDriver.disableLanesReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
+    await boardDriver.resetLanes()#Toggle RST
     # Setup injector
     injector = boardDriver.getInjectionBoard(slot = 3)#ShortHand to configure on-chip injector
     injector.period, injector.clkdiv, injector.initdelay, injector.cycle, injector.pulsesperset = 100, 300, 100, 0, 1#Default set of parameters
     await boardDriver.ioSetInjectionToGeccoInjBoard(enable = False, flush = True)#ShortHand for writing the correct registers on-chip, ignore reference to Gecco
 
     # Set chip IDs
-    await boardDriver.layersSelectSPI(flush=True)#Set chipSelect
-    for layer in layerlst:
-        await boardDriver.asics[layer].writeSPIRoutingFrame(0)
-    await boardDriver.layersDeselectSPI(flush=True)#Unset chipSelect
+    await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+    for lane in lanelst:
+        await boardDriver.asics[lane].writeSPIRoutingFrame(0)
+    await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
 
     # Set first chip config - all pixels Off
     chipConfig = boardDriver.asics[0].gen_config_vector_SPI(msbfirst = False,targetChip = 0)# All disabled
-    for layer in layerlst:
-        for chip in range(args.chipsPerRow[layer]):
-            payload = boardDriver.asics[layer].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfig)
-            await boardDriver.layersSelectSPI(flush=True)#Set chipSelect
-            await boardDriver.asics[layer].writeSPI(payload)
-            await boardDriver.layersDeselectSPI(flush=True)#Unset chipSelect
-    await buffer_flush(boardDriver, layerlst)#Exit with hold active and manages chipselect itself
+    for lane in lanelst:
+        for chip in range(args.chipsPerLane[lane]):
+            payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfig)
+            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.asics[lane].writeSPI(payload)
+            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+    await buffer_flush(boardDriver, lanelst)#Exit with hold active and manages chipselect itself
 
     # Manually run SPI
     logger.info("Manually run SPI interface - all pixels OFF")
-    await boardDriver.enableLayersReadout(layerlst, autoread=True, flush=True)
-    for layer in layerlst:
-        await boardDriver.writeLayerBytes(layer = layer, bytes = [0x00] * 255, flush=True)
+    await boardDriver.enableLanesReadout(lanelst, autoread=True, flush=True)
+    for lane in lanelst:
+        await boardDriver.writeLaneBytes(lane = lane, bytes = [0x00] * 255, flush=True)
     task = asyncio.create_task(get_readout(boardDriver, 4096))
     await task
     buff, readout = task.result()
     logger.info(buff)
     logger.info(binascii.hexlify(readout))
-    await boardDriver.disableLayersReadout(flush=True)
-    for layer in range(3):
-        logger.info("Errors on layer {}: {}".format(layer, await boardDriver.getLayerWrongLength(layer)))
-        await boardDriver.zeroLayerWrongLength(layer, flush=True)
+    await boardDriver.disableLanesReadout(flush=True)
+    for lane in range(3):
+        logger.info("Errors on lane {}: {}".format(lane, await boardDriver.getLaneWrongLength(lane)))
+        await boardDriver.zeroLaneWrongLength(lane, flush=True)
     
     # Injection in one pixel
     chipConfigInject = boardDriver.asics[0].gen_config_vector_SPI(msbfirst = False,targetChip = 5)# Inject in pix 17,17
-    for layer in layerlst:
-        for chip in range(args.chipsPerRow[layer]):
+    for lane in lanelst:
+        for chip in range(args.chipsPerLane[lane]):
             # Reconfigure 1 chip
-            logger.info(f"Injection in one pixel layer={layer} chip={chip}")
-            payload = boardDriver.asics[layer].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfigInject)
-            await boardDriver.layersSelectSPI(flush=True)#Set chipSelect
-            await boardDriver.asics[layer].writeSPI(payload)
-            await boardDriver.layersDeselectSPI(flush=True)#Unset chipSelect
+            logger.info(f"Injection in one pixel lane={lane} chip={chip}")
+            payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfigInject)
+            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.asics[lane].writeSPI(payload)
+            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
             await injector.start()
             # Read data
             logger.info("Injection in one pixel for 6 seconds")
-            await boardDriver.enableLayersReadout(layerlst, autoread=True, flush=True)
+            await boardDriver.enableLanesReadout(lanelst, autoread=True, flush=True)
             endTime = time.time()+6
             while time.time() < endTime:
                 task = asyncio.create_task(getBuffer(boardDriver))
@@ -228,29 +228,29 @@ async def main(args):
                 logger.info(buff)
                 if buff > 0:
                     logger.info(binascii.hexlify(readout))
-            await boardDriver.disableLayersReadout(flush=True)
+            await boardDriver.disableLanesReadout(flush=True)
             await injector.stop()
-            logger.info("Errors on layer {}: {}".format(layer, await boardDriver.getLayerWrongLength(layer)))
-            await boardDriver.zeroLayerWrongLength(layer, flush=True)
-            payload = boardDriver.asics[layer].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfig)
-            await boardDriver.layersSelectSPI(flush=True)#Set chipSelect
-            await boardDriver.asics[layer].writeSPI(payload)
-            await boardDriver.layersDeselectSPI(flush=True)#Unset chipSelect
+            logger.info("Errors on lane {}: {}".format(lane, await boardDriver.getLaneWrongLength(lane)))
+            await boardDriver.zeroLaneWrongLength(lane, flush=True)
+            payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfig)
+            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.asics[lane].writeSPI(payload)
+            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
     
     # Injection in 15 pixels
     chipConfigInject = boardDriver.asics[0].gen_config_vector_SPI(msbfirst = False,targetChip = 4)
-    for layer in layerlst:
-        for chip in range(args.chipsPerRow[layer]):
+    for lane in lanelst:
+        for chip in range(args.chipsPerLane[lane]):
             # Reconfigure 1 chip
-            logger.info(f"Injection in one pixel layer={layer} chip={chip}")
-            payload = boardDriver.asics[layer].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfigInject)
-            await boardDriver.layersSelectSPI(flush=True)#Set chipSelect
-            await boardDriver.asics[layer].writeSPI(payload)
-            await boardDriver.layersDeselectSPI(flush=True)#Unset chipSelect
+            logger.info(f"Injection in one pixel lane={lane} chip={chip}")
+            payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfigInject)
+            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.asics[lane].writeSPI(payload)
+            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
             await injector.start()
             # Read data
             logger.info("Injection in one pixel for 6 seconds")
-            await boardDriver.enableLayersReadout(layerlst, autoread=True, flush=True)
+            await boardDriver.enableLanesReadout(lanelst, autoread=True, flush=True)
             endTime = time.time()+6
             while time.time() < endTime:
                 task = asyncio.create_task(getBuffer(boardDriver))
@@ -259,20 +259,20 @@ async def main(args):
                 logger.info(buff)
                 if buff > 0:
                     logger.info(binascii.hexlify(readout))
-            await boardDriver.disableLayersReadout(flush=True)
+            await boardDriver.disableLanesReadout(flush=True)
             await injector.stop()
-            logger.info("Errors on layer {}: {}".format(layer, await boardDriver.getLayerWrongLength(layer)))
-            await boardDriver.zeroLayerWrongLength(layer, flush=True)
-            payload = boardDriver.asics[layer].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfig)
-            await boardDriver.layersSelectSPI(flush=True)#Set chipSelect
-            await boardDriver.asics[layer].writeSPI(payload)
-            await boardDriver.layersDeselectSPI(flush=True)#Unset chipSelect
+            logger.info("Errors on lane {}: {}".format(lane, await boardDriver.getLaneWrongLength(lane)))
+            await boardDriver.zeroLaneWrongLength(lane, flush=True)
+            payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfig)
+            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.asics[lane].writeSPI(payload)
+            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
 
     return
 
-    for layer in layerlst:
-        for chip in range(args.chipsPerRow[layer]):
-            logger.info(f"Injection in one pixel layer={layer} chip={chip}")
+    for lane in lanelst:
+        for chip in range(args.chipsPerLane[lane]):
+            logger.info(f"Injection in one pixel lane={lane} chip={chip}")
 
     # Start injector
     injector = boardDriver.getInjectionBoard(slot = 3)#ShortHand to configure on-chip injector
@@ -298,7 +298,7 @@ async def main(args):
     #         injector.period, injector.clkdiv, injector.initdelay, injector.cycle, injector.pulsesperset = 100, 300, 100, 0, 1#Default set of parameters
     #         await boardDriver.ioSetInjectionToGeccoInjBoard(enable = False, flush = True)#ShortHand for writing the correct registers on-chip, ignore reference to Gecco
     #     except (KeyError, IndexError):
-    #         logger.error(f"Injection arguments layer={args.inject[0]}, chip={args.inject[1]} invalid. Cannot initialize injection.")
+    #         logger.error(f"Injection arguments lane={args.inject[0]}, chip={args.inject[1]} invalid. Cannot initialize injection.")
     #         args.inject = None
     # # Setup / configure analog
     # if args.analog:
@@ -308,17 +308,17 @@ async def main(args):
     # await printStatus(boardDriver)
 
 
-    # for i in range(args.chipsPerRow[layer]):
-    #     await boardDriver.layersSelectSPI(flush=True)#Set chipSelect
-    #     for layer in layerlst:
-    #         if i < args.chipsPerRow[layer]:
-    #             payload = boardDriver.asics[layer].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
-    #             await boardDriver.asics[layer].writeSPI(payload)
-    #     await boardDriver.layersDeselectSPI(flush=True)#Unset chipSelect
+    # for i in range(args.chipsPerLane[lane]):
+    #     await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+    #     for lane in lanelst:
+    #         if i < args.chipsPerLane[lane]:
+    #             payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
+    #             await boardDriver.asics[lane].writeSPI(payload)
+    #     await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
     # Flush old data
-    #await boardDriver.layersSelectSPI(flush=True)#Set chipSelect
-    await buffer_flush(boardDriver, layerlst)#Exit with hold active and manages chipselect itself
-    #await boardDriver.layersDeselectSPI(flush=True)#Unset chipSelect
+    #await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+    await buffer_flush(boardDriver, lanelst)#Exit with hold active and manages chipselect itself
+    #await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
 
     # Final setup
     if args.inject:
@@ -333,15 +333,15 @@ async def main(args):
         end_time = float('inf')
     
     # Enable readout
-    await boardDriver.enableLayersReadout(layerlst, autoread=not(args.noAutoread), flush=True)
+    await boardDriver.enableLanesReadout(lanelst, autoread=not(args.noAutoread), flush=True)
     
     # Main loop
     run = time.time() < end_time
     while run:
         try:
             if args.noAutoread:
-                for layer in layerlst:
-                    await boardDriver.writeLayerBytes(layer = layer, bytes = [0x00] * 255, flush=True)
+                for lane in lanelst:
+                    await boardDriver.writeLaneBytes(lane = lane, bytes = [0x00] * 255, flush=True)
             # Read data
             if args.readout is None: task = asyncio.create_task(getBuffer(boardDriver))
             else: task = asyncio.create_task(get_readout(boardDriver, args.readout))
@@ -366,7 +366,7 @@ async def main(args):
             run=False
     await printStatus(boardDriver, time.time()-end_time)
     # Pause readout
-    await boardDriver.disableLayersReadout(flush=True)
+    await boardDriver.disableLanesReadout(flush=True)
     
     # End injection
     if args.inject: await injector.stop()
@@ -381,7 +381,7 @@ async def main(args):
         dataStream = dataParse_autoread(dataStream_lst, bufferLength_lst, None)
         df = drivers.astropix.decode.decode_readout(myhack(), logger, dataStream, i=0, printer=False)
         if len(df) > 0:
-            csvframe = ['readout', 'layer', 'chipID', 'payload', 'location', 'isCol', 'timestamp', 'tot_msb', 'tot_lsb', 'tot_total', 'tot_us', 'fpga_ts']
+            csvframe = ['readout', 'lane', 'chipID', 'payload', 'location', 'isCol', 'timestamp', 'tot_msb', 'tot_lsb', 'tot_total', 'tot_us', 'fpga_ts']
             df.columns = csvframe
             df.to_csv(args.outputPrefix+".csv")
         else:
@@ -419,9 +419,9 @@ if __name__ == "__main__":
     # Options related to Setup / Configuration of system
     parser.add_argument('-y', '--yaml', action='store', required=False, type=str, default = ['quadchip_allOff'], nargs="+", 
                         help = 'filepath (in scripts/config/ directory) .yml file containing chip configuration. \
-                                One file must be passed for each layer, from layer #0 to layer #2. \
-                                Default: config/quadChip_allOff (All pixels off, only fisrt layer is configured)')
-    parser.add_argument('-c', '--chipsPerRow', action='store', required=False, type=int, default = [4], nargs="+", 
+                                One file must be passed for each lane, from lane #0 to lane #2. \
+                                Default: config/quadChip_allOff (All pixels off, only fisrt lane is configured)')
+    parser.add_argument('-c', '--chipsPerLane', action='store', required=False, type=int, default = [4], nargs="+", 
                         help = 'Number of chips per SPI bus to enable. Can provide a single number or one number per bus. Default: 4')
     parser.add_argument('--config-override', dest='confOverride', action='store_true',
                         help = "Execute a special line of code that applies hard-coded configuration changes - do not use unless you have read the code and know what you are doing!")
@@ -432,14 +432,14 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--threshold', type = int, action='store', default=100,
                         help = 'Threshold voltage for digital ToT (in mV). DEFAULT: 100')
     parser.add_argument('-a', '--analog', action='store', required=False, type=int, default = None, nargs=3,
-                        help = 'Turn on analog output in the given column. Can only enable one analog pixel per layer. \
-                        Requires input in the form {layer, chip, col} (no wrapping brackets). \
+                        help = 'Turn on analog output in the given column. Can only enable one analog pixel per lane. \
+                        Requires input in the form {lane, chip, col} (no wrapping brackets). \
                         Default: None')
-                        #Default: layer 1, chip 0, col 0')
+                        #Default: lane 1, chip 0, col 0')
     
     # Options related to chip injection
     parser.add_argument('-i', '--inject', action='store', default=None, type=int, nargs=4,
-                    help =  'Turn on injection in the given layer, chip, row, and column. Default: No injection')
+                    help =  'Turn on injection in the given lane, chip, row, and column. Default: No injection')
     parser.add_argument('-v','--vinj', action='store', default = None,  type=int,
                         help = 'Specify injection voltage (in mV). DEFAULT: value in config ')
 
@@ -470,20 +470,20 @@ if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     logger.info("Setup logger")
 
-    #Layer counting begins at 0.
+    #Lane counting begins at 0.
     #Make sure config arguments make sense
-    if len(args.yaml) > len(args.chipsPerRow):
-        if len(args.chipsPerRow) > 1:
-            logger.warning(f"Number of chips per row not provided for every layer - default to {args.chipsPerRow[0]} for all {len(args.yaml)} layers.")
-        args.chipsPerRow = [args.chipsPerRow[0]]*len(args.yaml)
-    elif len(args.yaml) < len(args.chipsPerRow):
-        raise ValueError("You need to provide one yaml configuration file for every chipsPerRow argument.")
+    if len(args.yaml) > len(args.chipsPerLane):
+        if len(args.chipsPerLane) > 1:
+            logger.warning(f"Number of chips per row not provided for every lane - default to {args.chipsPerLane[0]} for all {len(args.yaml)} lanes.")
+        args.chipsPerLane = [args.chipsPerLane[0]]*len(args.yaml)
+    elif len(args.yaml) < len(args.chipsPerLane):
+        raise ValueError("You need to provide one yaml configuration file for every chipsPerLane argument.")
 
     #Make sure analog/inject arguments make sense
     if args.analog is not None and (len(args.analog)!=3 or args.analog[0]<0 or args.analog[0]>2 or args.analog[1]<0 or args.analog[1]>3 or args.analog[2]<0):
-        raise ValueError("Incorrect analog argument layer={0[0]},chip={0[1]},column={0[2]}".format(args.analog))
+        raise ValueError("Incorrect analog argument lane={0[0]},chip={0[1]},column={0[2]}".format(args.analog))
     if args.inject is not None and (len(args.inject)!=4 or args.inject[0]<0 or args.inject[0]>2 or args.inject[1]<0 or args.inject[1]>3 or args.inject[2]<0 or args.inject[3]<0):
-        raise ValueError("Incorrect analog argument layer={0[0]},chip={0[1]},row={0[2]},column={0[3]}".format(args.inject))
+        raise ValueError("Incorrect analog argument lane={0[0]},chip={0[1]},row={0[2]},column={0[3]}".format(args.inject))
 
     #Sanitizing args.readout
     if args.readout == 0: args.readout = None

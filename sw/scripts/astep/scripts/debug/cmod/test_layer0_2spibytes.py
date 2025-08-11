@@ -8,14 +8,14 @@ boardDriver = drivers.boards.getCMODUartDriver("COM4")#drivers.astep.serial.getF
 boardDriver.open()
 
 async def main():
-    ## Write 2 Bytes to Layer 0
-    await boardDriver.configureLayerSPIFrequency(2000000,flush= False)
-    await boardDriver.setLayerConfig(0,reset=False,autoread = False, hold= True, flush=True)
+    ## Write 2 Bytes to Lane 0
+    await boardDriver.configureLaneSPIFrequency(2000000,flush= False)
+    await boardDriver.setLaneConfig(0,reset=False,autoread = False, hold= True, flush=True)
 
     ## Write bytes
-    await boardDriver.layersSelectSPI(flush=True)
-    await boardDriver.writeBytesToLayer(0,[0x00,0x01],flush=True)
-    await boardDriver.layersDeselectSPI(flush=True)
+    await boardDriver.setLaneCS(cs=True, flush=True)
+    await boardDriver.asic[0].writeSPI([0x00,0x01],flush=True)
+    await boardDriver.setLaneCS(cs=False, flush=True)
     print("Writing [0x00,0x01]")
 
     time.sleep(2)

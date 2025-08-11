@@ -81,8 +81,8 @@ class BoardDriver():
 
     ## Loopback Model
     ##################
-    def getLoopbackModelForLayer(self,layer):
-        return Astropix3LBModel(self,layer)
+    def getLoopbackModelForLane(self,lane):
+        return Astropix3LBModel(self,lane)
 
     ## Asic
     ##################
@@ -90,11 +90,11 @@ class BoardDriver():
         """
         Load a config yaml file to memory
         :param version: int, AstroPix chip version
-        :param row: int, number of the current row, default=0
-        :param chipsPerRow: int, number of chips per row (aka daisy chain), default=1
+        :param lane: int, number of the current lane, default=0
+        :param chipsPerRow: int, number of chips per lane (aka daisy chain), default=1
         :param configFile: srt, path to yaml config file, defaults to None (no configuration applied?)
         """
-        asic = Asic(rfg = self.rfg, row = lane)
+        asic = Asic(rfg = self.rfg, lane = lane)
         asic.chipversion = version
         if configFile is not None: 
             asic.load_conf_from_yaml(configFile)
@@ -111,89 +111,76 @@ class BoardDriver():
         else: v &= ~(0x2)
         await self.rfg.write_io_ctrl(v,flush) 
 
-    ## Layers
+    ## Lanes
     ##################
-    async def configureLayersFrameTag(self,enable, flush = False):
+    async def configureLanesFrameTag(self,enable, flush = False):
         await self.rfg.write_layers_cfg_frame_tag_counter_ctrl(1 if enable is True else 0,flush)
 
-    async def configureLayersFrameTagFrequency(self, targetFrequencyHz : int , flush = False):
+    async def configureLanesFrameTagFrequency(self, targetFrequencyHz : int , flush = False):
         """Calculated required divider to reach the provided target SPI clock frequency"""
         coreFrequency = self.getFPGACoreFrequency()
         divider = int( coreFrequency / ( targetFrequencyHz))
         assert divider >=1 and divider <=255 , (f"Divider {divider} is too high, min. clock frequency: {int(coreFrequency/255)}")
-        await self.configureLayersFrameTagDivider(divider,flush)
+        await self.configureLanesFrameTagDivider(divider,flush)
 
-    async def configureLayersFrameTagDivider(self, divider , flush = False):
+    async def configureLanesFrameTagDivider(self, divider , flush = False):
         await self.rfg.write_layers_cfg_frame_tag_counter_trigger_match(divider,False)
         await self.rfg.write_layers_cfg_frame_tag_counter_trigger(0,flush)
         
-    async def configureLayerSPIFrequency(self, targetFrequencyHz : int , flush = False):
+    async def configureLaneSPIFrequency(self, targetFrequencyHz : int , flush = False):
         """Calculated required divider to reach the provided target SPI clock frequency"""
         coreFrequency = self.getFPGACoreFrequency()
         divider = int( coreFrequency / (2 * targetFrequencyHz))
         assert divider >=1 and divider <=255 , (f"Divider {divider} is too high, min. clock frequency: {int(coreFrequency/2/255)}")
-        await self.configureLayerSPIDivider(divider,flush)
+        await self.configureLaneSPIDivider(divider,flush)
 
-    async def configureLayerSPIDivider(self, divider:int , flush = False):
+    async def configureLaneSPIDivider(self, divider:int , flush = False):
         await self.rfg.write_spi_layers_ckdivider(divider,flush)
 
-    async def layersSetSPICSN(self, cs = False, flush = False):
-        """This helper method asserts the shared CSN to 0 by selecting CS on layer 0
-        it's a helper to be used only if the hardware uses a shared Chip Select!!
-        If any Layer is in autoread mode, chip select will be already asserted
-        """
-        layer0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
-        if cs:
-            layer0Cfg = layer0Cfg | (1 << 3)
-        else:
-            layer0Cfg = layer0Cfg & ~(1 << 3)
-            
-        await self.rfg.write_layer_0_cfg_ctrl(layer0Cfg,flush)
+#    async def lanesSetSPICSN(self, cs = False, flush = False):
+#        """This helper method asserts the shared CSN to 0 by selecting CS on lane 0
+#        it's a helper to be used only if the hardware uses a shared Chip Select!!
+#        If any lane is in autoread mode, chip select will be already asserted
+#        """
+#        lane0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
+#        if cs:
+#            lane0Cfg = lane0Cfg | (1 << 3)
+#        else:
+#            lane0Cfg = lane0Cfg & ~(1 << 3)
+#            
+#        await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
+#
+#    async def lanesSelectSPI(self, flush = False):
+#        """This helper method asserts the shared CSN to 0 by selecting CS on layer 0
+#        it's a helper to be used only if the hardware uses a shared Chip Select!!
+#        If any Lane is in autoread mode, chip select will be already asserted
+#        """
+#        lane0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
+#        lane0Cfg = lane0Cfg | (1 << 3)
+#        await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
+#
+#    async def lanesDeselectSPI(self, flush = False):
+#        """This helper method deasserts the shared CSN to 1 by deselecting CS on layer 0
+#        it's a helper to be used only if the hardware uses a shared Chip Select!!
+#        If any Lane is in autoread mode, chip select will stay asserted
+#        """
+#        lane0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
+#        lane0Cfg = lane0Cfg & ~(1 << 3)
+#        await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
 
-    async def layersSelectSPI(self, flush = False):
-        """This helper method asserts the shared CSN to 0 by selecting CS on layer 0
-        it's a helper to be used only if the hardware uses a shared Chip Select!!
-        If any Layer is in autoread mode, chip select will be already asserted
-        """
-        layer0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
-        layer0Cfg = layer0Cfg | (1 << 3)
-        await self.rfg.write_layer_0_cfg_ctrl(layer0Cfg,flush)
-
-    async def layersDeselectSPI(self, flush = False):
-        """This helper method deasserts the shared CSN to 1 by deselecting CS on layer 0
-        it's a helper to be used only if the hardware uses a shared Chip Select!!
-        If any Layer is in autoread mode, chip select will stay asserted
-        """
-        layer0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
-        layer0Cfg = layer0Cfg & ~(1 << 3)
-        await self.rfg.write_layer_0_cfg_ctrl(layer0Cfg,flush)
-
-    async def resetLayers(self, waitTime: float = 0.5, flush=True):
-        """Reset all layers because the reset line is shared.
-
+    async def setLaneConfig(self,lane:int, reset : bool, autoread : bool, hold:bool , chipSelect:bool = False,disableMISO:bool = False, flush = False):
+        """Modified the lane config with provided bools
+           Note: Reset is shared and only connected to lane #0, Hold and CSN piloted per-lane
         Args:
-            waitTime (float):  Reset duration - Default 0.5s
-        """
-        layer0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
-        layer0Cfg |= (1<<1)
-        await self.rfg.write_layer_0_cfg_ctrl(layer0Cfg,flush)
-        await asyncio.sleep(waitTime)
-        layer0Cfg &= ~(1<<1)
-        await self.rfg.write_layer_0_cfg_ctrl(layer0Cfg,flush)
-
-    async def setLayerConfig(self,layer:int, reset : bool, autoread : bool, hold:bool , chipSelect:bool = False,disableMISO:bool = False, flush = False):
-        """Modified the layer config with provided bools
-            Since Reset and hold are shared and only connected to layer #0 and CSN is shared and or-ed between layers, you better avoid this command unless you know what you are doing
-        Args:
-            layer (int): layer to reset
+            lane (int): lane to reset
             reset (bool): Assert/deassert reset I/O to ASIC
             autoread (bool): Enables or Disables interrupt-based automatic reading
             hold (bool): Assert/deassert hold I/O to ASIC
-            chipSelect (bool): Assert/deassert Chip Select for this layer (I/O is inverted in firmware to produce low-active signal)
+            chipSelect (bool): Assert/deassert Chip Select for this lane (I/O is inverted in firmware to produce low-active signal)
             disableMISO (bool): Disable SPI MISO bytes reading. Setting this bit to 1 prevents the Firmware from reading bytes
             flush (bool): Write the register right away
         """
-        regval =  await getattr(self.rfg, f"read_layer_{layer}_cfg_ctrl")()
+        regval =  await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
         if reset is True: regval |= (1<<1)
         else: regval &= ~(1<<1)
         if hold is True: regval |= 1 
@@ -205,88 +192,109 @@ class BoardDriver():
         else: regval &= ~(1<<3)
         if disableMISO is True: regval |= (1<<4)
         else: regval &= ~(1<<4)
-        await getattr(self.rfg, f"write_layer_{layer}_cfg_ctrl")(regval,flush)
+        await getattr(self.rfg, f"write_layer_{lane}_cfg_ctrl")(regval,flush)
 
-    async def holdLayers(self, hold:bool, flush:bool = False):
+    async def resetLanes(self, waitTime: float = 0.5, flush=True):
+        """Reset all lanes because the reset line is shared.
+
+        Args:
+            waitTime (float):  Reset duration - Default 0.5s
         """
+        lane0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
+        lane0Cfg |= (1<<1)
+        await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
+        await asyncio.sleep(waitTime)
+        lane0Cfg &= ~(1<<1)
+        await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
+
+    async def holdLane(self, lane:int hold:bool, flush:bool = False):
         """
-        ctrl = await getattr(self.rfg, f"read_layer_0_cfg_ctrl")()
+        Set Hold to active/inactive for a lane
+        """
+        ctrl = await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
+        if hold: ctrl |= (1 << 3) 
+        else: ctrl &= ~(1 << 3)
+        await getattr(self.rfg, f"write_layer_{lane}_cfg_ctrl")(ctrl,flush=flush)
+
+    async def setLaneCS(self, lane:int, cs:bool = True, flush:bool = True):
+        """
+        Set CS to active/inactive for a lane
+        """
+        ctrl = await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
         if hold: ctrl |= 1 
         else: ctrl &= 0XFE
-        await getattr(self.rfg, f"write_layer_0_cfg_ctrl")(ctrl,flush=flush)
-    
-    async def enableLayersReadout(self, layerlst:list, autoread:bool, flush:bool = False):
+        await getattr(self.rfg, f"write_layer_{lane}_cfg_ctrl")(ctrl,flush=flush)
+
+    async def enableLanesReadout(self, lanelst:list, autoread:bool, flush:bool = False):
         """
-        Enables readout for a list of layers:
-         - Disable autoread and chipselect for all layers
-         - Disable MISO for all layers
-         - Enable autoread and chipselect for selected layers
-         - Enable MISO for select layers
+        Enables readout for a list of lanes:
+         - Disable autoread and chipselect for all lanes
+         - Disable MISO for all lanes
+         - Enable autoread and chipselect for selected lanes
+         - Enable MISO for select lanes
          - Lower shared hold
-        :param layerlst: list of layers numbers (int) for which readout will be enabled
+        :param lanelst: list of lanes numbers (int) for which readout will be enabled
         :param autoread: bool, True for autoread
         :param flush:
         """
-        await self.disableLayersReadout(flush=True)
-        if 0 in layerlst: await self.setLayerConfig(layer=0, hold=True, reset=False, autoread=autoread, chipSelect=True, disableMISO=False, flush=True)
-        if 1 in layerlst: await self.setLayerConfig(layer=1, hold=False, reset=False, autoread=autoread, chipSelect=True, disableMISO=False, flush=True)
-        if 2 in layerlst: await self.setLayerConfig(layer=2, hold=False, reset=False, autoread=autoread, chipSelect=True, disableMISO=False, flush=True)
-        await self.holdLayers(hold=False, flush=True)
+        await self.disableLanesReadout(flush=False)
+        for lane in lanelst:
+            await self.setLaneConfig(lane=lane, hold=False, reset=False, autoread=autoread, chipSelect=True, disableMISO=False, flush=False)
+        self.rfg.flush()
 
-    async def disableLayersReadout(self, flush:bool = True):
+    async def disableLanesReadout(self, flush:bool = True):
         """
-        Disable readout for all layers
-         - Raise shared Hold
+        Disable readout for all lanes
+         - Raise Hold
          - Disable autoread, chipselect and MISO
         """
-        await self.setLayerConfig(layer=0, hold=True, reset=False, autoread=False, chipSelect=False, disableMISO=True, flush=flush)
-        await self.setLayerConfig(layer=1, hold=False, reset=False, autoread=False, chipSelect=False, disableMISO=True, flush=flush)
-        await self.setLayerConfig(layer=2, hold=False, reset=False, autoread=False, chipSelect=False, disableMISO=True, flush=flush)
+        for lane in range(20):
+            await self.setLaneConfig(lane=lane, hold=True, reset=False, autoread=False, chipSelect=False, disableMISO=True, flush=flush)
 
-    async def writeLayerBytes(self,layer : int , bytes: bytearray,flush:bool = False):
-        await getattr(self.rfg, f"write_layer_{layer}_mosi_bytes")(bytes,flush)
+#    async def writeLaneBytes(self,lane : int , bytes: bytearray,flush:bool = False):
+#        await getattr(self.rfg, f"write_layer_{lane}_mosi_bytes")(bytes,flush)
     
-    async def writeBytesToLayer(self,layer : int , bytes: bytearray,waitBytesSend : bool = False, flush:bool = False):
-        await getattr(self.rfg, f"write_layer_{layer}_mosi_bytes")(bytes,flush)
-        if waitBytesSend is True:
-            await self.assertLayerNotInReset(layer)
-            while (await getattr(self.rfg, f"read_layer_{layer}_mosi_write_size")() > 0):
-                pass
+#    async def writeBytesToLane(self,lane : int , bytes: bytearray,waitBytesSend : bool = False, flush:bool = False):
+#        await getattr(self.rfg, f"write_layer_{lane}_mosi_bytes")(bytes,flush)
+#        if waitBytesSend is True:
+#            await self.assertLaneNotInReset(lane)
+#            while (await getattr(self.rfg, f"read_layer_{lane}_mosi_write_size")() > 0):
+#                pass
 
-    async def getLayerMOSIBytesCount(self,layer:int):
-        return await getattr(self.rfg,f"read_layer_{layer}_mosi_write_size")()
+    async def getLaneMOSIBytesCount(self,lane:int):
+        return await getattr(self.rfg,f"read_layer_{lane}_mosi_write_size")()
 
-    async def getLayerStatIDLECounter(self,layer:int):
-        return await getattr(self.rfg, f"read_layer_{layer}_stat_idle_counter")()
+    async def getLaneStatIDLECounter(self,lane:int):
+        return await getattr(self.rfg, f"read_layer_{lane}_stat_idle_counter")()
 
-    async def getLayerStatFRAMECounter(self,layer:int):
-        return await getattr(self.rfg, f"read_layer_{layer}_stat_frame_counter")()
+    async def getLaneStatFRAMECounter(self,lane:int):
+        return await getattr(self.rfg, f"read_layer_{lane}_stat_frame_counter")()
 
-    async def getLayerStatus(self,layer:int):
-        return await getattr(self.rfg, f"read_layer_{layer}_status")()
+    async def getLaneStatus(self,lane:int):
+        return await getattr(self.rfg, f"read_layer_{lane}_status")()
 
-    async def getLayerControl(self,layer:int):
-        return await getattr(self.rfg, f"read_layer_{layer}_cfg_ctrl")()
+    async def getLaneControl(self,lane:int):
+        return await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
     
-    async def getLayerWrongLength(self, layer:int):
-        return await getattr(self.rfg, f"read_layer_{layer}_stat_wronglength_counter")()
+    async def getLaneWrongLength(self, lane:int):
+        return await getattr(self.rfg, f"read_layer_{lane}_stat_wronglength_counter")()
 
-    async def zeroLayerWrongLength(self, layer:int, flush:bool =True):
-        await getattr(self.rfg, f"write_layer_{layer}_stat_wronglength_counter")(0, flush=flush)
+    async def zeroLaneWrongLength(self, lane:int, flush:bool =True):
+        await getattr(self.rfg, f"write_layer_{lane}_stat_wronglength_counter")(0, flush=flush)
 
     
-    async def assertLayerNotInReset(self,layer:int):
-        ctrlReg = await self.getLayerControl(layer)
+    async def assertLaneNotInReset(self,lane:int):
+        ctrlReg = await self.getLaneControl(lane)
         if ((ctrlReg >> 1) & 0x1) == 1:
-            raise Exception(f"Layer {layer} is in reset, user requests it is not")
+            raise Exception(f"Lane {lane} is in reset, user requests it is not")
 
-    async def resetLayerStatCounters(self,layer:int,flush:bool = True):
-        await getattr(self.rfg, f"write_layer_{layer}_stat_frame_counter")(0,False)
-        await getattr(self.rfg, f"write_layer_{layer}_stat_idle_counter")(0,flush)
+    async def resetLaneStatCounters(self,lane:int,flush:bool = True):
+        await getattr(self.rfg, f"write_layer_{lane}_stat_frame_counter")(0,False)
+        await getattr(self.rfg, f"write_layer_{lane}_stat_idle_counter")(0,flush)
 
-    async def getLayerMISOBytesCount(self,layer:int):
+    async def getLaneMISOBytesCount(self,lane:int):
         """Returns the number of bytes in the Slave Out Bytes Buffer"""
-        return await getattr(self.rfg, f"read_layer_{layer}_mosi_write_size")()
+        return await getattr(self.rfg, f"read_layer_{lane}_mosi_write_size")()
 
 
     ## Readout
@@ -303,7 +311,7 @@ class BoardDriver():
     ## FPGA Timestamp config
     ############
 
-    async def layersConfigFPGATimestamp(self,enable:bool,force : bool,source_match_counter:bool,source_external:bool,flush:bool = False):
+    async def lanesConfigFPGATimestamp(self,enable:bool,force : bool,source_match_counter:bool,source_external:bool,flush:bool = False):
         """Configure the FPGA Timestamp to count from the internal match counter, the external TS input or force at each clock cycle"""
         assert not (source_match_counter is True and source_external is True) , "Don't configure FPGA TS to both count from internal match counter or the external clock"
         regVal = 0
@@ -313,7 +321,7 @@ class BoardDriver():
         regVal |= 0x0 if force is False else 0x8
         await self.rfg.write_layers_cfg_frame_tag_counter_ctrl(regVal,flush)
 
-    async def layersConfigFPGATimestampFrequency(self,targetFrequencyHz:int,flush:bool = False):
+    async def lanesConfigFPGATimestampFrequency(self,targetFrequencyHz:int,flush:bool = False):
         """Configure the internal matching counter to trigger an FPGA Timestmap count with a certain frequency"""
         coreFrequency = self.getFPGACoreFrequency()
         divider = int( coreFrequency / (targetFrequencyHz))
