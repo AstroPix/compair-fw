@@ -15,7 +15,7 @@ class BoardDriver():
     def __init__(self,rfg):
         self.rfg = rfg
         self.houseKeeping = drivers.astep.housekeeping.Housekeeping(self,rfg)
-        self.asics = []
+        self.asics = {}
         ## Opened Event -> Set/unset by close/open
         ## Useful to start or stop tasks dependent on open/close state of the driver
         self.openedEvent = asyncio.Event()
@@ -99,19 +99,19 @@ class BoardDriver():
         if configFile is not None: 
             asic.load_conf_from_yaml(configFile)
         asic._num_chips = chipsPerLane
-        self.asics.append(asic)
+        self.asics.update({lane: asic})
 
-    def getLaneConfig(self, lane:int):
-        """
-        Return the Asic object for the specified lane
-        :param lane: int, lane ID (0-19)
-        :retuns: Asic object containing configuration from yaml file
-        Note to my future self: Refactor this to use a dictionary instead
-        """
-        for asic in self.asics:
-            if asic.lane == lane:
-                return asic
-        raise IndexError("Lane {} not found!".format(lane))
+    #def getAsic(self, lane:int):
+    #    """
+    #    Return the Asic object for the specified lane
+    #    :param lane: int, lane ID (0-19)
+    #    :retuns: Asic object containing configuration from yaml file
+    #    """
+    #    return self.asics[lane]
+    #    #for asic in self.asics:
+    #    #    if asic.lane == lane:
+    #    #        return asic
+    #    #raise IndexError("Lane {} not found!".format(lane))
 
     ## Ctrl reg
     ##################
@@ -121,7 +121,14 @@ class BoardDriver():
         else:  v &= ~(0x1)
         if TS: v|=0x2
         else: v &= ~(0x2)
+        await self.rfg.write_io_ctrl(v,flush)
+
+    async def ioSetInjectionToChip(self,enable:bool = True,flush:bool = False):
+        v = await self.rfg.read_io_ctrl()
+        if enable: v &= ~(0x8)
+        else: v |= 0x8
         await self.rfg.write_io_ctrl(v,flush) 
+
 
     ## Lanes
     ##################

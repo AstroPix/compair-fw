@@ -21,22 +21,22 @@ import logging
 async def buffer_flush(boardDriver, lanelst = range(3)):
     """This method flushes data from SPI lanes then from FPGA buffer, and resets counters"""
     logger.info("Flush chips before data collection")
-    await boardDriver.holdLanes(hold=False, flush=True)
     for lane in lanelst:
+        await boardDriver.holdLane(lane, hold=False, flush=True)
         interrupt_counter=0
         interrupt = await boardDriver.getLaneStatus(lane)
         while interrupt&1 == 0 and interrupt_counter<20:
             logger.info("interrupt low")
-            await boardDriver.setLaneCS(cs=True, flush=True)
+            await boardDriver.setLaneCS(lane, cs=True, flush=True)
             await boardDriver.writeLaneBytes(lane = lane, bytes = [0x00] * 128, flush=True)
-            await boardDriver.setLaneCS(cs=False, flush=True)
+            await boardDriver.setLaneCS(lane, cs=False, flush=True)
             #time.sleep(.1)
             # Let's not bother emptying the FPGA buffer, at this point it can overflow, and this data is trashed anyways since disableMISO in probably True
             interrupt_counter+=1
             interrupt = await boardDriver.getLaneStatus(lane)
             #logger.info(f"lane {lane} int={interrupt} ({interrupt_counter}/20)")
-    # Reassert hold to be safe
-    await boardDriver.holdLanes(hold=True, flush=True)
+        # Reassert hold to be safe
+        await boardDriver.holdLane(lane, hold=True, flush=True)
     # Now all interrupts are high, empty FPGA buffer
     logger.info("Flush FPGA buffer before data collection")
     await(boardDriver.readoutReadBytes(4098))
@@ -47,7 +47,7 @@ async def buffer_flush(boardDriver, lanelst = range(3)):
 #     # Flush data from sensor
 #     logger.info("Flush chip before data collection")
 #     # Deassert hold
-#     await boardDriver.holdLanes(hold=False, flush=True)
+#     await boardDriver.holdLane(hold=False, flush=True) #TBC
 #     # Flush chips and SPI lines
 #     interruptn = [1 for i in lanelst]
 #     for lane in lanelst:
@@ -74,7 +74,7 @@ async def buffer_flush(boardDriver, lanelst = range(3)):
 #     # Now all interrupts are high, empty FPGA buffer
 #     await(boardDriver.readoutReadBytes(4098))
 #     # Reassert hold to be safe
-#     await boardDriver.holdLanes(hold=True, flush=True)
+#     await boardDriver.holdLane(hold=True, flush=True) #TBC
 #     logger.info("interrupt recovered, ready to collect data, resetting stat counters")
 #     await boardDriver.resetLaneStatCounters(lane)
 
@@ -176,19 +176,19 @@ async def main(args):
     await boardDriver.ioSetInjectionToGeccoInjBoard(enable = False, flush = True)#ShortHand for writing the correct registers on-chip, ignore reference to Gecco
 
     # Set chip IDs
-    await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
     for lane in lanelst:
+        await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
         await boardDriver.asics[lane].writeSPIRoutingFrame(0)
-    await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+        await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
 
     # Set first chip config - all pixels Off
     chipConfig = boardDriver.asics[0].gen_config_vector_SPI(msbfirst = False,targetChip = 0)# All disabled
     for lane in lanelst:
         for chip in range(args.chipsPerLane[lane]):
             payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfig)
-            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
             await boardDriver.asics[lane].writeSPI(payload)
-            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+            await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
     await buffer_flush(boardDriver, lanelst)#Exit with hold active and manages chipselect itself
 
     # Manually run SPI
@@ -213,9 +213,9 @@ async def main(args):
             # Reconfigure 1 chip
             logger.info(f"Injection in one pixel lane={lane} chip={chip}")
             payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfigInject)
-            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
             await boardDriver.asics[lane].writeSPI(payload)
-            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+            await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
             await injector.start()
             # Read data
             logger.info("Injection in one pixel for 6 seconds")
@@ -233,9 +233,9 @@ async def main(args):
             logger.info("Errors on lane {}: {}".format(lane, await boardDriver.getLaneWrongLength(lane)))
             await boardDriver.zeroLaneWrongLength(lane, flush=True)
             payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfig)
-            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
             await boardDriver.asics[lane].writeSPI(payload)
-            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+            await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
     
     # Injection in 15 pixels
     chipConfigInject = boardDriver.asics[0].gen_config_vector_SPI(msbfirst = False,targetChip = 4)
@@ -244,9 +244,9 @@ async def main(args):
             # Reconfigure 1 chip
             logger.info(f"Injection in one pixel lane={lane} chip={chip}")
             payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfigInject)
-            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
             await boardDriver.asics[lane].writeSPI(payload)
-            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+            await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
             await injector.start()
             # Read data
             logger.info("Injection in one pixel for 6 seconds")
@@ -264,9 +264,9 @@ async def main(args):
             logger.info("Errors on lane {}: {}".format(lane, await boardDriver.getLaneWrongLength(lane)))
             await boardDriver.zeroLaneWrongLength(lane, flush=True)
             payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=chip, value=chipConfig)
-            await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+            await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
             await boardDriver.asics[lane].writeSPI(payload)
-            await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+            await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
 
     return
 
@@ -309,16 +309,16 @@ async def main(args):
 
 
     # for i in range(args.chipsPerLane[lane]):
-    #     await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
     #     for lane in lanelst:
+    #         await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
     #         if i < args.chipsPerLane[lane]:
     #             payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
     #             await boardDriver.asics[lane].writeSPI(payload)
-    #     await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+    #         await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
     # Flush old data
-    #await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+    #await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
     await buffer_flush(boardDriver, lanelst)#Exit with hold active and manages chipselect itself
-    #await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+    #await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
 
     # Final setup
     if args.inject:

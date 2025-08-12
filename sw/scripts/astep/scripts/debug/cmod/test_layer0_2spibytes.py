@@ -13,9 +13,9 @@ async def main():
     await boardDriver.setLaneConfig(0,reset=False,autoread = False, hold= True, flush=True)
 
     ## Write bytes
-    await boardDriver.setLaneCS(cs=True, flush=True)
+    await boardDriver.setLaneCS(0, cs=True, flush=True)
     await boardDriver.asic[0].writeSPI([0x00,0x01],flush=True)
-    await boardDriver.setLaneCS(cs=False, flush=True)
+    await boardDriver.setLaneCS(0, cs=False, flush=True)
     print("Writing [0x00,0x01]")
 
     time.sleep(2)

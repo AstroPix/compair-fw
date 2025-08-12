@@ -28,7 +28,7 @@ async def buffer_flush(boardDriver, lanelst = range(3)):
         while interrupt&1 == 0 and interrupt_counter<20:
             logger.info("interrupt low")
             await boardDriver.setLaneCS(lane, cs=True, flush=True)
-            await boardDriver.getLaneConfig(lane).writeSPI([0x00] * 128)
+            await boardDriver.asics[lane].writeSPI([0x00] * 128)
             await boardDriver.setLaneCS(lane, cs=False, flush=True)
             #time.sleep(.1)
             # Let's not bother emptying the FPGA buffer, at this point it can overflow, and this data is trashed anyways since disableMISO in probably True
@@ -172,20 +172,20 @@ async def main(args):
 
     # Set multi-pix injection chip
     if args.confOverride:
-        boardDriver.getLaneConfig(1).asic_config["config_3"] = boardDriver.getLaneConfig(1).asic_config["config_4"]
+        boardDriver.asics[1].asic_config["config_3"] = boardDriver.asics[1].asic_config["config_4"]
 
     logger.info(f"{len(boardDriver.asics)} ASIC drivers instanciated.")
     # Setup / configure injection
     if args.inject:
         logger.debug("Enable injection pixel")
         try:
-            boardDriver.getLaneConfig(args.inject[0]).enable_inj_col(args.inject[1], args.inject[3], inplace=False)
-            boardDriver.getLaneConfig(args.inject[0]).enable_inj_row(args.inject[1], args.inject[2], inplace=False)
-            boardDriver.getLaneConfig(args.inject[0]).enable_pixel(chip=args.inject[1], col=args.inject[3], row=args.inject[2], inplace=False)
+            boardDriver.asics[args.inject[0]].enable_inj_col(args.inject[1], args.inject[3], inplace=False)
+            boardDriver.asics[args.inject[0]].enable_inj_row(args.inject[1], args.inject[2], inplace=False)
+            boardDriver.asics[args.inject[0]].enable_pixel(chip=args.inject[1], col=args.inject[3], row=args.inject[2], inplace=False)
             logger.debug("Set injection voltage")
             # Priority to command line, defaults to yaml - already in vdac units
             if args.vinj is not None:
-                boardDriver.getLaneConfig(args.inject[0]).asic_config[f"config_{args.inject[1]}"]["vdacs"]["vinj"][1] = int(args.vinj/1000*1024/1.8)#1.8 V coded on 10 bits
+                boardDriver.asics[args.inject[0]].asic_config[f"config_{args.inject[1]}"]["vdacs"]["vinj"][1] = int(args.vinj/1000*1024/1.8)#1.8 V coded on 10 bits
             injector = boardDriver.getInjector()
             injector.setPattern(100, 300, 100, 0, 1)#Default set of parameters
             await boardDriver.ioSetInjectionToChip(enable = True, flush = True) # Routes injection pattern to on-chip injector
@@ -195,7 +195,7 @@ async def main(args):
     # Setup / configure analog
     if args.analog:
         logger.debug("enable analog")
-        boardDriver.getLaneConfig(args.analog[0]).enable_ampout_col(args.analog[1], args.analog[2], inplace=False)
+        boardDriver.asics[args.analog[0]].enable_ampout_col(args.analog[1], args.analog[2], inplace=False)
 
     await printStatus(boardDriver)
     #for lane in range(20): await boardDriver.zeroLaneWrongLength(lane, flush=True)
@@ -211,15 +211,15 @@ async def main(args):
     # Set chip IDs
     for lane in args.lanes:
         await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
-        await boardDriver.getLaneConfig(lane).writeSPIRoutingFrame(0)
+        await boardDriver.asics[lane].writeSPIRoutingFrame(0)
         await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
     
     for i in range(max(args.chipsPerLane)):
         await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
         for j, lane in enumerate(args.lanes):
             if i < args.chipsPerLane[j]:
-                payload = boardDriver.getLaneConfig(lane).createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
-                await boardDriver.getLaneConfig(lane).writeSPI(payload)
+                payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
+                await boardDriver.asics[lane].writeSPI(payload)
         await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
     # Flush old data
     #await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
@@ -247,7 +247,7 @@ async def main(args):
         try:
             if args.noAutoread:
                 for lane in args.lanes:
-                    await boardDriver.getLaneConfig(lane).writeSPI([0x00] * 255)
+                    await boardDriver.asics[lane].writeSPI([0x00] * 255)
             # Read data
             if args.readout is None: task = asyncio.create_task(getBuffer(boardDriver))
             else: task = asyncio.create_task(get_readout(boardDriver, args.readout))
