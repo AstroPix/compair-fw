@@ -160,29 +160,31 @@ async def main(args):
     # Configure chips in memory
     pathdelim = os.path.sep #determine if Mac or Windows separators in path name
     ymlpath = [os.getcwd()+pathdelim+"scripts"+pathdelim+"config"+pathdelim+ y +".yml" for y in args.yaml] # Define YAML path variables
+    chipoff = os.getcwd()+pathdelim+"scripts"+pathdelim+"config"+pathdelim+ args.chipoffyml +".yml"#Default config: 1 chip, all pixels off
     try:
-        for lane, (nchips, yml) in enumerate(zip(args.chipsPerLane, ymlpath)):
-            boardDriver.setupASIC(version = 3, lane = lane, chipsPerLane = nchips , configFile = yml )
+        boardDriver.setupASIC(version = 3, lane = -1, chipsPerLane = 1, configFile = chipoff)
+        for lane, nchips, yml in zip(args.lanes, args.chipsPerLane, ymlpath):
+            boardDriver.setupASIC(version = 3, lane = lane, chipsPerLane = nchips , configFile = yml)
     except FileNotFoundError as e :
         logger.error(f'Config File {ymlpath} was not found, pass the name of a config file from the scripts/config folder')
         raise e
 
     # Set multi-pix injection chip
     if args.confOverride:
-        boardDriver.asics[1].asic_config["config_3"] = boardDriver.asics[1].asic_config["config_4"]
+        boardDriver.getLaneConfig(1).asic_config["config_3"] = boardDriver.getLaneConfig(1).asic_config["config_4"]
 
     logger.info(f"{len(boardDriver.asics)} ASIC drivers instanciated.")
     # Setup / configure injection
     if args.inject:
         logger.debug("Enable injection pixel")
         try:
-            boardDriver.asics[args.inject[0]].enable_inj_col(args.inject[1], args.inject[3], inplace=False)
-            boardDriver.asics[args.inject[0]].enable_inj_row(args.inject[1], args.inject[2], inplace=False)
-            boardDriver.asics[args.inject[0]].enable_pixel(chip=args.inject[1], col=args.inject[3], row=args.inject[2], inplace=False)
+            boardDriver.getLaneConfig(args.inject[0]).enable_inj_col(args.inject[1], args.inject[3], inplace=False)
+            boardDriver.getLaneConfig(args.inject[0]).enable_inj_row(args.inject[1], args.inject[2], inplace=False)
+            boardDriver.getLaneConfig(args.inject[0]).enable_pixel(chip=args.inject[1], col=args.inject[3], row=args.inject[2], inplace=False)
             logger.debug("Set injection voltage")
             # Priority to command line, defaults to yaml - already in vdac units
             if args.vinj is not None:
-                boardDriver.asics[args.inject[0]].asic_config[f"config_{args.inject[1]}"]["vdacs"]["vinj"][1] = int(args.vinj/1000*1024/1.8)#1.8 V coded on 10 bits
+                boardDriver.getLaneConfig(args.inject[0]).asic_config[f"config_{args.inject[1]}"]["vdacs"]["vinj"][1] = int(args.vinj/1000*1024/1.8)#1.8 V coded on 10 bits
             injector = boardDriver.getInjector()
             injector.setPattern(100, 300, 100, 0, 1)#Default set of parameters
             await boardDriver.ioSetInjectionToChip(enable = True, flush = True) # Routes injection pattern to on-chip injector
@@ -192,31 +194,35 @@ async def main(args):
     # Setup / configure analog
     if args.analog:
         logger.debug("enable analog")
-        boardDriver.asics[args.analog[0]].enable_ampout_col(args.analog[1], args.analog[2], inplace=False)
+        boardDriver.getLaneConfig(args.analog[0]).enable_ampout_col(args.analog[1], args.analog[2], inplace=False)
 
     await printStatus(boardDriver)
-    for lane in range(3): await boardDriver.zeroLaneWrongLength(lane, flush=True)
+    for lane in range(20): await boardDriver.zeroLaneWrongLength(lane, flush=True)
 
-    lanelst = range(len(args.yaml))
     await boardDriver.disableLanesReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
-    await boardDriver.resetLanes()#Toggle RST
+    #await boardDriver.resetLanes()#Toggle RST with next firmware
+    for lane in range(20):
+        await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    time.sleep(0.5)
+    for lane in range(20):
+        await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
 
     # Set chip IDs
     await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
-    for lane in lanelst:
-        await boardDriver.asics[lane].writeSPIRoutingFrame(0)
+    for lane in args.lanes:
+        await boardDriver.getLaneConfig(lane).writeSPIRoutingFrame(0)
     await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
     
     for i in range(args.chipsPerLane[lane]):
         await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
-        for lane in lanelst:
+        for lane in args.lanes:
             if i < args.chipsPerLane[lane]:
-                payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
-                await boardDriver.asics[lane].writeSPI(payload)
+                payload = boardDriver.getLaneConfig(lane).createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
+                await boardDriver.getLaneConfig(lane).writeSPI(payload)
         await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
     # Flush old data
     #await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
-    await buffer_flush(boardDriver, lanelst)#Exit with hold active and manages chipselect itself
+    await buffer_flush(boardDriver, args.lanes)#Exit with hold active and manages chipselect itself
     #await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
 
     # Final setup
@@ -232,14 +238,14 @@ async def main(args):
         end_time = float('inf')
     
     # Enable readout
-    await boardDriver.enableLanesReadout(lanelst, autoread=not(args.noAutoread), flush=True)
+    await boardDriver.enableLanesReadout(args.lanes, autoread=not(args.noAutoread), flush=True)
     
     # Main loop
     run = time.time() < end_time
     while run:
         try:
             if args.noAutoread:
-                for lane in lanelst:
+                for lane in args.lanes:
                     await boardDriver.writeLaneBytes(lane = lane, bytes = [0x00] * 255, flush=True)
             # Read data
             if args.readout is None: task = asyncio.create_task(getBuffer(boardDriver))
@@ -316,14 +322,18 @@ if __name__ == "__main__":
                         help = 'Number of bytes of FPGA buffer to read for each readout (1 to 4098, 0->As much as buffer contains, other->4096). Default: 0')
     
     # Options related to Setup / Configuration of system
-    parser.add_argument('-y', '--yaml', action='store', required=False, type=str, default = ['quadchip_allOff'], nargs="+", 
+    parser.add_argument('-y', '--yaml', action='store', required=False, type=str, default = [], nargs="*", 
                         help = 'filepath (in scripts/config/ directory) .yml file containing chip configuration. \
                                 One file must be passed for each lane, from lane #0 to lane #2. \
-                                Default: config/quadChip_allOff (All pixels off, only fisrt lane is configured)')
-    parser.add_argument('-c', '--chipsPerLane', action='store', required=False, type=int, default = [4], nargs="+", 
-                        help = 'Number of chips per SPI lane to enable. Can provide a single number or one number per lane. Default: 4')
+                                Default: All pixels off')
+    parser.add_argument('-c', '--chipsPerLane', action='store', required=False, type=int, default = [], nargs="*", 
+                        help = 'Number of chips per SPI lanes to enable. Can provide a single number or one number per lane. Default: 20')
+    parser.add_argument('-l', '--lanes', action='store', required=False, type=int, default = [], nargs="*",
+                        help = 'Lane IDs to configure. Can provide a single number or many, lane numbering starts at 0. \
+                        If -c and -y present, the lanes will be configured using the yaml file and number of chips provided.')
     parser.add_argument('--config-override', dest='confOverride', action='store_true',
-                        help = "Execute a special line of code that applies hard-coded configuration changes - do not use unless you have read the code and know what you are doing!")
+                        help = "Execute a special line of code that applies hard-coded configuration changes -- \
+                        do not use unless you have read the code and know what you are doing!")
     
     # Options related to Setup / Configuration of the chip in data collection run
     parser.add_argument('-na', '--noAutoread', action='store_true', required=False, 
@@ -343,7 +353,8 @@ if __name__ == "__main__":
                         help = 'Specify injection voltage (in mV). DEFAULT: value in config ')
 
     args = parser.parse_args()
-    
+    args.chipoffyml = '1chip_allOff'#Default config: 1 chip, all pixels off
+
     # Define the loglevel
     ll = args.loglevel
     if ll == 'D':
@@ -371,17 +382,17 @@ if __name__ == "__main__":
 
     #Lane counting begins at 0.
     #Make sure config arguments make sense
-    if len(args.yaml) > len(args.chipsPerLane):
-        if len(args.chipsPerLane) > 1:
-            logger.warning(f"Number of chips per lane not provided for every lane - default to {args.chipsPerLane[0]} for all {len(args.yaml)} lanes.")
-        args.chipsPerLane = [args.chipsPerLane[0]]*len(args.yaml)
-    elif len(args.yaml) < len(args.chipsPerLane):
-        raise ValueError("You need to provide one yaml configuration file for every chipsPerLane argument.")
+    if len(args.yaml) > len(args.chipsPerLane) or len(args.yaml) > len(args.lanes):
+        raise ValueError("You need to provide one chipsPerLane (-c) argument and one lane ID (-l) argument per yaml file!")
+    if len(args.chipsPerLane) != 0 and len(args.chipsPerLane) != len(args.lanes):
+        raise ValueError("You need to provide one lane ID (-l) per chipsPerLane argument!")
+    #if len(args.lanes) != len(args.yaml) or len(args.lanes) != len(args.chipsPerLane):
+    #    raise ValueError("You need to provide one yaml configuration file (with -y) and one chipsPerLane argument (with -c) for every lane to configure (with -l).")
 
     #Make sure analog/inject arguments make sense
-    if args.analog is not None and (len(args.analog)!=3 or args.analog[0]<0 or args.analog[0]>2 or args.analog[1]<0 or args.analog[1]>3 or args.analog[2]<0):
+    if args.analog is not None and (len(args.analog)!=3 or args.analog[0]<0 or args.analog[0]>19 or args.analog[1]<0 or args.analog[1]>19 or args.analog[2]<0):
         raise ValueError("Incorrect analog argument lane={0[0]},chip={0[1]},column={0[2]}".format(args.analog))
-    if args.inject is not None and (len(args.inject)!=4 or args.inject[0]<0 or args.inject[0]>2 or args.inject[1]<0 or args.inject[1]>3 or args.inject[2]<0 or args.inject[3]<0):
+    if args.inject is not None and (len(args.inject)!=4 or args.inject[0]<0 or args.inject[0]>19 or args.inject[1]<0 or args.inject[1]>19 or args.inject[2]<0 or args.inject[3]<0):
         raise ValueError("Incorrect analog argument lane={0[0]},chip={0[1]},row={0[2]},column={0[3]}".format(args.inject))
 
     #Sanitizing args.readout

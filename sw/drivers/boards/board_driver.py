@@ -101,6 +101,17 @@ class BoardDriver():
         asic._num_chips = chipsPerRow
         self.asics.append(asic)
 
+    def getLaneConfig(self, lane:int):
+        """
+        Return the Asic object for the specified lane
+        :param lane: int, lane ID (0-19)
+        :retuns: Asic object containing configuration from yaml file
+        """
+        for asic in self.asics:
+            if asic.lane == lane:
+                return asic
+        raise IndexError("Lane {} not found!".format(lane))
+
     ## Ctrl reg
     ##################
     async def enableSensorClocks(self, ToT=True, TS=True, flush:bool = False):
