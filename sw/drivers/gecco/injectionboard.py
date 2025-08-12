@@ -39,7 +39,7 @@ class InjectionBoard(GeccoCard):
     The Injection Board DACs are configured through the associated VoltageBoard instance accessible via self.voltageBoard property
     """
 
-    def __init__(self,rfg,slot:int,registerNamePrefix = "LAYERS_INJ") -> None:
+    def __init__(self,rfg,slot:int,registerNamePrefix = "LANES_INJ") -> None:
         
         GeccoCard.__init__(self, rfg, slot)
 

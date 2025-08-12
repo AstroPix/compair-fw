@@ -45,7 +45,7 @@ SPI_HEADER_SR       = 0b011 << 5
 class Asic():
     """Configure ASIC"""
 
-    def __init__(self,rfg , row : int = 0, srRegisterName : str = "LAYERS_SR_OUT") -> None:
+    def __init__(self,rfg , row : int = 0, srRegisterName : str = "LANES_SR_OUT") -> None:
         
         
         self._chipversion = None
@@ -61,7 +61,7 @@ class Asic():
         ## Added 09/23 Richard
         self.rfg = rfg
         self.row = row  ## Row ID used to send the bytes to the right firmware interface
-        self.rfgSRRegisterName = "LAYERS_SR_OUT"
+        self.rfgSRRegisterName = "LANES_SR_OUT"
 
 
     @property
