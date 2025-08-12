@@ -30,7 +30,7 @@ astropix3:
             extrabits:          [15, 0b0]
 
         biasconfig:
-            DisHiDR:            [1, 0b1]
+            DisHiDR:            [1, 0b0]
             q01:                [1, 0b0]
             qon0:               [1, 0b0]
             qon1:               [1, 0b1]

@@ -28,7 +28,7 @@ class BoardDriver():
             from drivers.astep.serial import getSerialPort
             port = drivers.astep.serial.getSerialPort()
             if port is None:
-                raise RuntimeError("No Serial Port could be listed")
+                raise RuntimeError("No Serial Port from vendor FTDI could be listed")
             else:
                 portPath = port.device
         self.rfg.withUARTIO(portPath, baud)
@@ -54,9 +54,9 @@ class BoardDriver():
     def debug_full(self):
         rfg.core.debug()
 
-    def flush(self):
+    async def flush(self):
         """Flushed the RFG instance, use to be sure no bytes are pending writting"""
-        self.rfg.flush()
+        await self.rfg.flush()
 
     async def readFirmwareVersion(self):
         """Returns the raw integer with the firmware Version"""
@@ -86,19 +86,19 @@ class BoardDriver():
 
     ## Asic
     ##################
-    def setupASIC(self, version: int, lane: int = 0, chipsPerRow: int=1, configFile: str|None = None):
+    def setupASIC(self, version: int, lane: int = 0, chipsPerLane: int=1, configFile: str|None = None):
         """
         Load a config yaml file to memory
         :param version: int, AstroPix chip version
         :param lane: int, number of the current lane, default=0
-        :param chipsPerRow: int, number of chips per lane (aka daisy chain), default=1
+        :param chipsPerLane: int, number of chips per lane (aka daisy chain), default=1
         :param configFile: srt, path to yaml config file, defaults to None (no configuration applied?)
         """
         asic = Asic(rfg = self.rfg, lane = lane)
         asic.chipversion = version
         if configFile is not None: 
             asic.load_conf_from_yaml(configFile)
-        asic._num_chips = chipsPerRow
+        asic._num_chips = chipsPerLane
         self.asics.append(asic)
 
     def getLaneConfig(self, lane:int):
@@ -106,6 +106,7 @@ class BoardDriver():
         Return the Asic object for the specified lane
         :param lane: int, lane ID (0-19)
         :retuns: Asic object containing configuration from yaml file
+        Note to my future self: Refactor this to use a dictionary instead
         """
         for asic in self.asics:
             if asic.lane == lane:
@@ -218,7 +219,7 @@ class BoardDriver():
         lane0Cfg &= ~(1<<1)
         await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
 
-    async def holdLane(self, lane:int hold:bool, flush:bool = False):
+    async def holdLane(self, lane:int, hold:bool, flush:bool = False):
         """
         Set Hold to active/inactive for a lane
         """
@@ -232,7 +233,7 @@ class BoardDriver():
         Set CS to active/inactive for a lane
         """
         ctrl = await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
-        if hold: ctrl |= 1 
+        if cs: ctrl |= 1 
         else: ctrl &= 0XFE
         await getattr(self.rfg, f"write_layer_{lane}_cfg_ctrl")(ctrl,flush=flush)
 
@@ -251,7 +252,7 @@ class BoardDriver():
         await self.disableLanesReadout(flush=False)
         for lane in lanelst:
             await self.setLaneConfig(lane=lane, hold=False, reset=False, autoread=autoread, chipSelect=True, disableMISO=False, flush=False)
-        self.rfg.flush()
+        await self.rfg.flush()
 
     async def disableLanesReadout(self, flush:bool = True):
         """

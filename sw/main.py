@@ -21,22 +21,22 @@ import logging
 async def buffer_flush(boardDriver, lanelst = range(3)):
     """This method flushes data from SPI lanes then from FPGA buffer, and resets counters"""
     logger.info("Flush chips before data collection")
-    await boardDriver.holdLanes(hold=False, flush=True)
     for lane in lanelst:
+        await boardDriver.holdLane(lane, hold=False, flush=True)
         interrupt_counter=0
         interrupt = await boardDriver.getLaneStatus(lane)
         while interrupt&1 == 0 and interrupt_counter<20:
             logger.info("interrupt low")
-            await boardDriver.setLaneCS(cs=True, flush=True)
-            await boardDriver.writeLaneBytes(lane = lane, bytes = [0x00] * 128, flush=True)
-            await boardDriver.setLaneCS(cs=False, flush=True)
+            await boardDriver.setLaneCS(lane, cs=True, flush=True)
+            await boardDriver.getLaneConfig(lane).writeSPI([0x00] * 128)
+            await boardDriver.setLaneCS(lane, cs=False, flush=True)
             #time.sleep(.1)
             # Let's not bother emptying the FPGA buffer, at this point it can overflow, and this data is trashed anyways since disableMISO in probably True
             interrupt_counter+=1
             interrupt = await boardDriver.getLaneStatus(lane)
             #logger.info(f"lane {lane} int={interrupt} ({interrupt_counter}/20)")
-    # Reassert hold to be safe
-    await boardDriver.holdLanes(hold=True, flush=True)
+        # Reassert hold to be safe
+        await boardDriver.holdLane(lane, hold=True, flush=True)
     # Now all interrupts are high, empty FPGA buffer
     logger.info("Flush FPGA buffer before data collection")
     await(boardDriver.readoutReadBytes(4098))
@@ -47,7 +47,7 @@ async def buffer_flush(boardDriver, lanelst = range(3)):
 #     # Flush data from sensor
 #     logger.info("Flush chip before data collection")
 #     # Deassert hold
-#     await boardDriver.holdLanes(hold=False, flush=True)
+#     await boardDriver.holdLane(lane, hold=False, flush=True)#TBC
 #     # Flush chips and SPI lines
 #     interruptn = [1 for i in lanelst]
 #     for lane in lanelst:
@@ -74,7 +74,7 @@ async def buffer_flush(boardDriver, lanelst = range(3)):
 #     # Now all interrupts are high, empty FPGA buffer
 #     await(boardDriver.readoutReadBytes(4098))
 #     # Reassert hold to be safe
-#     await boardDriver.holdLanes(hold=True, flush=True)
+#     await boardDriver.holdLane(lane, hold=True, flush=True)#TBC
 #     logger.info("interrupt recovered, ready to collect data, resetting stat counters")
 #     await boardDriver.resetLaneStatCounters(lane)
 
@@ -102,11 +102,12 @@ def dataParse_autoread(data_lst, buffer_lst, bitfile:str = None):
     return allData
 
 async def printStatus(boardDriver, time=0., buff=0):
-    status = [await boardDriver.getLaneStatus(lane) for lane in range(3)]
-    ctrl = [await boardDriver.getLaneControl(lane) for lane in range(3)]
-    wrongl = [await boardDriver.getLaneWrongLength(lane) for lane in range(3)]
-    logger.info("[{time:04.2} s] buff={0:04d} status: 0={1[0]:02b}-{2[0]:06b}-{3[0]:04d} 1={1[1]:02b}-{2[1]:06b}-{3[1]:04d} 2={1[2]:02b}-{2[2]:06b}-{3[2]:04d}"\
-                .format(buff, status, ctrl, wrongl, time=time))
+    pass
+    # status = [await boardDriver.getLaneStatus(lane) for lane in range(3)]
+    # ctrl = [await boardDriver.getLaneControl(lane) for lane in range(3)]
+    # wrongl = [await boardDriver.getLaneWrongLength(lane) for lane in range(3)]
+    # logger.info("[{time:04.2} s] buff={0:04d} status: 0={1[0]:02b}-{2[0]:06b}-{3[0]:04d} 1={1[1]:02b}-{2[1]:06b}-{3[1]:04d} 2={1[2]:02b}-{2[2]:06b}-{3[2]:04d}"\
+    #             .format(buff, status, ctrl, wrongl, time=time))
 
 # Needed to decode data
 class myhack:
@@ -118,7 +119,7 @@ def bin2csv(fprefix):
         datalst = []
         i = 0
         while (data := ofile.read(4096)):
-            datalst.append( drivers.astropix.decode.decode_readout(myhack(), logger, data, i=i, printer=False) )
+            datalst.append( drivers.astropix.decode.decode_readout(myhack(), data, i = i, printer=False) )
             # logger.info(binascii.hexlify(data))
             i += 1
     if len(datalst) > 0:
@@ -137,7 +138,7 @@ async def main(args):
     print(args) # Soon to be removed
     logger.debug("Start main()")
     # Setup FPGA communications
-    boardDriver = drivers.boards.getCMODUartDriver("COM6")
+    boardDriver = drivers.boards.getCMODUartDriver()
     logger.debug(f"boardDriver instanciated: {boardDriver}")
     await boardDriver.open()
     logger.info("Opened FPGA, testing...")
@@ -197,7 +198,7 @@ async def main(args):
         boardDriver.getLaneConfig(args.analog[0]).enable_ampout_col(args.analog[1], args.analog[2], inplace=False)
 
     await printStatus(boardDriver)
-    for lane in range(20): await boardDriver.zeroLaneWrongLength(lane, flush=True)
+    #for lane in range(20): await boardDriver.zeroLaneWrongLength(lane, flush=True)
 
     await boardDriver.disableLanesReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
     #await boardDriver.resetLanes()#Toggle RST with next firmware
@@ -208,22 +209,22 @@ async def main(args):
         await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
 
     # Set chip IDs
-    await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
     for lane in args.lanes:
+        await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
         await boardDriver.getLaneConfig(lane).writeSPIRoutingFrame(0)
-    await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+        await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
     
-    for i in range(args.chipsPerLane[lane]):
-        await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
-        for lane in args.lanes:
-            if i < args.chipsPerLane[lane]:
+    for i in range(max(args.chipsPerLane)):
+        await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
+        for j, lane in enumerate(args.lanes):
+            if i < args.chipsPerLane[j]:
                 payload = boardDriver.getLaneConfig(lane).createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
                 await boardDriver.getLaneConfig(lane).writeSPI(payload)
-        await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+        await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
     # Flush old data
-    #await boardDriver.setLaneCS(cs=True, flush=True)#Set chipSelect
+    #await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
     await buffer_flush(boardDriver, args.lanes)#Exit with hold active and manages chipselect itself
-    #await boardDriver.setLaneCS(cs=False, flush=True)#Unset chipSelect
+    #await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
 
     # Final setup
     if args.inject:
@@ -246,7 +247,7 @@ async def main(args):
         try:
             if args.noAutoread:
                 for lane in args.lanes:
-                    await boardDriver.writeLaneBytes(lane = lane, bytes = [0x00] * 255, flush=True)
+                    await boardDriver.getLaneConfig(lane).writeSPI([0x00] * 255)
             # Read data
             if args.readout is None: task = asyncio.create_task(getBuffer(boardDriver))
             else: task = asyncio.create_task(get_readout(boardDriver, args.readout))
