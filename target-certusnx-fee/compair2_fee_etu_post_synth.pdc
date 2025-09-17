@@ -12,6 +12,23 @@ ldc_set_vcc -bank 5 1.8
 ldc_set_vcc -bank 6 1.8
 ldc_set_vcc -bank 7 1.8
 ldc_set_vcc -core 1
+
+ldc_set_location -site {P1} [get_ports row0_row3_inject]
+ldc_set_location -site {N12} [get_ports row4_row7_inject]
+ldc_set_location -site {W5} [get_ports row8_row11_inject]
+ldc_set_location -site {T3} [get_ports row12_row15_inject]
+ldc_set_location -site {AA7} [get_ports row16_row19_inject]
+
+ldc_set_location -site {K1} [get_ports row0_row3_reset]
+ldc_set_location -site {F20} [get_ports row4_row7_reset]
+ldc_set_location -site {U16} [get_ports row8_row11_reset]
+ldc_set_location -site {V18} [get_ports row12_row15_reset]
+ldc_set_location -site {R21} [get_ports row16_row19_reset]
+
+
+
+
+
 ldc_set_location -site {J1} [get_ports {row0_spi_miso[0]}]
 ldc_set_location -site {M1} [get_ports {row0_spi_miso[1]}]
 ldc_set_location -site {L1} [get_ports row0_spi_clk]
@@ -21,8 +38,7 @@ ldc_set_location -site {M2} [get_ports row0_hold]
 ldc_set_location -site {M3} [get_ports row0_int]
 ldc_set_location -site {L2} [get_ports row0_ts_clk]
 #ldc_set_location -site {T1} [get_ports row0_tot_clk]
-ldc_set_location -site {P1} [get_ports row0_row3_inject]
-ldc_set_location -site {K1} [get_ports row0_row3_reset]
+
 ldc_set_location -site {G5} [get_ports {row1_spi_miso[0]}]
 ldc_set_location -site {K4} [get_ports {row1_spi_miso[1]}]
 ldc_set_location -site {L4} [get_ports row1_spi_clk]
@@ -32,6 +48,7 @@ ldc_set_location -site {K3} [get_ports row1_hold]
 ldc_set_location -site {J2} [get_ports row1_int]
 ldc_set_location -site {H5} [get_ports row1_ts_clk]
 #ldc_set_location -site {T2} [get_ports row1_tot_clk]
+
 ldc_set_location -site {G7} [get_ports {row2_spi_miso[0]}]
 ldc_set_location -site {K9} [get_ports {row2_spi_miso[1]}]
 ldc_set_location -site {K10} [get_ports row2_spi_clk]
@@ -41,6 +58,7 @@ ldc_set_location -site {L8} [get_ports row2_hold]
 ldc_set_location -site {H8} [get_ports row2_int]
 ldc_set_location -site {J6} [get_ports row2_ts_clk]
 #ldc_set_location -site {T4} [get_ports row2_tot_clk]
+
 ldc_set_location -site {M8} [get_ports {row3_spi_miso[0]}]
 ldc_set_location -site {L14} [get_ports {row3_spi_miso[1]}]
 ldc_set_location -site {G16} [get_ports row3_spi_clk]
@@ -50,6 +68,7 @@ ldc_set_location -site {G17} [get_ports row3_hold]
 ldc_set_location -site {D18} [get_ports row3_int]
 ldc_set_location -site {L11} [get_ports row3_ts_clk]
 #ldc_set_location -site {U5} [get_ports row3_tot_clk]
+
 ldc_set_location -site {F21} [get_ports {row4_spi_miso[0]}]
 ldc_set_location -site {L21} [get_ports {row4_spi_miso[1]}]
 ldc_set_location -site {K21} [get_ports row4_spi_clk]
@@ -59,8 +78,7 @@ ldc_set_location -site {L18} [get_ports row4_hold]
 ldc_set_location -site {P14} [get_ports row4_int]
 ldc_set_location -site {F22} [get_ports row4_ts_clk]
 #ldc_set_location -site {T20} [get_ports row4_tot_clk]
-ldc_set_location -site {N12} [get_ports row4_row7_inject]
-ldc_set_location -site {F20} [get_ports row4_row7_reset]
+
 ldc_set_location -site {G21} [get_ports {row5_spi_miso[0]}]
 ldc_set_location -site {K22} [get_ports {row5_spi_miso[1]}]
 ldc_set_location -site {K19} [get_ports row5_spi_clk]
@@ -70,6 +88,7 @@ ldc_set_location -site {J21} [get_ports row5_hold]
 ldc_set_location -site {L22} [get_ports row5_int]
 ldc_set_location -site {G22} [get_ports row5_ts_clk]
 #ldc_set_location -site {V22} [get_ports row5_tot_clk]
+
 ldc_set_location -site {R8} [get_ports {row6_spi_miso[0]}]
 ldc_set_location -site {N6} [get_ports {row6_spi_miso[1]}]
 ldc_set_location -site {M6} [get_ports row6_spi_clk]
@@ -79,6 +98,7 @@ ldc_set_location -site {N7} [get_ports row6_hold]
 ldc_set_location -site {R7} [get_ports row6_int]
 ldc_set_location -site {T8} [get_ports row6_ts_clk]
 #ldc_set_location -site {V7} [get_ports row6_tot_clk]
+
 ldc_set_location -site {V13} [get_ports {row7_spi_miso[0]}]
 ldc_set_location -site {M4} [get_ports {row7_spi_miso[1]}]
 ldc_set_location -site {L6} [get_ports row7_spi_clk]
@@ -88,6 +108,7 @@ ldc_set_location -site {M5} [get_ports row7_hold]
 ldc_set_location -site {N5} [get_ports row7_int]
 ldc_set_location -site {P9} [get_ports row7_ts_clk]
 #ldc_set_location -site {W10} [get_ports row7_tot_clk_N]
+
 ldc_set_location -site {AB20} [get_ports {row8_spi_miso[0]}]
 ldc_set_location -site {AA10} [get_ports {row8_spi_miso[1]}]
 ldc_set_location -site {W7} [get_ports row8_spi_clk]
@@ -97,8 +118,7 @@ ldc_set_location -site {AB11} [get_ports row8_hold]
 ldc_set_location -site {W11} [get_ports row8_int]
 ldc_set_location -site {AB21} [get_ports row8_ts_clk]
 #ldc_set_location -site {W22} [get_ports row8_tot_clk]
-ldc_set_location -site {W5} [get_ports row8_row11_inject]
-ldc_set_location -site {U16} [get_ports row8_row11_reset]
+
 ldc_set_location -site {W13} [get_ports {row9_spi_miso[0]}]
 ldc_set_location -site {U11} [get_ports {row9_spi_miso[1]}]
 ldc_set_location -site {T10} [get_ports row9_spi_clk]
@@ -108,6 +128,7 @@ ldc_set_location -site {U10} [get_ports row9_hold]
 ldc_set_location -site {V11} [get_ports row9_int]
 ldc_set_location -site {AB15} [get_ports row9_ts_clk]
 #ldc_set_location -site {AB16} [get_ports row9_tot_clk]
+
 ldc_set_location -site {T16} [get_ports {row10_spi_miso[0]}]
 ldc_set_location -site {P4} [get_ports {row10_spi_miso[1]}]
 ldc_set_location -site {R4} [get_ports row10_spi_clk]
@@ -117,6 +138,7 @@ ldc_set_location -site {R5} [get_ports row10_hold]
 ldc_set_location -site {V5} [get_ports row10_int]
 ldc_set_location -site {T15} [get_ports row10_ts_clk]
 #ldc_set_location -site {W6} [get_ports row10_tot_clk]
+
 ldc_set_location -site {N17} [get_ports {row11_spi_miso[0]}]
 ldc_set_location -site {P2} [get_ports {row11_spi_miso[1]}]
 ldc_set_location -site {R1} [get_ports row11_spi_clk]
@@ -126,6 +148,7 @@ ldc_set_location -site {P3} [get_ports row11_hold]
 ldc_set_location -site {N4} [get_ports row11_int]
 ldc_set_location -site {P18} [get_ports row11_ts_clk]
 #ldc_set_location -site {AB6} [get_ports row12_tot_clk]
+
 ldc_set_location -site {V15} [get_ports {row12_spi_miso[0]}]
 ldc_set_location -site {V8} [get_ports {row12_spi_miso[1]}]
 ldc_set_location -site {Y7} [get_ports row12_spi_clk]
@@ -135,8 +158,7 @@ ldc_set_location -site {U8} [get_ports row12_hold]
 ldc_set_location -site {V10} [get_ports row12_int]
 ldc_set_location -site {U15} [get_ports row12_ts_clk]
 #ldc_set_location -site {AA22} [get_ports row12_tot_clk]
-ldc_set_location -site {T3} [get_ports row12_row15_inject]
-ldc_set_location -site {V18} [get_ports row12_row15_reset]
+
 ldc_set_location -site {Y15} [get_ports {row13_spi_miso[0]}]
 ldc_set_location -site {U12} [get_ports {row13_spi_miso[1]}]
 ldc_set_location -site {AB13} [get_ports row13_spi_clk]
@@ -146,6 +168,7 @@ ldc_set_location -site {AB12} [get_ports row13_hold]
 ldc_set_location -site {U9} [get_ports row13_int]
 ldc_set_location -site {W15} [get_ports row13_ts_clk]
 #ldc_set_location -site {AB18} [get_ports row13_tot_clk]
+
 ldc_set_location -site {U21} [get_ports {row14_spi_miso[0]}]
 ldc_set_location -site {AB2} [get_ports {row14_spi_miso[1]}]
 ldc_set_location -site {W2} [get_ports row14_spi_clk]
@@ -155,6 +178,7 @@ ldc_set_location -site {U3} [get_ports row14_hold]
 ldc_set_location -site {AB3} [get_ports row14_int]
 ldc_set_location -site {U17} [get_ports row14_ts_clk]
 #ldc_set_location -site {AB7} [get_ports row14_tot_clk]
+
 ldc_set_location -site {P19} [get_ports {row15_spi_miso[0]}]
 ldc_set_location -site {V1} [get_ports {row15_spi_miso[1]}]
 ldc_set_location -site {R3} [get_ports row15_spi_clk]
@@ -164,6 +188,7 @@ ldc_set_location -site {Y1} [get_ports row15_hold]
 ldc_set_location -site {AA1} [get_ports row15_int]
 ldc_set_location -site {R22} [get_ports row15_ts_clk]
 #ldc_set_location -site {AA5} [get_ports row15_tot_clk]
+
 ldc_set_location -site {V19} [get_ports {row16_spi_miso[0]}]
 ldc_set_location -site {AA12} [get_ports {row16_spi_miso[1]}]
 ldc_set_location -site {Y11} [get_ports row16_spi_clk]
@@ -173,8 +198,7 @@ ldc_set_location -site {Y13} [get_ports row16_hold]
 ldc_set_location -site {AA14} [get_ports row16_int]
 ldc_set_location -site {U20} [get_ports row16_ts_clk]
 #ldc_set_location -site {T22} [get_ports row16_tot_clk]
-ldc_set_location -site {AA7} [get_ports row16_row19_inject]
-ldc_set_location -site {R21} [get_ports row16_row19_reset]
+
 ldc_set_location -site {AA20} [get_ports {row17_spi_miso[0]}]
 ldc_set_location -site {AA17} [get_ports {row17_spi_miso[1]}]
 ldc_set_location -site {AA18} [get_ports row17_spi_clk]
@@ -184,6 +208,7 @@ ldc_set_location -site {AA16} [get_ports row17_hold]
 ldc_set_location -site {AA15} [get_ports row17_int]
 ldc_set_location -site {W18} [get_ports row17_ts_clk]
 #ldc_set_location -site {Y21} [get_ports row17_tot_clk]
+
 ldc_set_location -site {P21} [get_ports {row18_spi_miso[0]}]
 ldc_set_location -site {AA4} [get_ports {row18_spi_miso[1]}]
 ldc_set_location -site {AA3} [get_ports row18_spi_clk]
@@ -193,6 +218,7 @@ ldc_set_location -site {AB4} [get_ports row18_hold]
 ldc_set_location -site {Y5} [get_ports row18_int]
 ldc_set_location -site {P22} [get_ports row18_ts_clk]
 #ldc_set_location -site {AB9} [get_ports row18_tot_clk]
+
 ldc_set_location -site {N20} [get_ports {row19_spi_miso[0]}]
 ldc_set_location -site {Y2} [get_ports {row19_spi_miso[1]}]
 ldc_set_location -site {W3} [get_ports row19_spi_clk]
@@ -202,6 +228,7 @@ ldc_set_location -site {AA2} [get_ports row19_hold]
 ldc_set_location -site {Y3} [get_ports row19_int]
 ldc_set_location -site {M21} [get_ports row19_ts_clk]
 #ldc_set_location -site {AA8} [get_ports row19_tot_clk]
+
 #ldc_set_location -site {K18} [get_ports meb_diff_spare_in]
 #ldc_set_location -site {M10} [get_ports meb_gps_pps]
 #ldc_set_location -site {Y8} [get_ports meb_hold]
@@ -218,6 +245,7 @@ ldc_set_location -site {M21} [get_ports row19_ts_clk]
 #ldc_set_location -site {P10} [get_ports {meb_spare_out[1]}]
 #ldc_set_location -site {L20} [get_ports {meb_spare_in[0]}]
 #ldc_set_location -site {J20} [get_ports {meb_spare_in[1]}]
+
 ldc_set_location -site {D22} [get_ports ftdi_tx]
 ldc_set_location -site {D21} [get_ports ftdi_rx]
 ldc_set_location -site {L9} [get_ports ext_spi_mosi]
@@ -245,6 +273,7 @@ ldc_set_location -site {J13} [get_ports watchdog]
 ldc_set_location -site {D19} [get_ports rstn]
 #ldc_set_location -site {K6} [get_ports internal_pps_clk]
 ldc_set_location -site {M22} [get_ports sysclk_100]
+
 #INPUTS
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=NA} [get_ports row0_spi_miso[0]]
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=NA} [get_ports row1_spi_miso]
@@ -278,7 +307,7 @@ ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=NA} [get_ports ftdi_tx]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row0_spi_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row1_spi_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row2_spi_clk]
-ldc_set_port -iobuf {DRIVE=50RS IO_TYPE=LVCMOS18} [get_ports row3_spi_clk]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row3_spi_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row4_spi_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row5_spi_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row6_spi_clk]
@@ -299,12 +328,16 @@ ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row5_hold]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row6_hold]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row*_ts_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row*_reset]
+
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=8} [get_ports ftdi_rx]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports watchdog]
+
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports meb_int]
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports meb_spi_miso]
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports meb_spare_out*]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=8} [get_ports ftdi_rx]
+
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports dcdc_*_sync_mode]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports watchdog]
+
 #ldc_set_port -iobuf {IO_TYPE=LVDS} [get_ports row7_tot_clk]
 # HP fix
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row7_spi_mosi]
@@ -330,8 +363,7 @@ ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {row9_spi_miso[0]}]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {row9_spi_miso[1]}]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row9_ts_clk]
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row9_tot_clk]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row9_row12_inject]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row9_row12_reset]
+
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row10_spi_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row10_spi_cs]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row10_spi_mosi]
@@ -362,8 +394,7 @@ ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row13_hold]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports row13_int]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row13_ts_clk]
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row13_tot_clk]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row13_row16_inject]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row13_row16_reset]
+
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row14_spi_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18 DRIVE=50RS} [get_ports row14_spi_cs]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row14_spi_mosi]
@@ -393,10 +424,10 @@ ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {row17_spi_miso[1]}]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row17_spi_cs]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row17_spi_clk]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row17_spi_mosi]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS18H HDRIVE=50RS} [get_ports row17_hold]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row17_hold]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row17_ts_clk]
 #ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row17_tot_clk]
-ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row17_row20_inject]
+
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {row18_spi_miso[1]}]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports {row18_spi_miso[0]}]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H DRIVE=50RS} [get_ports row18_spi_clk]
@@ -463,6 +494,9 @@ ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports row4_row7_inject]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports row8_row11_inject]
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports row12_row15_inject]
 ldc_set_vcc -core 1
+
+
+
 ## Post Syn FIFO Constraints
 ## Constraints when Nexus HARD_IP is used
 set_max_delay -from [get_cells -hierarchical */*.FIFO16K_MODE_inst] -to [get_cells -hierarchical */*.full_r*.*_inst] -datapath_only 6.4
@@ -474,22 +508,127 @@ set_false_path -from [get_pins -hierarchical */*.FIFO16K_MODE_inst/FULL] -to [ge
 ldc_set_port -iobuf {IO_TYPE=LVCMOS18} [get_ports ext_spi_adc_miso]
 
 
-## 100Mhz Clocks
-create_clock -name {sysclk_100} -period 10 [get_ports sysclk_100]
-## SPI Clocks
-create_clock -name {ext_spi_clk} -period 166 [get_ports ext_spi_clk]
-#set_clock_uncertainty 0.225 [get_clocks] -to [get_clocks]
-#set_clock_uncertainty -setup 0.125 sysclk_100
-## Resets and Falsepath inputs
+
+## Resets falsepath
 set_false_path -from [get_ports rstn]
-set_false_path -to [get_ports {ext_spi_adc_csn[2] ext_spi_adc_csn[1] ext_spi_adc_csn[0]}]
-set_false_path -from [get_ports row*]
-set_false_path -to [get_ports row*]
-set_output_delay -clock [get_clocks ext_spi_clk] -min 15 [get_ports ext_spi_mosi]
-set_output_delay -clock [get_clocks ext_spi_clk] -max 15 [get_ports ext_spi_mosi]
-set_input_delay -clock [get_clocks ext_spi_clk] -clock_fall -min 15 [get_ports ext_spi_adc_miso]
-set_input_delay -clock [get_clocks ext_spi_clk] -clock_fall -max 15 [get_ports ext_spi_adc_miso]
-set_clock_uncertainty -setup 0.125 [get_clocks sysclk_100]
+
+
+
+
+################# target-certusnx-fee/pll
+
+set device "LFCPNX-100"
+set device_int "jd5d80"
+set package "BBG484"
+set package_int "BBG484"
+set speed "7_High-Performance_1.0V"
+set speed_int "10"
+set operation "Automotive"
+set family "LFCPNX"
+set architecture "jd5d00"
+set partnumber "LFCPNX-100-7BBG484A"
+set WRAPPER_INST "lscc_pll_inst"
+set INTFBKDEL_SEL "DISABLED"
+set PMU_WAITFORLOCK "ENABLED"
+set REF_OSC_CTRL "3P2"
+set REF_COUNTS "0000"
+set EN_REFCLK_MON 0
+set FVCO 1560.000000
+set CLKI_FREQ 100.000000
+set CLKI_DIVIDER_ACTUAL_STR "5"
+set FRAC_N_EN 0
+set FBK_MODE "INTCLKOP"
+set FBCLK_DIVIDER_ACTUAL_STR "3"
+set SSC_N_CODE_STR "0b000000011"
+set SSC_F_CODE_STR "0b000000000000000"
+set SS_EN 0
+set SSC_PROFILE "DOWN"
+set SSC_TBASE_STR "0b000000000000"
+set SSC_STEP_IN_STR "0b0000000"
+set SSC_REG_WEIGHTING_SEL_STR "0b000"
+set CLKOP_BYPASS 0
+set ENCLKOP_EN 0
+set CLKOP_FREQ_ACTUAL 60.000000
+set CLKOP_PHASE_ACTUAL 0.000000
+set DIVOP_ACTUAL_STR "25"
+set DELA "25"
+set PHIA "0"
+set TRIM_EN_P 0
+set CLKOP_TRIM_MODE "Falling"
+set CLKOP_TRIM "0b0000"
+set CLKOS_EN 1
+set CLKOS_BYPASS 0
+set ENCLKOS_EN 0
+set CLKOS_FREQ_ACTUAL 30.000000
+set CLKOS_PHASE_ACTUAL 0.000000
+set DIVOS_ACTUAL_STR "51"
+set DELB "51"
+set PHIB "0"
+set TRIM_EN_S 0
+set CLKOS_TRIM_MODE "Falling"
+set CLKOS_TRIM "0b0000"
+set CLKOS2_EN 0
+set CLKOS2_BYPASS 0
+set ENCLKOS2_EN 0
+set CLKOS2_FREQ_ACTUAL 100.000000
+set CLKOS2_PHASE_ACTUAL 0.000000
+set DIVOS2_ACTUAL_STR "7"
+set DELC "7"
+set PHIC "0"
+set CLKOS3_EN 0
+set CLKOS3_BYPASS 0
+set ENCLKOS3_EN 0
+set CLKOS3_FREQ_ACTUAL 100.000000
+set CLKOS3_PHASE_ACTUAL 0.000000
+set DIVOS3_ACTUAL_STR "7"
+set DELD "7"
+set PHID "0"
+set CLKOS4_EN 0
+set CLKOS4_BYPASS 0
+set ENCLKOS4_EN 0
+set CLKOS4_FREQ_ACTUAL 100.000000
+set CLKOS4_PHASE_ACTUAL 0.000000
+set DIVOS4_ACTUAL_STR "7"
+set DELE "7"
+set PHIE "0"
+set CLKOS5_EN 0
+set CLKOS5_BYPASS 0
+set ENCLKOS5_EN 0
+set CLKOS5_FREQ_ACTUAL 100.000000
+set CLKOS5_PHASE_ACTUAL 0.000000
+set DIVOS5_ACTUAL_STR "7"
+set DELF "7"
+set PHIF "0"
+set PLL_REFCLK_FROM_PIN 1
+set IO_TYPE "LVCMOS18"
+set DYN_PORTS_EN 0
+set PLL_RST 1
+set LOCK_EN 1
+set PLL_LOCK_STICKY 0
+set LMMI_EN 0
+set APB_EN 0
+set APB_SOFT_REG_EN 0
+set LEGACY_EN 0
+set POWERDOWN_EN 1
+set IPI_CMP "0b1100"
+set CSET "8P"
+set CRIPPLE "1P"
+set IPP_CTRL "0b0110"
+set IPP_SEL "0b1111"
+set BW_CTL_BIAS "0b1111"
+set V2I_PP_RES "9K"
+set KP_VCO "0b00011"
+set V2I_KVCO_SEL "60"
+set V2I_1V_EN "ENABLED"
+
+set CLK_PERIOD [expr {double(round(1000000/$CLKI_FREQ))/1000}]
+
+
+# # IO_TYPE constraint - Refclk
+# if {$PLL_REFCLK_FROM_PIN} {
+#   ldc_set_port -iobuf IO_TYPE=$IO_TYPE [get_ports sysclk_100]
+# }
+
 
 
 ################## target-certusnx-fee/fifo_2clk_64x8
@@ -645,3 +784,53 @@ if { $radiant(stage) == "premap" } {
     }
 
 }
+
+
+
+create_clock -name {sysclk_100} -period 10 [get_ports sysclk_100]
+set_clock_uncertainty -setup 0.125 [get_clocks sysclk_100]
+
+create_generated_clock -name {clk_core} -source [get_ports sysclk_100] -multiply_by 3 -divide_by 5 [get_pins {astep24_20l_top_I/clocking_reset_I/top_clocking_core_io_uart/lscc_pll_inst/gen_no_refclk_mon.u_PLL.PLL_inst/CLKOP }] 
+create_generated_clock -name {clk_uart} -source [get_ports sysclk_100] -multiply_by 3 -divide_by 10 [get_pins {astep24_20l_top_I/clocking_reset_I/top_clocking_core_io_uart/lscc_pll_inst/gen_no_refclk_mon.u_PLL.PLL_inst/CLKOS }] 
+set_clock_uncertainty -setup 0.125 [get_clocks clk_core]
+set_clock_uncertainty -setup 0.125 [get_clocks clk_uart]
+
+create_generated_clock -name {layers_spi_divided} -source [get_pins {astep24_20l_top_I/clocking_reset_I/top_clocking_core_io_uart/lscc_pll_inst/gen_no_refclk_mon.u_PLL.PLL_inst/CLKOP }]  -divide_by 3 [get_pins -hierarchical */spi_layers_ckdivider_divided_clk*]
+set numberOfLayerClocks 20
+for {set i 0} {$i < $numberOfLayerClocks} {incr i} {
+    create_generated_clock -name spi_layer${i}_clock_out -source [get_pins -hierarchical */spi_layers_ckdivider_divided_clk*] -divide_by 1 [get_ports row${i}_spi_clk]
+}
+
+
+
+### Layer SPI delays, assume maximum 20 Mhz (50ns) - reserve 75% of period
+set layer_spi_min_period 50
+set layer_spi_io_delay [expr $layer_spi_min_period * 0.5 + 4]
+
+
+## Layers SPI Constraints
+for {set i 0} {$i < $numberOfLayerClocks} {incr i} {
+
+
+        set_false_path -through [get_ports row${i}_spi_cs ]
+        #set_false_path -through [get_ports [list layer_${i}_inj layer_${i}_resn] ]
+ 
+        set_output_delay $layer_spi_io_delay -max -clock spi_layer${i}_clock_out     [get_ports row${i}_spi_mosi ]
+        set_output_delay 2 -min -clock spi_layer${i}_clock_out                      [get_ports row${i}_spi_mosi ]
+       
+        set_input_delay  30 -max -clock spi_layer${i}_clock_out                      [get_ports row${i}_spi_miso* ] -clock_fall
+        set_input_delay  17 -min -clock spi_layer${i}_clock_out                     [get_ports row${i}_spi_miso* ] -clock_fall
+
+
+
+}
+
+set layer_adc_min_period 50
+set layer_adc_io_delay [expr $layer_adc_min_period * 0.5 + 4]
+create_generated_clock -name {hk_spi_divided} -source [get_pins {astep24_20l_top_I/clocking_reset_I/top_clocking_core_io_uart/lscc_pll_inst/gen_no_refclk_mon.u_PLL.PLL_inst/CLKOP }] -divide_by 4 [get_pins -hierarchical */spi_hk_ckdivider_divided_clk*]
+set_false_path -through [get_ports {ext_spi_adc_csn*} ]
+set_output_delay -max -clock hk_spi_divided 10     [get_ports {ext_spi_mosi}  ]
+set_output_delay -min -clock hk_spi_divided -10                       [get_ports {ext_spi_mosi}]
+
+set_input_delay  -max -clock hk_spi_divided  25 + 17                      [get_ports ext_spi_adc_miso ]
+set_input_delay  -min -clock hk_spi_divided  25 -4                     [get_ports ext_spi_adc_miso ]

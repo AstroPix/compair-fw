@@ -250,11 +250,11 @@ module compair_fpga_top(
 	    
 
 	
-    assign row0_row3_reset = row0_resn || row1_resn || row2_resn || row3_resn;
-    assign row4_row7_reset = row4_resn || row5_resn || row6_resn || row7_resn;
-    assign row8_row11_reset = row8_resn || row9_resn || row10_resn || row11_resn;
-    assign row12_row15_reset = row12_resn || row13_resn || row14_resn || row15_resn;
-    assign row16_row19_reset = row16_resn || row17_resn || row18_resn || row19_resn;
+    assign row0_row3_reset = row0_resn;
+    assign row4_row7_reset = row0_resn;
+    assign row8_row11_reset = row0_resn;
+    assign row12_row15_reset = row0_resn;
+    assign row16_row19_reset = row0_resn;
 
     // Module Instance
     // verilator lint_off DECLFILENAME 
