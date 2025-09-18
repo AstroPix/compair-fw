@@ -171,8 +171,8 @@ async def main(args):
         raise e
 
     # Set multi-pix injection chip
-    if args.confOverride:
-        boardDriver.asics[1].asic_config["config_3"] = boardDriver.asics[1].asic_config["config_4"]
+    # if args.confOverride:
+    #     boardDriver.getLaneConfig(1).asic_config["config_3"] = boardDriver.getLaneConfig(1).asic_config["config_4"]
 
     logger.info(f"{len(boardDriver.asics)} ASIC drivers instanciated.")
     # Setup / configure injection
@@ -197,23 +197,25 @@ async def main(args):
         logger.debug("enable analog")
         boardDriver.asics[args.analog[0]].enable_ampout_col(args.analog[1], args.analog[2], inplace=False)
 
-    await printStatus(boardDriver)
-    #for lane in range(20): await boardDriver.zeroLaneWrongLength(lane, flush=True)
+    # await printStatus(boardDriver)
+    # for lane in range(20): await boardDriver.zeroLaneWrongLength(lane, flush=True)
 
     await boardDriver.disableLanesReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
     #await boardDriver.resetLanes()#Toggle RST with next firmware
+    print("Reset chips")
     for lane in range(20):
-        await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+        await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
     time.sleep(0.5)
     for lane in range(20):
-        await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
-
+        await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    time.sleep(1)
     # Set chip IDs
+    print("Set chip ID")
     for lane in args.lanes:
         await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
         await boardDriver.asics[lane].writeSPIRoutingFrame(0)
         await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
-    
+    # return
     for i in range(max(args.chipsPerLane)):
         await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
         for j, lane in enumerate(args.lanes):

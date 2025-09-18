@@ -202,6 +202,8 @@ class BoardDriver():
         regval =  await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
         if reset is True: regval |= (1<<1)
         else: regval &= ~(1<<1)
+        # if reset is True: regval &= ~(1<<1)
+        # else: regval |= (1<<1)
         if hold is True: regval |= 1 
         else:  regval &= 0XFE
         # Autoread is "disable" in config, so True here means False in the register
@@ -213,36 +215,44 @@ class BoardDriver():
         else: regval &= ~(1<<4)
         await getattr(self.rfg, f"write_layer_{lane}_cfg_ctrl")(regval,flush)
 
-    async def resetLanes(self, waitTime: float = 0.5, flush=True):
-        """Reset all lanes because the reset line is shared.
+    # async def resetLanes(self, waitTime: float = 0.5, flush=True):
+    #     """Reset all lanes because the reset line is shared.
 
-        Args:
-            waitTime (float):  Reset duration - Default 0.5s
-        """
-        lane0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
-        lane0Cfg |= (1<<1)
-        await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
-        await asyncio.sleep(waitTime)
-        lane0Cfg &= ~(1<<1)
-        await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
+    #     Args:
+    #         waitTime (float):  Reset duration - Default 0.5s
+    #     """
+    #     lane0Cfg = await self.rfg.read_layer_0_cfg_ctrl()
+    #     lane0Cfg |= (1<<1)
+    #     await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
+    #     await asyncio.sleep(waitTime)
+    #     lane0Cfg &= ~(1<<1)
+    #     await self.rfg.write_layer_0_cfg_ctrl(lane0Cfg,flush)
 
     async def holdLane(self, lane:int, hold:bool, flush:bool = False):
         """
         Set Hold to active/inactive for a lane
         """
         ctrl = await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
-        if hold: ctrl |= (1 << 3) 
-        else: ctrl &= ~(1 << 3)
+        if hold: ctrl |= 1 
+        else: ctrl &= 0XFE
         await getattr(self.rfg, f"write_layer_{lane}_cfg_ctrl")(ctrl,flush=flush)
+        # ctrl = await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
+        # if hold: ctrl |= (1 << 3) 
+        # else: ctrl &= ~(1 << 3)
+        # await getattr(self.rfg, f"write_layer_{lane}_cfg_ctrl")(ctrl,flush=flush)
 
     async def setLaneCS(self, lane:int, cs:bool = True, flush:bool = True):
         """
         Set CS to active/inactive for a lane
         """
         ctrl = await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
-        if cs: ctrl |= 1 
-        else: ctrl &= 0XFE
+        if cs: ctrl |= (1 << 3) 
+        else: ctrl &= ~(1 << 3)
         await getattr(self.rfg, f"write_layer_{lane}_cfg_ctrl")(ctrl,flush=flush)
+        # ctrl = await getattr(self.rfg, f"read_layer_{lane}_cfg_ctrl")()
+        # if cs: ctrl |= 1 
+        # else: ctrl &= 0XFE
+        # await getattr(self.rfg, f"write_layer_{lane}_cfg_ctrl")(ctrl,flush=flush)
 
     async def enableLanesReadout(self, lanelst:list, autoread:bool, flush:bool = False):
         """
@@ -268,7 +278,8 @@ class BoardDriver():
          - Disable autoread, chipselect and MISO
         """
         for lane in range(20):
-            await self.setLaneConfig(lane=lane, hold=True, reset=False, autoread=False, chipSelect=False, disableMISO=True, flush=flush)
+            await self.setLaneConfig(lane=lane, hold=True, reset=False, autoread=False, chipSelect=False, disableMISO=True, flush=False)
+        await self.rfg.flush()
 
 #    async def writeLaneBytes(self,lane : int , bytes: bytearray,flush:bool = False):
 #        await getattr(self.rfg, f"write_layer_{lane}_mosi_bytes")(bytes,flush)

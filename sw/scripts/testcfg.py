@@ -66,6 +66,39 @@ async def main(args):
     await boardDriver.configureLaneSPIDivider(120, flush = True)
     #await boardDriver.rfg.write_lanes_cfg_nodata_continue(value=8, flush=True) only used in readout, early modification
     print("Instanciate ASIC drivers ...")
+
+    # Test RST
+    # for _ in range(5):
+    #     for lane in range(20):
+    #         await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    #     time.sleep(0.5)
+    #     for lane in range(20):
+    #         await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+
+    # Test Hold/CS
+    # for lane in range(15,18):
+    #     print(f"Lane {lane}")
+    #     for _ in range(5):
+    #         await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    #         time.sleep(.1)
+    #         await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    #         time.sleep(.1)
+    #     time.sleep(1)
+    for lane in range(15,18):
+        print(f"Lane {lane}")
+        for _ in range(5):
+            await boardDriver.setLaneCS(lane, cs=True, flush=True)
+            time.sleep(.1)
+            await boardDriver.setLaneCS(lane, cs=False, flush=True)
+            time.sleep(.1)
+        for _ in range(5):
+            await boardDriver.holdLane(lane, hold=True, flush=True)
+            time.sleep(.1)
+            await boardDriver.holdLane(lane, hold=False, flush=True)
+            time.sleep(.1)
+        time.sleep(1)
+    return
+
     # Configure chips in memory
     pathdelim = os.path.sep #determine if Mac or Windows separators in path name
     ymlpath = [os.getcwd()+pathdelim + "sw" + pathdelim+"scripts"+pathdelim+"config"+pathdelim+ y +".yml" for y in args.yaml] # Define YAML path variables
