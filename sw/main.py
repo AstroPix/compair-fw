@@ -202,13 +202,16 @@ async def main(args):
 
     await boardDriver.disableLanesReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
     #await boardDriver.resetLanes()#Toggle RST with next firmware
-    print("Reset chips")
-    for lane in range(20):
-        await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    await boardDriver.setLaneConfig(0, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
     time.sleep(0.5)
-    for lane in range(20):
-        await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
-    time.sleep(1)
+    await boardDriver.setLaneConfig(0, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    # print("Reset chips")
+    # for lane in range(20):
+    #     await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    # time.sleep(0.5)
+    # for lane in range(20):
+    #     await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    # time.sleep(1)
     # Set chip IDs
     print("Set chip ID")
     for lane in args.lanes:
