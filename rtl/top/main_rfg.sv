@@ -1,3 +1,5 @@
+`include "build_info.sv"
+
 module main_rfg(
     // IO
     // RFG R/W Interface,
@@ -1262,7 +1264,7 @@ module main_rfg(
     always@(posedge clk) begin
         if (!resn) begin
             hk_firmware_id_reg <= 32'h0000ff00;
-            hk_firmware_version_reg <= 32'd2024112001;
+            hk_firmware_version_reg <= `BUILD_YMDH;
             hk_xadc_temperature_reg <= 0;
             hk_xadc_vccint_reg <= 0;
             hk_conversion_trigger_reg <= 0;
