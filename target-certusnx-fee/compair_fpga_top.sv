@@ -176,6 +176,28 @@ module compair_fpga_top(
         output wire row18_ts_clk,
         output wire row19_ts_clk,
 
+        output wire row0_tot_clk,
+        output wire row1_tot_clk,
+        output wire row2_tot_clk,
+        output wire row3_tot_clk,
+        output wire row4_tot_clk,
+        output wire row5_tot_clk,
+        output wire row6_tot_clk,
+        output wire row7_tot_clk,
+        output wire row8_tot_clk,
+        output wire row9_tot_clk,
+        output wire row10_tot_clk,
+        output wire row11_tot_clk,
+        output wire row12_tot_clk,
+        output wire row13_tot_clk,
+        output wire row14_tot_clk,
+        output wire row15_tot_clk,
+        output wire row16_tot_clk,
+        output wire row17_tot_clk,
+        output wire row18_tot_clk,
+        output wire row19_tot_clk,
+
+
         output wire row0_row3_inject,
         output wire row4_row7_inject,
         output wire row8_row11_inject,
@@ -196,6 +218,31 @@ module compair_fpga_top(
 	output wire             ext_spi_mosi
 
 );
+
+    wire clk_sample_ungated;
+    wire clk_sample;
+    wire io_ctrl_sample_clock_enable;
+    assign clk_sample = io_ctrl_sample_clock_enable  & clk_sample_ungated;    
+    assign row0_tot_clk = clk_sample;
+    assign row1_tot_clk = clk_sample;
+    assign row2_tot_clk = clk_sample;
+    assign row3_tot_clk = clk_sample;
+    assign row4_tot_clk = clk_sample;
+    assign row5_tot_clk = clk_sample;
+    assign row6_tot_clk = clk_sample;
+    assign row7_tot_clk = clk_sample;
+    assign row8_tot_clk = clk_sample;
+    assign row9_tot_clk = clk_sample;
+    assign row10_tot_clk = clk_sample;
+    assign row11_tot_clk = clk_sample;
+    assign row12_tot_clk = clk_sample;
+    assign row13_tot_clk = clk_sample;
+    assign row14_tot_clk = clk_sample;
+    assign row15_tot_clk = clk_sample;
+    assign row16_tot_clk = clk_sample;
+    assign row17_tot_clk = clk_sample;
+    assign row18_tot_clk = clk_sample;
+    assign row19_tot_clk = clk_sample;
 
     wire clk_timestamp_ungated;
     wire clk_timestamp;
@@ -261,7 +308,7 @@ module compair_fpga_top(
     // verilator lint_off UNDRIVEN
     astep24_20l_top  astep24_20l_top_I(
         .sysclk(sysclk_100),
-        .clk_sample(clk_sample),
+        .clk_sample(clk_sample_ungated),
         .clk_timestamp(clk_timestamp_ungated),
         
         .warm_resn(rstn), // Warm reset either from IO or a local button
@@ -467,7 +514,7 @@ module compair_fpga_top(
         .gecco_sr_ctrl_sin(),
         .gecco_sr_ctrl_ld(),
 
-        .io_ctrl_sample_clock_enable(),
+        .io_ctrl_sample_clock_enable(io_ctrl_sample_clock_enable),
         .io_ctrl_timestamp_clock_enable(io_ctrl_timestamp_clock_enable),
         .io_ctrl_gecco_sample_clock_se(),
         .io_ctrl_gecco_inj_enable(),
