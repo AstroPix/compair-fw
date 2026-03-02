@@ -291,8 +291,8 @@ module compair_fpga_top(
     //assign sysclk_100_dbg = sysclk_100;
     assign dcdc_d3p3_sync_mode = row5_int;
     assign dcdc_d1p8_sync_mode = row5_spi_cs;
-	assign dcdc_d1p0_sync_mode = row5_spi_clk;
-    assign dcdc_a1p8_sync_mode = row5_spi_miso[1];
+    assign dcdc_d1p0_sync_mode = row5_spi_clk;
+    assign dcdc_a1p8_sync_mode =  row5_spi_miso[1];
     assign dcdc_a1p2_sync_mode = row5_spi_miso[0];
 	    
 
