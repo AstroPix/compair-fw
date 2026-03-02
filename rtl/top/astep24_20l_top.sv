@@ -285,7 +285,7 @@ module astep24_20l_top(
         .warm_resn_in(warm_resn),
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
-        .clk_sample(),
+        .clk_sample(clk_sample),
         .clk_timestamp(),
         .clk_uart(clk_uart),
         .clk_uart_resn(clk_uart_resn)
