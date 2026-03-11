@@ -45,7 +45,7 @@ SPI_HEADER_SR       = 0b011 << 5
 class Asic():
     """Configure ASIC"""
 
-    def __init__(self,rfg , row : int = 0, srRegisterName : str = "LAYERS_SR_OUT") -> None:
+    def __init__(self,rfg , lane : int = 0, srRegisterName : str = "LAYERS_SR_OUT") -> None:
         
         
         self._chipversion = None
@@ -60,8 +60,8 @@ class Asic():
 
         ## Added 09/23 Richard
         self.rfg = rfg
-        self.row = row  ## Row ID used to send the bytes to the right firmware interface
-        self.rfgSRRegisterName = "LAYERS_SR_OUT"
+        self.lane = lane  ## Lane number used to send the bytes to the right firmware interface
+        self.rfgSRRegisterName = srRegisterName
 
 
     @property
@@ -131,6 +131,10 @@ class Asic():
     @num_chips.setter
     def num_chips(self, chips):
         self._num_chips = chips
+
+
+    def interrupt_pushpull(self,chip:int,enable:bool):
+        self.asic_config[f'config_{chip}']['digitalconfig']['interrupt_pushpull'][1] = 0 if enable is False else 1
 
     def enable_inj_row(self, chip:int, row: int, inplace:bool=False):
         """
@@ -284,13 +288,12 @@ class Asic():
         
         # Get Chain settings
         try:
-            self.num_chips_yml = dict_from_yml[self.chip].get('chain')['length']
-            self.num_chips_yml = self.num_chips
-            logger.info("%s%d  Configuration file with %d chips found!", self.chipname, self.chipversion, self.num_chips_yml)
+            self._num_chips = dict_from_yml[self.chip].get('chain')['length']
+            logger.info("%s%d  Configuration file with %d chips found!", self.chipname, self.chipversion, self._num_chips)
         except (KeyError, TypeError):
             logger.debug("%s%d DaisyChain Length config not found!", self.chipname, self.chipversion)
-            logger.debug("Use %s%d DaisyChain Length %i from chipsPerRow run parameter", self.chipname, self.chipversion, self.num_chips)
-        
+            logger.debug("Use %s%d DaisyChain Length %i from chipsPerRow run parameter", self.chipname, self.chipversion, self._num_chips)
+        logger.info("%s%d Number of chips in chain: %d ", self.chipname, self.chipversion, self._num_chips)
  
         # Get chip geometry
         try:
@@ -303,7 +306,7 @@ class Asic():
             #sys.exit(1)
 
         # Get chip configs
-        for chip_number in range(self.num_chips_yml):
+        for chip_number in range(self._num_chips):
             try:
                 self.asic_config[f'config_{chip_number}'] = dict_from_yml.get(self.chip)[f'config_{chip_number}']
                 logger.info("Chain chip_%d config found!", chip_number)
@@ -312,37 +315,38 @@ class Asic():
                 sys.exit(1)
 
 
-    def gen_config_vector(self, msbfirst: bool = False) -> BitArray:
-        """
-        Generate asic bitvector from digital, bias and dacconfig
+#    def gen_config_vector_SR(self, msbfirst: bool = False) -> BitArray:
+#        """
+#        Generate asic bitvector from digital, bias and dacconfig
+#        For use with SR configuration
+#
+#        :param msbfirst: Send vector MSB first
+#        """
+#        bitvector = BitArray()
+#
+#        for chip in range(self._num_chips-1, -1, -1): #configure far end of daisy chain first
+#            chipBitvector = BitArray()
+#            for key in self.asic_config[f'config_{chip}']:
+#                for values in self.asic_config[f'config_{chip}'][key].values():
+#                    if(key=='vdacs'):
+#                        bitvector_vdac_reversed = BitArray(self.__int2nbit(values[1], values[0]))
+#                        bitvector_vdac_reversed.reverse()
+#                        chipBitvector.append(bitvector_vdac_reversed)
+#                    else:
+#                        chipBitvector.append(self.__int2nbit(values[1], values[0]))
+#        
+#            if not msbfirst:
+#                chipBitvector.reverse()
+#
+#            bitvector.append(chipBitvector)
+#
+#            logger.info("Generated chip_%d config successfully!", chip)
+#
+#        logger.debug(bitvector)
+#
+#        return bitvector 
 
-        :param msbfirst: Send vector MSB first
-        """
-        bitvector = BitArray()
-
-        for chip in range(self.num_chips-1, -1, -1): #configure far end of daisy chain first
-            chipBitvector = BitArray()
-            for key in self.asic_config[f'config_{chip}']:
-                for values in self.asic_config[f'config_{chip}'][key].values():
-                    if(key=='vdacs'):
-                        bitvector_vdac_reversed = BitArray(self.__int2nbit(values[1], values[0]))
-                        bitvector_vdac_reversed.reverse()
-                        chipBitvector.append(bitvector_vdac_reversed)
-                    else:
-                        chipBitvector.append(self.__int2nbit(values[1], values[0]))
-        
-            if not msbfirst:
-                chipBitvector.reverse()
-
-            bitvector.append(chipBitvector)
-
-            logger.info("Generated chip_%d config successfully!", chip)
-
-        logger.debug(bitvector)
-
-        return bitvector 
-
-    def gen_config_vectorv2(self, msbfirst: bool = False,targetChip:int = -1) -> BitArray:
+    def gen_config_vector_SPI(self, msbfirst: bool = False,targetChip:int = -1) -> BitArray:
         """
         Generate asic bitvector from digital, bias and dacconfig
 
@@ -351,8 +355,8 @@ class Asic():
         """
         bitvector = BitArray()
 
-        if targetChip==-1 and self.num_chips > 1:
-            for chip in range(self.num_chips-1, -1, -1):
+        if targetChip==-1 and self._num_chips > 1:
+            for chip in range(self._num_chips-1, -1, -1):
                 chipBitvector = BitArray()
                 for key in self.asic_config[f'config_{chip}']:
                     for values in self.asic_config[f'config_{chip}'][key].values():
@@ -373,7 +377,7 @@ class Asic():
         ## Create config for a single chip
         ## This can be if the config is single chip, or for multichip if we want the bits or a single chip, for example when writing SPI config to a certain chip
         else:
-            configSource = self.asic_config[f'config_{targetChip}'] #if (self.num_chips>1) else self.asic_config    
+            configSource = self.asic_config[f'config_{targetChip}'] #if (self._num_chips>1) else self.asic_config    
             for key in configSource:
                 for values in configSource[key].values():
                     #bitvector.append(self.__int2nbit(values[1], values[0]))
@@ -389,127 +393,56 @@ class Asic():
 
         logger.debug(bitvector)
 
-        return bitvector    
+        return bitvector     
 
-    def gen_config_vectorv2_AS(self, msbfirst: bool = False, targetChip:int = -1) -> BitArray:
-        """
-        Generate asic bitvector from digital, bias and dacconfig
-
-        :param msbfirst: Send vector MSB first
-        :param targetChip: Returns only the bits for the selected Astropix - if set to -1, returns for all the Astropix - no effect if the configuration is not multichip
-        """
-        bitvector = BitArray()
-
-        """
-        #if targetChip==-1 and self.num_chips > 1:
-
-        for chip in range(self.num_chips-1, -1, -1):
-            chipBitvector = BitArray()
-            for key in self.asic_config[f'config_{chip}']:
-                for values in self.asic_config[f'config_{chip}'][key].values():
-                    if(key=='vdacs'):
-                        bitvector_vdac_reversed = BitArray(self.__int2nbit(values[1], values[0]))
-                        bitvector_vdac_reversed.reverse()
-                        chipBitvector.append(bitvector_vdac_reversed)
-                    else:
-                        chipBitvector.append(self.__int2nbit(values[1], values[0]))
-
-            logger.info("Generated chip_%d config successfully!", chip)
-        
-            if not msbfirst:
-                chipBitvector.reverse()
-
-            bitvector.append(chipBitvector)
-            """
-        
-        chipBitvector = BitArray()
-        for key in self.asic_config[f'config_{targetChip}']:
-            for values in self.asic_config[f'config_{targetChip}'][key].values():
-                if(key=='vdacs'):
-                    bitvector_vdac_reversed = BitArray(self.__int2nbit(values[1], values[0]))
-                    bitvector_vdac_reversed.reverse()
-                    chipBitvector.append(bitvector_vdac_reversed)
-                else:
-                    chipBitvector.append(self.__int2nbit(values[1], values[0]))
-
-        logger.info("Generated chip_%d config successfully!", targetChip)
-    
-        if not msbfirst:
-            chipBitvector.reverse()
-
-        bitvector.append(chipBitvector)
-
-        """
-        ## Create config for a single chip
-        ## This can be if the config is single chip, or for multichip if we want the bits or a single chip, for example when writing SPI config to a certain chip
-        else:
-            configSource = self.asic_config[f'config_{targetChip}'] if (self.num_chips>1) else self.asic_config    
-            for key in configSource:
-                for values in configSource[key].values():
-                    #bitvector.append(self.__int2nbit(values[1], values[0]))
-                    if(key=='vdacs'):
-                        bitvector_vdac_reversed = BitArray(self.__int2nbit(values[1], values[0]))
-                        bitvector_vdac_reversed.reverse()
-                        bitvector.append(bitvector_vdac_reversed)
-                    else:
-                        bitvector.append(self.__int2nbit(values[1], values[0]))
-
-            if not msbfirst:
-                bitvector.reverse()
-        """
-
-        logger.debug(bitvector)
-
-        return bitvector    
-
- 
-    ## SR Update
-    async def writeConfigSR(self,ckdiv = 8 , limit : int | None = None ):
-        """This method writes the Config bits through the register file bits (SIN,CK1,CK2, LOAD)
-        
-        Args:
-            ckdiv(int) : Repeats the write for ck1/ck2/load ckdiv times to strech the signal. Set this value higher for faster software interface
-            limit(int) : Only write limit bits to SR - Mostly useful in simulation to limit runtime which checking the I/O are correctly driven
-        """
-        ## Generate Bit vector for config 
-        bits = self.gen_config_vector(msbfirst = False)
-        if limit is not None: 
-            bits = bits[:limit]
-
-        logger.info("Writing SR Config for row=%d,len=%d",self.row,len(bits))
-
-        ## Find target register to write to for IO 
-        targetRegister = self.rfg.Registers[self.rfgSRRegisterName]
-
-        ## Write to SR using register
-        for bit in bits: 
+#
+#    ## SR Update
+#    async def writeConfigSR(self,ckdiv = 8 , limit : int | None = None ):
+#        """This method writes the Config bits through the register file bits (SIN,CK1,CK2, LOAD)
+#        
+#        Args:
+#            ckdiv(int) : Repeats the write for ck1/ck2/load ckdiv times to strech the signal. Set this value higher for faster software interface
+#            limit(int) : Only write limit bits to SR - Mostly useful in simulation to limit runtime which checking the I/O are correctly driven
+#        """
+#        ## Generate Bit vector for config 
+#        bits = self.gen_config_vector_SR(msbfirst = False)
+#        if limit is not None: 
+#            bits = bits[:limit]
+#
+#        logger.info("Writing SR Config for row=%d,len=%d",self.row,len(bits))
+#
+#        ## Find target register to write to for IO 
+#        targetRegister = self.rfg.Registers[self.rfgSRRegisterName]
+#
+#        ## Write to SR using register
+#        for bit in bits: 
+#
+#
+#            # SIN (bit 3 in register)
+#            sinValue = (1 if bit == True else 0) << 2
+#            self.rfg.addWrite(register = targetRegister, value = sinValue, repeat = ckdiv) #ensure SIN has higher delay than CLK1 to avoid setup violation / incorrect sampling
+#
+#            # CK1
+#            self.rfg.addWrite(register = targetRegister, value = sinValue | 0x1 , repeat = ckdiv)
+#            self.rfg.addWrite(register = targetRegister, value = sinValue , repeat = ckdiv)
+#
+#            # CK2
+#            self.rfg.addWrite(register = targetRegister, value = sinValue | 0x2 , repeat = ckdiv)
+#            self.rfg.addWrite(register = targetRegister, value = sinValue , repeat = ckdiv)
+#            
+#        
+#        ## Set Load (loads start bit 4)
+#        self.rfg.addWrite(register = targetRegister, value = sinValue | (0x1 << (self.row +3)) , repeat = ckdiv)
+#        self.rfg.addWrite(register = targetRegister, value = 0 , repeat = ckdiv)
+#
+#
+#        await self.rfg.flush()
 
 
-            # SIN (bit 3 in register)
-            sinValue = (1 if bit == True else 0) << 2
-            self.rfg.addWrite(register = targetRegister, value = sinValue, repeat = ckdiv) #ensure SIN has higher delay than CLK1 to avoid setup violation / incorrect sampling
+    async def writeSPIRoutingFrame(self, firstChipID: int = 0x00):
+        await self.writeSPI([SPI_HEADER_ROUTING | firstChipID] + [0x00]*(self._num_chips-1)*4)
 
-            # CK1
-            self.rfg.addWrite(register = targetRegister, value = sinValue | 0x1 , repeat = ckdiv)
-            self.rfg.addWrite(register = targetRegister, value = sinValue , repeat = ckdiv)
-
-            # CK2
-            self.rfg.addWrite(register = targetRegister, value = sinValue | 0x2 , repeat = ckdiv)
-            self.rfg.addWrite(register = targetRegister, value = sinValue , repeat = ckdiv)
-            
-        
-        ## Set Load (loads start bit 4)
-        self.rfg.addWrite(register = targetRegister, value = sinValue | (0x1 << (self.row +3)) , repeat = ckdiv)
-        self.rfg.addWrite(register = targetRegister, value = 0 , repeat = ckdiv)
-
-
-        await self.rfg.flush()
-
-
-    async def writeSPIRoutingFrame(self):
-        await getattr(self.rfg, f"write_layer_{self.row}_mosi_bytes")([SPI_HEADER_ROUTING] + [0x00]*self._num_chips*4,True)
-
-    def createSPIConfigFramev2(self, load: bool = True, n_load: int = 10, broadcast: bool = False, targetChip: int = 0)  -> bytearray:
+    def createSPIConfigFrame(self, load: bool = True, n_load: int = 10, broadcast: bool = False, targetChip: int = 0, value=None)  -> bytearray:
         """
         "Converts the ASIC Config bits to the corresponding bytes to send via SPI
 
@@ -523,13 +456,12 @@ class Asic():
         :returns: SPI ASIC config pattern
         """
 
-        ## Generate Bit vector for config 
-        value = self.gen_config_vectorv2(msbfirst = False,targetChip = targetChip)
+        ## Generate Bit vector for config
+        if value is None:
+            value = self.gen_config_vector_SPI(msbfirst = False,targetChip = targetChip)
 
         # Number of Bytes to write
         #length = len(value) * 5 + 4
-
-        ##logger.info("SPI Write Asic Config")
         
 
         # Write SPI SR Command to set MUX
@@ -549,101 +481,46 @@ class Asic():
         if load:
             data.extend([SPI_SR_LOAD] * n_load)
 
-        # Append 4 Empty bytes per chip in the chip, to ensure the config frame is pushed completely through the chain
-        data.extend([SPI_EMPTY_BYTE] * ((self.num_chips-1) *4))
+        # Append 2 Empty bytes per chip in the chip, to ensure the config frame is pushed completely through the chain
+        data.extend([SPI_EMPTY_BYTE] * ((self._num_chips-1) *4))
 
 
         logger.debug("Length: %d\n Data (%db): %s\n", len(data), len(value), value)
 
         return data
+    
+    async def writeSPI(self, payload, timeout=1.):
+        """Writes the payload over SPI
+        :param payload: bytearray to be written (by chunks of 256 bytes)
+        :param timeout: maximum duration allowed for a single chunk
+        :raises: RuntimeError if a chunks times out
+        """
+        step  = 256
+        steps = int(math.ceil(len(payload)/step))
+        for chunk in range(0, len(payload), step):
+            chunkBytes = payload[chunk:chunk+step]
+
+            #if len(chunkBytes) != 256:
+            #    task = asyncio.create_task(asyncio.sleep(20))
+            #    await task
+            
+            logger.info("Writing Chunck %d/%d len=%d",(chunk/step+1),steps,len(chunkBytes))
+            await getattr(self.rfg, f"write_layer_{self.lane}_mosi_bytes")(chunkBytes,True)
+
+            # Wait for the current chunk to be written before sending the next one
+            maxtime = time.time()+timeout
+            while (await getattr(self.rfg, f"read_layer_{self.lane}_mosi_write_size")() > 0 and time.time() <= maxtime):
+                time.sleep(0.05)
+                #pass
+            #logger.info("Current MISO Write count=%d",await getattr(self.rfg, f"read_layer_{self.lane}_mosi_write_size")())
+            if time.time() > maxtime:
+                raise RuntimeError("Chunck {}/{} len={} timed out".format(int(chunk/step+1),steps,len(chunkBytes)))
 
 
-    async def writeConfigSPIv2(self, broadcast: bool = False, targetChip : int = 0 ):
+
+    async def writeConfigSPI(self, broadcast: bool = False, targetChip : int = 0 ):
         """Generate Config Shift Register bits, spi protocol bytes and send them"""
 
-        spiBytes = self.createSPIConfigFramev2(targetChip = targetChip , broadcast = broadcast)
-        logger.info("Writing SPI Config for chip %d,row=%d,len=%d",targetChip,self.row,len(spiBytes))
-
-        step  = 256
-        steps = int(math.ceil(len(spiBytes)/step))
-        for chunk in range(0, len(spiBytes), step):
-            chunkBytes = spiBytes[chunk:chunk+step]
-            logger.info("Writing Chunck %d/%d len=%d",(chunk/step+1),steps,len(chunkBytes))
-            await getattr(self.rfg, f"write_layer_{self.row}_mosi_bytes")(chunkBytes,True)
-
-            ## Sleep to give time for the FW to send the bytes, this will be better synchronised in the future
-            ## Must be improved
-            while (await getattr(self.rfg, f"read_layer_{self.row}_mosi_write_size")() > 0):
-                pass
-            #await asyncio.sleep(0.1)         
-            logger.info("Current MISO Write count=%d",await self.rfg.read_layer_0_mosi_write_size())
-
-
-    ## SPI outdated
-    #############
-
-    async def writeConfigSPI(self, targetChip : int = 0 ):
-        """Generate Config Shift Register bits, spi protocol bytes and send them"""
-
-        spiBytes = self.createSPIConfigFrame(targetChip = targetChip)
-        logger.info("Writing SPI Config for chip %d,row=%d,len=%d",targetChip,self.row,len(spiBytes))
-
-        step  = 256
-        steps = int(math.ceil(len(spiBytes)/step))
-        for chunk in range(0, len(spiBytes), step):
-            chunkBytes = spiBytes[chunk:chunk+step]
-            logger.info("Writing Chunck %d/%d len=%d",(chunk/step+1),steps,len(chunkBytes))
-            await getattr(self.rfg, f"write_layer_{self.row}_mosi_bytes")(chunkBytes,True)
-
-            ## Sleep to give time for the FW to send the bytes, this will be better synchronised in the future
-            ## Must be improved
-            await asyncio.sleep(0.1)         
-            logger.info("Current MISO Write count=%d",await self.rfg.read_layer_0_mosi_write_size())
-
-    def createSPIConfigFrame(self, load: bool = True, n_load: int = 10, broadcast: bool = False, targetChip: int = 0)  -> bytearray:
-        """
-        "Converts the ASIC Config bits to the corresponding bytes to send via SPI
-
-        :param value: Bytearray vector of config bits
-        :param load: Load signal
-        :param n_load: Length of load signal
-
-        :param broadcast: Enable Broadcast
-        :param targetChip: Set chipid if !broadcast
-
-        :returns: SPI ASIC config pattern
-        """
-
-        ## Generate Bit vector for config 
-        value = self.gen_config_vector(msbfirst = False)
-
-        # Number of Bytes to write
-        #length = len(value) * 5 + 4
-
-        ##logger.info("SPI Write Asic Config")
-        
-
-        # Write SPI SR Command to set MUX
-        if broadcast:
-            data = bytearray([SPI_SR_BROADCAST])
-        else:
-            data = bytearray([SPI_HEADER_SR | targetChip])
-
-        # data
-        for bit in value:
-
-            sin = SPI_SR_BIT1 if bit == 1 else SPI_SR_BIT0
-
-            data.append(sin)
-
-        # Append Load signal and empty bytes
-        if load:
-
-            data.extend([SPI_SR_LOAD] * n_load)
-
-            data.extend([SPI_EMPTY_BYTE] * n_load)
-
-
-        logger.debug("Length: %d\n Data (%db): %s\n", len(data), len(value), value)
-
-        return data
+        spiBytes = self.createSPIConfigFrame(targetChip = targetChip , broadcast = broadcast)
+        logger.info("Writing SPI Config for chip %d,lane=%d,len=%d",targetChip,self.lane,len(spiBytes))
+        await self.writeSPI(spiBytes)

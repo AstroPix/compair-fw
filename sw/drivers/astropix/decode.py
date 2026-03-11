@@ -2,7 +2,7 @@ import pandas as pd
 import logging
 logger = logging.getLogger(__name__)
 
-def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True):
+def decode_readout(self, readout:bytearray, i:int, printer: bool = True):
     #Decodes readout
     #Required argument:
     #readout: Bytearray - readout from sensor, not the printed Hex values
@@ -20,19 +20,17 @@ def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True)
     while b<len(readout):
         packet_len = int(readout[b])
         if packet_len>16:
-            logger.debug("Probably didn't find a hit here - go to next byte")
             b+=1
         else: #got a hit
             list_hits.append(readout[b:b+packet_len+1])
-            #logger.debug(f"found hit {binascii.hexlify(readout[b:b+packet_len+1])}")
             b += packet_len+1
 
     #decode hit contents
     for hit in list_hits:
         # Generates the values from the bitstream
         try:
-            pack_len  = int(hit[0])
-            layer       = int(hit[1])
+            pack_len    = int(hit[0])
+            lane        = int(hit[1])
             id          = int(hit[2]) >> 3
             payload     = int(hit[2]) & 0b111
             location    = int(hit[3])  & 0b111111
@@ -44,7 +42,7 @@ def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True)
             tot_us      = (tot_total * self.sampleclock_period_ns)/1000.0
             fpga_ts     = int.from_bytes(hit[7:11], 'little')
         except IndexError: #hit cut off at end of stream
-            packet_len, id, payload, location, col = -1, -1, -1, -1, -1
+            packet_len, lane, id, payload, location, col = -1, -1, -1, -1, -1, -1
             timestamp, tot_msb, tot_lsb, tot_total = -1, -1, -1, -1
             tot_us, fpga_ts = -1, -1
         
@@ -52,7 +50,7 @@ def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True)
         if printer:
             try:
                 print(
-                f"{i} Packet len: {pack_len}\t Layer ID: {layer}\n"
+                f"{i} Packet len: {pack_len}\t Layer ID: {lane}\n"
                 f"ChipId: {id}\tPayload: {payload}\t"
                 f"Location: {location}\tRow/Col: {'Col' if col else 'Row'}\t"
                 f"TS: {timestamp}\t"
@@ -63,7 +61,7 @@ def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True)
                 print(f"HIT TOO SHORT TO BE DECODED - {binascii.hexlify(hit)}")
             except UnboundLocalError:
                 print(f"Hit could not be decoded - likely missing a header\n\n"
-                f"{i} Packet len: {pack_len}\t Layer ID: {layer}\n"
+                f"{i} Packet len: {pack_len}\t Layer ID: {lane}\n"
                 f"ChipId: {id}\tPayload: {payload}\t"
                 f"Location: {location}\tRow/Col: {'Col' if col else 'Row'}\t"
                 f"TS: {timestamp}\t"
@@ -73,7 +71,7 @@ def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True)
         # hits are sored in dictionary form
         hits = {
             'readout': i,
-            'layer': layer,
+            'lane': lane,
             'chipID': id,
             'payload': payload,
             'location': location,
@@ -89,3 +87,4 @@ def decode_readout(self, logger, readout:bytearray, i:int, printer: bool = True)
 
         # Much simpler to convert to df in the return statement vs df.concat
         return pd.DataFrame(hit_list)
+

@@ -12,7 +12,7 @@ import rfg.core
 
 async def test_fpga():
     x = 115200
-    boardDriver = drivers.boards.getGeccoUARTDriver("COM17",baud=115200)
+    boardDriver = drivers.boards.getGeccoUARTDriver("COM10",baud=115200)
     #print('Open')
     await boardDriver.open()
     
@@ -25,7 +25,7 @@ async def test_fpga():
     await boardDriver.close()
 
 async def test_busbar():
-    boardDriver = drivers.boards.getGeccoUARTDriver("COM17",baud=115200)
+    boardDriver = drivers.boards.getGeccoUARTDriver("COM10",baud=115200)
     #print('Open')
     waitTime = 0.1
     await boardDriver.open()
@@ -35,24 +35,24 @@ async def test_busbar():
     await boardDriver.enableSensorClocks(True)
     await boardDriver.ioSetSampleClock(True)
     config_fname = "./verification/tb_full_astep/files/config_v3_mc_auto.yml"
-    await boardDriver.configureLayerSPIFrequency(1e6,flush=True)
-    await boardDriver.setLayerConfig(12,reset=False,autoread=False,hold=False,chipSelect=False,flush=True)
+    await boardDriver.configureLanesSPIFrequency(1e6,flush=True)
+    await boardDriver.setLaneConfig(12,reset=False,autoread=False,hold=False,chipSelect=False,flush=True)
     await asyncio.sleep(waitTime)
     await boardDriver.rfg.write_layer_12_mosi(int(3),flush=True)
     await asyncio.sleep(waitTime)
 
-    await boardDriver.setLayerReset(layer =12, reset = True , flush = True )
-    # for layer in range(13):
-    #     await boardDriver.setLayerReset(layer = layer, reset = True , flush = True )
+    await boardDriver.setLaneConfig(lane =12, reset = True, autoread=False, hold=False , flush = True )
+    # for lane in range(13):
+    #     await boardDriver.setLaneConfig(layer = layer, reset = True ,autoread=False, hold=False ,  flush = True )
         
     #     await asyncio.sleep(waitTime)
-    #     await boardDriver.setLayerReset(layer = layer, reset = False , flush = True )
+    #     await boardDriver.setLaneConfig(layer = layer, reset = False ,autoread=False, hold=False ,  flush = True )
     #     await asyncio.sleep(waitTime)
-    await boardDriver.layerSelectSPI(12,cs=True,flush = True)
-    boardDriver.setupASICS(version=3,rows=12,chipsPerRow=1,configFile=config_fname)
-    await boardDriver.setLayerConfig(12,reset=False,autoread=False,hold=False,chipSelect=False,flush=True)
+    await boardDriver.setLaneCS(12,cs=True,flush = True)
+    #boardDriver.setupASICS(version=3,rows=12,chipsPerRow=1,configFile=config_fname)
+    await boardDriver.setLaneConfig(12,reset=False,autoread=False,hold=False,chipSelect=False,flush=True)
     await asyncio.sleep(waitTime)
-    await boardDriver.layerSelectSPI(12,cs=True,flush = True)
+    await boardDriver.setLaneCS(12,cs=True,flush = True)
     await asyncio.sleep(waitTime)
     await boardDriver.close()
 

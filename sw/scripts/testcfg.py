@@ -1,0 +1,225 @@
+"""
+Test program to configure a ComPair segment (adapted from A-STEP test bench).
+
+Author: Adrien Laviron, adrien.laviron@nasa.gov
+"""
+
+import sys
+import os
+os.environ['BASE'] = os.path.abspath(".")
+print(sys.path)
+sys.path.insert(1, os.path.abspath("sw"))
+sys.path.insert(1, os.path.abspath("vendor/icflow_hdl_240807/hdl_rfg_v1/python"))
+sys.path.insert(1, os.path.abspath("rtl/top"))
+
+import asyncio
+import time, os, sys, binascii, math
+from tqdm import tqdm
+import argparse
+
+import drivers.boards
+import drivers.astropix.decode
+
+async def get_readout(boardDriver, counts:int = 4096):
+    bufferSize = await(boardDriver.readoutGetBufferSize())
+    readout = await(boardDriver.readoutReadBytes(counts))
+    return bufferSize, readout
+
+# Needed to decode data
+class myhack:
+    def __init__(self):
+        self.sampleclock_period_ns = 10
+
+#Parse raw data readouts to remove railing. Moved to postprocessing method to avoid SW slowdown when using autoread
+def dataParse_autoread(data_lst, buffer_lst, bitfile:str = None):
+    allData = b''
+    for i, buff in enumerate(buffer_lst):
+        if buff>0:
+            readout_data = data_lst[i][:buff]
+            #logger.info(binascii.hexlify(readout_data))
+            allData+=readout_data
+            if bitfile:
+                bitfile.write(f"{str(binascii.hexlify(readout_data))}\n")
+    ## DAN - could also return buffer index to keep track of whether multiple hits occur in the same readout. Would need to propagate forward
+    return allData
+
+#######################################################
+#################### MAIN FUNCTION ####################
+
+async def main(args):
+    # Welcome to the main (and only) function of this script!
+    # Setup FPGA communications
+    boardDriver = drivers.boards.getCMODUartDriver(baud=115200)
+    await boardDriver.open()
+    print("Opened FPGA, testing...")
+    try:
+        fwid = await boardDriver.readFirmwareID()
+        print(f"FW ID: {fwid}")
+    except Exception: 
+        raise RuntimeError("Could not read or write from astropix!")
+    print("Set sensor clocks.")
+    await boardDriver.enableSensorClocks(flush = True)
+    # Setup FPGA timestamps
+    await boardDriver.lanesConfigFPGATimestampFrequency(targetFrequencyHz = 1000000, flush = True)
+    await boardDriver.lanesConfigFPGATimestamp(enable = True, force = False, source_match_counter = True, source_external = False, flush = True)
+    # Setup SPI
+    await boardDriver.configureLaneSPIDivider(120, flush = True)
+    #await boardDriver.rfg.write_lanes_cfg_nodata_continue(value=8, flush=True) only used in readout, early modification
+    print("Instanciate ASIC drivers ...")
+
+    # Test RST
+    # for _ in range(5):
+    #     for lane in range(20):
+    #         await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    #     time.sleep(0.5)
+    #     for lane in range(20):
+    #         await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+
+    # Test Hold/CS
+    # for lane in range(15,18):
+    #     print(f"Lane {lane}")
+    #     for _ in range(5):
+    #         await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    #         time.sleep(.1)
+    #         await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    #         time.sleep(.1)
+    #     time.sleep(1)
+    for lane in range(15,18):
+        print(f"Lane {lane}")
+        for _ in range(5):
+            await boardDriver.setLaneCS(lane, cs=True, flush=True)
+            time.sleep(.1)
+            await boardDriver.setLaneCS(lane, cs=False, flush=True)
+            time.sleep(.1)
+        for _ in range(5):
+            await boardDriver.holdLane(lane, hold=True, flush=True)
+            time.sleep(.1)
+            await boardDriver.holdLane(lane, hold=False, flush=True)
+            time.sleep(.1)
+        time.sleep(1)
+    return
+
+    # Configure chips in memory
+    pathdelim = os.path.sep #determine if Mac or Windows separators in path name
+    ymlpath = [os.getcwd()+pathdelim + "sw" + pathdelim+"scripts"+pathdelim+"config"+pathdelim+ y +".yml" for y in args.yaml] # Define YAML path variables
+    try:
+        for lane, (nchips, yml) in enumerate(zip(args.chipsPerLane, ymlpath)):
+            print("{}: {}, {}".format(lane, nchips, yml))
+            boardDriver.setupASIC(version=3, lane=lane, chipsPerLane=nchips, configFile = yml)
+    except FileNotFoundError as e :
+        print(f'Config File {ymlpath} was not found, pass the name of a config file from the scripts/config folder')
+        raise e
+    print(f"{len(boardDriver.asics)} ASIC drivers instanciated.")
+
+    lanelst = [16]#range(len(args.yaml)) Set SPI lane(s) here
+    #await boardDriver.disableLanesReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
+    # for i in range(20):
+    #     await boardDriver.setLaneConfig(i, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    #await boardDriver.resetLanes()#Toggle RST
+    for lane in range(20):
+        await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    time.sleep(0.5)
+    for lane in range(20):
+        await boardDriver.setLaneConfig(lane,reset=False,autoread=False,hold=False,chipSelect=False,disableMISO=True,flush=True)
+    
+    lane=17
+    for i in range(5):
+        for lane in range(20):
+            await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+        time.sleep(.1)
+        for lane in range(20):
+            await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+        time.sleep(.1)
+
+    return
+    # print("Starting test")
+    # for i in range(60):
+    #     await boardDriver.setLaneConfig(16, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    #     time.sleep(.5)
+    #     await boardDriver.setLaneConfig(16, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
+    #     time.sleep(.5)
+    # # Set chip IDs
+    for lane in lanelst:
+        await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
+        await boardDriver.asics[lane].writeSPIRoutingFrame(5)
+        await boardDriver.setLaneCS(lane, cs=False, flush=True)#Unset chipSelect
+    print("Chip IDs set")
+
+    # Configure chips - probably requires a little update of asic.py driver
+    for lane in lanelst:
+        await boardDriver.setLaneCS(lane, cs=True, flush=True)
+        await boardDriver.asics[lane].writeConfigSPI(broadcast=False, targetChip=0)
+        await boardDriver.setLaneCS(lane, cs=False, flush=True)
+    print("1 chip configured")
+    # for i in range(args.chipsPerLane[lane]):
+    #     await boardDriver.setLaneCS(4, cs=True, flush=True)#Set chipSelect
+    #     for lane in lanelst:
+    #         if i < args.chipsPerLane[lane]:
+    #            payload = boardDriver.asics[lane].createSPIConfigFrame(load=True, n_load=10, broadcast=False, targetChip=i)
+    #            await boardDriver.asics[lane].writeSPI(payload)
+    # await boardDriver.setLaneCS(4, cs=False, flush=True)#Unset chipSelect
+    # print("Chips configured")
+
+
+    # Skip buffer flush
+
+    # Activate chip readout
+    # for lane in lanelst:
+    #     await boardDriver.setLaneConfig(lane,reset=False,autoread=True,hold=False,chipSelect=True,disableMISO=False,flush=True)
+
+    # Main loop
+    dataStream_lst = []
+    bufferLength_lst = []
+    end_time=time.time()+10 # 4 s run
+    for lane in lanelst:
+        await boardDriver.setLaneConfig(lane,reset=False,autoread=True,hold=False,chipSelect=True,disableMISO=False,flush=True)
+    run = time.time() < end_time
+    while run:
+        try:
+            task = asyncio.create_task(get_readout(boardDriver))
+            await task
+            buff, readout = task.result()
+            #print(f"  {buff:04d}  ", end="\r")
+            dataStream_lst.append(readout)
+            bufferLength_lst.append(buff)
+            print(buff)
+            print(binascii.hexlify(readout[:buff]))
+            # Check time
+            run = time.time() < end_time
+        except (KeyboardInterrupt, asyncio.CancelledError):
+            print("[Ctrl+C] while in main loop - exiting.")
+            run=False
+    
+
+    for lane in lanelst:
+        await boardDriver.setLaneConfig(lane,reset=False,autoread=False,hold=True,chipSelect=False,disableMISO=True,flush=True)
+
+    print(len(bufferLength_lst), max(bufferLength_lst))
+    dataStream = dataParse_autoread(dataStream_lst, bufferLength_lst, None)
+    print(len(dataStream))
+    df = drivers.astropix.decode.decode_readout(myhack(), dataStream, i=0, printer=True)
+    print(len(df))
+
+
+
+#######################################################
+#################### TOP LEVEL ########################
+
+if __name__ == "__main__":
+    # Quick highjacking of arguments
+    parser = argparse.ArgumentParser()
+    args = parser.parse_args()
+    args.yaml = ['20chips_allOff']*20
+    args.chipsPerLane = [20]*20
+
+    #Layer counting begins at 0.
+    #Make sure config arguments make sense
+    if len(args.yaml) > len(args.chipsPerLane):
+        if len(args.chipsPerLane) > 1:
+            print(f"Number of chips per lane not provided for every lane - default to {args.chipsPerLane[0]} for all {len(args.yaml)} lanes.")
+        args.chipsPerLane = [args.chipsPerLane[0]]*len(args.yaml)
+    elif len(args.yaml) < len(args.chipsPerLane):
+        raise ValueError("You need to provide one yaml configuration file for every chipsPerLane argument.")
+
+    asyncio.run(main(args))
+

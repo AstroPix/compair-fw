@@ -33,17 +33,19 @@ module astep24_20l_top_clocking (
     wire all_reset;
     wire shutdown = all_reset && cold_resn_in==0;
     assign io_aresn = !shutdown;
-   
+    
     // Clocking
     //------------
-    wire pll_locked;
+    assign pll_locked = pll_locked_local;
+    wire pll_locked_local;
     // Module Instance
     clock_pll_1 top_clocking_core_io_uart(.clki_i(sysclk_in ),
         .rstn_i( !shutdown),
         .pllpd_en_n_i( !shutdown),
         .clkop_o(clk_core ),
         .clkos_o( clk_uart ),
-        .lock_o( pll_locked )
+        .clkos2_o(clk_sample),
+        .lock_o( pll_locked_local )
     );
             
     wire reset_condition = pll_locked && warm_resn_in && cold_resn_in;

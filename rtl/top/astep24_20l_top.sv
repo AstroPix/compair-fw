@@ -244,12 +244,30 @@ module astep24_20l_top(
         end
     end
 
-
+    // clockdiv 60/12 = 5 5MHZ for timestamp
+    //-------------------    
+	reg clk_timestamp;
+    localparam int TIMESTAMP_COUNT_MAX = 12;
+    logic [$clog2(TIMESTAMP_COUNT_MAX)-1:0] timestamp_count;
+    always @(posedge clk_core) begin
+        if (!warm_resn) begin 
+            timestamp_count <= 0;
+            clk_timestamp  <= 'b0;
+        end
+        else if (timestamp_count == TIMESTAMP_COUNT_MAX-1) begin
+            timestamp_count <= 0;
+            clk_timestamp  <= ~clk_timestamp;
+        end
+        else begin
+            timestamp_count <= timestamp_count + 1;
+        end
+    end
 
 
     assign clk_uart_dbg = clk_uart;
     //assign clk_core_dbg = clk_core;
     assign pll_locked_dbg = pll_locked;
+
     // Clocking
     //-------------------
     wire clk_100; // size=1
@@ -268,7 +286,7 @@ module astep24_20l_top(
         .clk_core(clk_core),
         .clk_core_resn(clk_core_resn),
         .clk_sample(clk_sample),
-        .clk_timestamp(clk_timestamp),
+        .clk_timestamp(),
         .clk_uart(clk_uart),
         .clk_uart_resn(clk_uart_resn)
     );
@@ -1177,13 +1195,31 @@ module astep24_20l_top(
         // Configurations
         //---------------------
         .config_disable_autoread({
-            layer_2_cfg_ctrl_disable_autoread,
-            layer_1_cfg_ctrl_disable_autoread,
-            layer_0_cfg_ctrl_disable_autoread
+    layer_19_cfg_ctrl_disable_autoread,
+    layer_18_cfg_ctrl_disable_autoread,
+    layer_17_cfg_ctrl_disable_autoread,
+    layer_16_cfg_ctrl_disable_autoread,
+    layer_15_cfg_ctrl_disable_autoread,
+    layer_14_cfg_ctrl_disable_autoread,
+    layer_13_cfg_ctrl_disable_autoread,
+    layer_12_cfg_ctrl_disable_autoread,
+    layer_11_cfg_ctrl_disable_autoread,
+    layer_10_cfg_ctrl_disable_autoread,
+    layer_9_cfg_ctrl_disable_autoread,
+    layer_8_cfg_ctrl_disable_autoread,
+    layer_7_cfg_ctrl_disable_autoread,
+    layer_6_cfg_ctrl_disable_autoread,
+    layer_5_cfg_ctrl_disable_autoread,
+    layer_4_cfg_ctrl_disable_autoread,
+    layer_3_cfg_ctrl_disable_autoread,
+    layer_2_cfg_ctrl_disable_autoread,
+    layer_1_cfg_ctrl_disable_autoread,
+    layer_0_cfg_ctrl_disable_autoread
         }),
         .config_frame_tag_counter(layers_cfg_frame_tag_counter),
         .config_nodata_continue(layers_cfg_nodata_continue),
         .config_layers_reset({
+            layer_19_reset,    
             layer_18_reset,
             layer_17_reset,
             layer_16_reset,
@@ -1205,6 +1241,7 @@ module astep24_20l_top(
             layer_0_reset
         }),
         .config_layers_disable_miso({
+            layer_19_cfg_ctrl_disable_miso,
             layer_18_cfg_ctrl_disable_miso,
             layer_17_cfg_ctrl_disable_miso,
             layer_16_cfg_ctrl_disable_miso,
@@ -1251,6 +1288,16 @@ module astep24_20l_top(
             layer_0_status_frame_decoding
         }),
         .layers_stat_count_frame({
+            layer_19_stat_frame_counter_enable,
+            layer_18_stat_frame_counter_enable,
+            layer_17_stat_frame_counter_enable,
+            layer_16_stat_frame_counter_enable,
+            layer_15_stat_frame_counter_enable,
+            layer_14_stat_frame_counter_enable,
+            layer_13_stat_frame_counter_enable,
+            layer_12_stat_frame_counter_enable,
+            layer_11_stat_frame_counter_enable,
+            layer_10_stat_frame_counter_enable,
             layer_9_stat_frame_counter_enable,
             layer_8_stat_frame_counter_enable,
             layer_7_stat_frame_counter_enable,
@@ -1262,6 +1309,23 @@ module astep24_20l_top(
             layer_1_stat_frame_counter_enable,
             layer_0_stat_frame_counter_enable}),
         .layers_stat_count_idle({
+            layer_19_stat_idle_counter_enable,
+            layer_18_stat_idle_counter_enable,
+            layer_17_stat_idle_counter_enable,
+            layer_16_stat_idle_counter_enable,
+            layer_15_stat_idle_counter_enable,
+            layer_14_stat_idle_counter_enable,
+            layer_13_stat_idle_counter_enable,
+            layer_12_stat_idle_counter_enable,
+            layer_11_stat_idle_counter_enable,
+            layer_10_stat_idle_counter_enable,
+            layer_9_stat_idle_counter_enable,
+            layer_8_stat_idle_counter_enable,
+            layer_7_stat_idle_counter_enable,
+            layer_6_stat_idle_counter_enable,
+            layer_5_stat_idle_counter_enable,
+            layer_4_stat_idle_counter_enable,
+            layer_3_stat_idle_counter_enable,
             layer_2_stat_idle_counter_enable,
             layer_1_stat_idle_counter_enable,
             layer_0_stat_idle_counter_enable})

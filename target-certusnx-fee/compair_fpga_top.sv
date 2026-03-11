@@ -176,6 +176,33 @@ module compair_fpga_top(
         output wire row18_ts_clk,
         output wire row19_ts_clk,
 
+        output wire row0_tot_clk,
+        output wire row1_tot_clk,
+        output wire row2_tot_clk,
+        output wire row3_tot_clk,
+        output wire row4_tot_clk,
+        output wire row5_tot_clk,
+        output wire row6_tot_clk,
+        output wire row7_tot_clk,
+        output wire row8_tot_clk,
+        output wire row9_tot_clk,
+        output wire row10_tot_clk,
+        output wire row11_tot_clk,
+        output wire row12_tot_clk,
+        output wire row13_tot_clk,
+        output wire row14_tot_clk,
+        output wire row15_tot_clk,
+        output wire row16_tot_clk,
+        output wire row17_tot_clk,
+        output wire row18_tot_clk,
+        output wire row19_tot_clk,
+
+
+        output wire row0_row3_inject,
+        output wire row4_row7_inject,
+        output wire row8_row11_inject,
+        output wire row12_row15_inject,
+        output wire row16_row19_inject,
 	//output wire             inj,
 
 	
@@ -192,7 +219,35 @@ module compair_fpga_top(
 
 );
 
+    wire clk_sample_ungated;
+    wire clk_sample;
+    wire io_ctrl_sample_clock_enable;
+    assign clk_sample = io_ctrl_sample_clock_enable  & clk_sample_ungated;    
+    assign row0_tot_clk = clk_sample;
+    assign row1_tot_clk = clk_sample;
+    assign row2_tot_clk = clk_sample;
+    assign row3_tot_clk = clk_sample;
+    assign row4_tot_clk = clk_sample;
+    assign row5_tot_clk = clk_sample;
+    assign row6_tot_clk = clk_sample;
+    assign row7_tot_clk = clk_sample;
+    assign row8_tot_clk = clk_sample;
+    assign row9_tot_clk = clk_sample;
+    assign row10_tot_clk = clk_sample;
+    assign row11_tot_clk = clk_sample;
+    assign row12_tot_clk = clk_sample;
+    assign row13_tot_clk = clk_sample;
+    assign row14_tot_clk = clk_sample;
+    assign row15_tot_clk = clk_sample;
+    assign row16_tot_clk = clk_sample;
+    assign row17_tot_clk = clk_sample;
+    assign row18_tot_clk = clk_sample;
+    assign row19_tot_clk = clk_sample;
+
+    wire clk_timestamp_ungated;
     wire clk_timestamp;
+    wire io_ctrl_timestamp_clock_enable;
+    assign clk_timestamp = io_ctrl_timestamp_clock_enable  & clk_timestamp_ungated;
     assign row0_ts_clk = clk_timestamp;
     assign row1_ts_clk = clk_timestamp;
     assign row2_ts_clk = clk_timestamp;
@@ -213,6 +268,14 @@ module compair_fpga_top(
     assign row17_ts_clk = clk_timestamp;
     assign row18_ts_clk = clk_timestamp;
     assign row19_ts_clk = clk_timestamp;
+
+    wire inj;
+    assign row0_row3_inject   = inj;
+    assign row4_row7_inject   = inj;
+    assign row8_row11_inject  = inj;
+    assign row12_row15_inject = inj;
+    assign row16_row19_inject = inj;
+    
     // Richard: Uart init done is set after a reset of the uart driver, and one successful read from the ip core happened
     // if the first Red LED is off, it is likely that the communication with the board won't work
     wire uart_init_done;
@@ -226,27 +289,27 @@ module compair_fpga_top(
     wire clk_core_dbg;
     wire pll_locked_dbg;
     //assign sysclk_100_dbg = sysclk_100;
-    assign dcdc_d3p3_sync_mode =  ftdi_rx;
-    assign dcdc_d1p8_sync_mode = ftdi_tx;
-	assign dcdc_d1p0_sync_mode = clk_core_dbg;
-    assign dcdc_a1p8_sync_mode = watchdog;
-    assign dcdc_a1p2_sync_mode = clk_uart_dbg;
+    assign dcdc_d3p3_sync_mode = row5_int;
+    assign dcdc_d1p8_sync_mode = row5_spi_cs;
+    assign dcdc_d1p0_sync_mode = row5_spi_clk;
+    assign dcdc_a1p8_sync_mode =  row5_spi_miso[1];
+    assign dcdc_a1p2_sync_mode = row5_spi_miso[0];
 	    
 
 	
-    assign row0_row3_reset = row0_resn || row1_resn || row2_resn || row3_resn;
-    assign row4_row7_reset = row4_resn || row5_resn || row6_resn || row7_resn;
-    assign row8_row11_reset = row8_resn || row9_resn || row10_resn || row11_resn;
-    assign row12_row15_reset = row12_resn || row13_resn || row14_resn || row15_resn;
-    assign row16_row19_reset = row16_resn || row17_resn || row18_resn || row19_resn;
+    assign row0_row3_reset = row0_resn;
+    assign row4_row7_reset = row0_resn;
+    assign row8_row11_reset = row0_resn;
+    assign row12_row15_reset = row0_resn;
+    assign row16_row19_reset = row0_resn;
 
     // Module Instance
     // verilator lint_off DECLFILENAME 
     // verilator lint_off UNDRIVEN
     astep24_20l_top  astep24_20l_top_I(
         .sysclk(sysclk_100),
-        .clk_sample(clk_sample),
-        .clk_timestamp(clk_timestamp),
+        .clk_sample(clk_sample_ungated),
+        .clk_timestamp(clk_timestamp_ungated),
         
         .warm_resn(rstn), // Warm reset either from IO or a local button
         .cold_resn(1'b1),
@@ -451,8 +514,8 @@ module compair_fpga_top(
         .gecco_sr_ctrl_sin(),
         .gecco_sr_ctrl_ld(),
 
-        .io_ctrl_sample_clock_enable(),
-        .io_ctrl_timestamp_clock_enable(),
+        .io_ctrl_sample_clock_enable(io_ctrl_sample_clock_enable),
+        .io_ctrl_timestamp_clock_enable(io_ctrl_timestamp_clock_enable),
         .io_ctrl_gecco_sample_clock_se(),
         .io_ctrl_gecco_inj_enable(),
 

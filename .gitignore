@@ -51,5 +51,6 @@ docs/site
 ## vendor things
 *.tar.gz
 
-
+## Other temp files
+*.swp
 

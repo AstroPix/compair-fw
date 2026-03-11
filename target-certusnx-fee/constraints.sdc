@@ -13,3 +13,8 @@ set_output_delay -clock [get_clocks ext_spi_clk] -max -20 [get_ports ext_spi_mos
 
 set_input_delay -clock [get_clocks ext_spi_clk] -clock_fall -min 2 [get_ports ext_spi_adc_miso]
 set_clock_uncertainty -setup 0.125 [get_clocks sysclk_100]
+
+set ts [clock format [clock seconds] -format "%Y%m%d%H"]
+set fh [open "../../rtl/top//build_info.sv" "w"]
+puts $fh "`define BUILD_YMDH 32'd$ts"
+close $fh
