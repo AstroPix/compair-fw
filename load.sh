@@ -22,4 +22,4 @@ then
         echo "Loading ICFlow at: $icflowpath"
         source $icflowpath/load.sh
     fi
-fi
+fi 

@@ -21,6 +21,7 @@ import drivers.boards
 import drivers.astropix.decode
 
 async def get_readout(boardDriver, counts:int = 4096):
+    
     bufferSize = await(boardDriver.readoutGetBufferSize())
     readout = await(boardDriver.readoutReadBytes(counts))
     return bufferSize, readout
@@ -54,7 +55,9 @@ async def main(args):
     print("Opened FPGA, testing...")
     try:
         fwid = await boardDriver.readFirmwareID()
-        print(f"FW ID: {fwid}")
+        print(f"FW ID: {fwid}")
+        fwver = await boardDriver.readFirmwareVersion()
+        print(f"FW v: {fwver}")
     except Exception: 
         raise RuntimeError("Could not read or write from astropix!")
     print("Set sensor clocks.")
@@ -63,17 +66,21 @@ async def main(args):
     await boardDriver.lanesConfigFPGATimestampFrequency(targetFrequencyHz = 1000000, flush = True)
     await boardDriver.lanesConfigFPGATimestamp(enable = True, force = False, source_match_counter = True, source_external = False, flush = True)
     # Setup SPI
-    await boardDriver.configureLaneSPIDivider(120, flush = True)
+    await boardDriver.configureLaneSPIDivider(20, flush = True)
     #await boardDriver.rfg.write_lanes_cfg_nodata_continue(value=8, flush=True) only used in readout, early modification
     print("Instanciate ASIC drivers ...")
 
     # Test RST
-    # for _ in range(5):
-    #     for lane in range(20):
-    #         await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
-    #     time.sleep(0.5)
-    #     for lane in range(20):
-    #         await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    # for lane in range(20):
+    #     await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    lanelst = [0]
+    for _ in range(5):
+        for lane in lanelst:
+            await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+        time.sleep(0.5)
+        for lane in lanelst:
+            await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+        time.sleep(0.5)
 
     # Test Hold/CS
     # for lane in range(15,18):
@@ -84,19 +91,19 @@ async def main(args):
     #         await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=False, chipSelect=False, disableMISO=True, flush=True)
     #         time.sleep(.1)
     #     time.sleep(1)
-    for lane in range(15,18):
-        print(f"Lane {lane}")
-        for _ in range(5):
-            await boardDriver.setLaneCS(lane, cs=True, flush=True)
-            time.sleep(.1)
-            await boardDriver.setLaneCS(lane, cs=False, flush=True)
-            time.sleep(.1)
-        for _ in range(5):
-            await boardDriver.holdLane(lane, hold=True, flush=True)
-            time.sleep(.1)
-            await boardDriver.holdLane(lane, hold=False, flush=True)
-            time.sleep(.1)
-        time.sleep(1)
+    # for lane in range(3, 6):
+    #     print(f"Lane {lane}")
+    #     for _ in range(5):
+    #         await boardDriver.setLaneCS(lane, cs=True, flush=True)
+    #         time.sleep(.1)
+    #         await boardDriver.setLaneCS(lane, cs=False, flush=True)
+    #         time.sleep(.1)
+    #     for _ in range(5):
+    #         await boardDriver.holdLane(lane, hold=True, flush=True)
+    #         time.sleep(.1)
+    #         await boardDriver.holdLane(lane, hold=False, flush=True)
+    #         time.sleep(.1)
+    #     time.sleep(1)
     return
 
     # Configure chips in memory

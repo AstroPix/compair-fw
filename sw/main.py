@@ -149,13 +149,17 @@ async def main(args):
         raise RuntimeError("Could not read or write from astropix!")
     logger.info("FPGA test successful.")
     logger.debug("Set sensor clocks.")
+    id =      await boardDriver.readFirmwareID()
+    print(f"Firmware ID: {hex(id)}")
+    version = await boardDriver.readFirmwareVersion()
+    print(f"Firmware Version: {str(version)}")
     await boardDriver.enableSensorClocks(flush = True)
     # Setup FPGA timestamps
     await boardDriver.lanesConfigFPGATimestampFrequency(targetFrequencyHz = 1000000, flush = True)
     await boardDriver.lanesConfigFPGATimestamp(enable = True, force = False, source_match_counter = True, source_external = False, flush = True)
 
     logger.debug("Configure SPI readout")
-    await boardDriver.configureLaneSPIDivider(20, flush = True)
+    await boardDriver.configureLaneSPIDivider(120, flush = True)
     await boardDriver.rfg.write_layers_cfg_nodata_continue(value=8, flush=True)#8
     logger.debug("Instanciate ASIC drivers ...")
     # Configure chips in memory
@@ -197,23 +201,44 @@ async def main(args):
         logger.debug("enable analog")
         boardDriver.asics[args.analog[0]].enable_ampout_col(args.analog[1], args.analog[2], inplace=False)
 
+    # Setup / configure whole row on
+    if args.enablerow:
+        logger.debug("Turn row on")
+        try:
+            for enabled_column in range(3,35):
+                boardDriver.asics[args.enablerow[0]].enable_pixel(chip=args.enablerow[1], col=enabled_column, row=args.enablerow[2], inplace=False)
+            logger.debug("turned row on")
+        except (KeyError, IndexError):
+            logger.error(f"turn row on arguments lane={args.enablerow[0]}, chip={args.enablerow[1]} invalid. Cannot initialize run.")
+    
+    # Setup / configure whole column on
+    if args.enablecol:
+        logger.debug("Turn row on")
+        try:
+            for enabled_row in range(0,35):
+                boardDriver.asics[args.enablecol[0]].enable_pixel(chip=args.enablecol[1], col=args.enablecol[2], row=enabled_row, inplace=False)
+            logger.debug("turned row on")
+        except (KeyError, IndexError):
+            logger.error(f"turn row on arguments lane={args.enablecol[0]}, chip={args.enablecol[1]} invalid. Cannot initialize run.")
+
     # await printStatus(boardDriver)
     # for lane in range(20): await boardDriver.zeroLaneWrongLength(lane, flush=True)
 
     await boardDriver.disableLanesReadout(flush=True)#Hold, disableMISO, disableAutoread, CS=inactive
     #await boardDriver.resetLanes()#Toggle RST with next firmware
-    await boardDriver.setLaneConfig(0, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
-    time.sleep(0.5)
-    await boardDriver.setLaneConfig(0, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
-    # print("Reset chips")
-    # for lane in range(20):
-    #     await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    # await boardDriver.setLaneConfig(0, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
     # time.sleep(0.5)
-    # for lane in range(20):
-    #     await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
-    # time.sleep(1)
+    # await boardDriver.setLaneConfig(0, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    print("Reset chips")
+    for lane in range(20):
+        await boardDriver.setLaneConfig(lane, reset=True, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    time.sleep(0.5)
+    for lane in range(20):
+        await boardDriver.setLaneConfig(lane, reset=False, autoread=False, hold=True, chipSelect=False, disableMISO=True, flush=True)
+    time.sleep(1)
     # Set chip IDs
     print("Set chip ID")
+    print(args.lanes)
     for lane in args.lanes:
         await boardDriver.setLaneCS(lane, cs=True, flush=True)#Set chipSelect
         await boardDriver.asics[lane].writeSPIRoutingFrame(0)
@@ -236,8 +261,8 @@ async def main(args):
         await injector.start()
         dataStream_lst = []
         bufferLength_lst = []
-    else:
-        ofile = open("{}.bin".format(args.outputPrefix), "wb")
+    ofile = open("{}.bin".format(args.outputPrefix), "wb")
+    ofile2 = open("{}_bufferout.txt".format(args.outputPrefix), "w")
     if args.runTime is not None: 
         end_time=time.time()+(args.runTime*60.)
     else:
@@ -262,13 +287,15 @@ async def main(args):
                 # Store data
                 dataStream_lst.append(readout)
                 bufferLength_lst.append(buff)
-                await printStatus(boardDriver, time.time()-end_time, buff=buff)
-            else:
-                if buff > 0:
-                    ofile.write(readout)
-                #logger.info(binascii.hexlify(readout))
                 #await printStatus(boardDriver, time.time()-end_time, buff=buff)
+            if buff > 0:
+                ofile.write(readout)
+            #logger.info(binascii.hexlify(readout))
+            #await printStatus(boardDriver, time.time()-end_time, buff=buff)
             print(f"  {buff:04d}  ", end="\r")
+            ofile2.write(f"{buff}\n")
+            time.sleep(.1)
+            #ofile.write(buff.to_bytes(2,byteorder='little'))
             # logger.info(binascii.hexlify(readout[:buff]))
             # Check time
             run = time.time() < end_time
@@ -281,24 +308,24 @@ async def main(args):
     
     # End injection
     if args.inject: await injector.stop()
-    else: ofile.close()
+    ofile.close()
     
     # End connection
     await boardDriver.close()
 
     #Process data
-    if args.inject:
-        print(len(bufferLength_lst), max(bufferLength_lst))
-        dataStream = dataParse_autoread(dataStream_lst, bufferLength_lst, None)
-        df = drivers.astropix.decode.decode_readout(myhack(), logger, dataStream, i=0, printer=False)
-        if len(df) > 0:
-            csvframe = ['readout', 'lane', 'chipID', 'payload', 'location', 'isCol', 'timestamp', 'tot_msb', 'tot_lsb', 'tot_total', 'tot_us', 'fpga_ts']
-            df.columns = csvframe
-            df.to_csv(args.outputPrefix+".csv")
-        else:
-            logger.warning("No data written to disk because none have been received.")
-    else:
-        bin2csv(args.outputPrefix)
+    # if args.inject:
+    #     print(len(bufferLength_lst), max(bufferLength_lst))
+    #     dataStream = dataParse_autoread(dataStream_lst, bufferLength_lst, None)
+    #     df = drivers.astropix.decode.decode_readout(myhack(), logger, dataStream, i=0, printer=False)
+    #     if len(df) > 0:
+    #         csvframe = ['readout', 'lane', 'chipID', 'payload', 'location', 'isCol', 'timestamp', 'tot_msb', 'tot_lsb', 'tot_total', 'tot_us', 'fpga_ts']
+    #         df.columns = csvframe
+    #         df.to_csv(args.outputPrefix+".csv")
+    #     else:
+    #         logger.warning("No data written to disk because none have been received.")
+    # else:
+    #     bin2csv(args.outputPrefix)
         
 
 
@@ -309,7 +336,8 @@ async def main(args):
 #######################################################
 #################### TOP LEVEL ########################
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+if True:
 
     parser = argparse.ArgumentParser(description='Test program to run the A-STEP test bench.',
                                      formatter_class=argparse.RawTextHelpFormatter, #allow formatting of the epilog
@@ -357,6 +385,10 @@ if __name__ == "__main__":
                     help =  'Turn on injection in the given lane, chip, row, and column. Default: No injection')
     parser.add_argument('-v','--vinj', action='store', default = None,  type=int,
                         help = 'Specify injection voltage (in mV). DEFAULT: value in config ')
+    parser.add_argument('-er', '--enablerow', action='store', default=None, type=int, nargs=3,
+                    help =  'Turn on all the pixels in the given lane, chip, and row. Default: No row on')
+    parser.add_argument('-ec', '--enablecol', action='store', default=None, type=int, nargs=3,
+                    help =  'Turn on all the pixels in the given lane, chip, and col. Default: No col on')
 
     args = parser.parse_args()
     args.chipoffyml = '1chip_allOff'#Default config: 1 chip, all pixels off
